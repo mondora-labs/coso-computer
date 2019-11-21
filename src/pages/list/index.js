@@ -1,6 +1,4 @@
-import React from "react";
-
-import uuid from "uuid/v4";
+import React, { useState, useEffect } from "react";
 
 import {
   DetailsList,
@@ -8,13 +6,9 @@ import {
   Icon,
   PrimaryButton
 } from "office-ui-fabric-react";
-import {
-  HoverCard,
-  IPlainCardProps,
-  HoverCardType
-} from "office-ui-fabric-react/lib/HoverCard";
 
 import { Link } from "@reach/router";
+import { getMacs } from "../../utils/firebase";
 
 const columns = [
   {
@@ -84,62 +78,14 @@ const columns = [
     )
   }
 ];
-const items = [
-  {
-    id: uuid(),
-    owner: "giorgio",
-    serial: "C02VX19JHTDF",
-    dateFrom: "20/01/2017",
-    dateTo: "20/01/2017",
-    hostName: "kunta",
-    rentId: "514132",
-    note: "ciao ciao ciao ciao",
-    antivirus: true,
-    encryption: true
-  },
-  {
-    id: uuid(),
-    owner: "giorgio2",
-    serial: "C02VX19JHTDF",
-    dateFrom: "20/01/2017",
-    dateTo: "20/01/2017",
-    hostName: "kunta",
-    rentId: "514132",
-    note: "ciao ciao ciao ciao",
-    antivirus: false,
-    encryption: true
-  },
-  {
-    id: uuid(),
-    owner: "giorgio3",
-    serial: "C02VX19JHTDF",
-    dateFrom: "20/01/2017",
-    dateTo: "20/01/2017",
-    hostName: "kunta",
-    rentId: "514132",
-    note: "ciao ciao ciao ciao",
-    antivirus: false,
-    encryption: true
-  },
-  {
-    id: uuid(),
-    owner: "giorgio4",
-    serial: "C02VX19JHTDF",
-    dateFrom: "20/01/2017",
-    dateTo: "20/01/2017",
-    hostName: "kunta",
-    rentId: "514132",
-    note: "ciao ciao ciao ciao",
-    antivirus: true,
-    encryption: true
-  }
-];
-
-const onRenderPlainCard = () => {
-  return <div>{"ciao"}</div>;
-};
 
 const List = () => {
+  const [items, setItems] = useState([]);
+
+  useEffect(() => {
+    getMacs().then(macs => setItems(macs));
+  }, []);
+
   return (
     <>
       <DetailsList
@@ -150,14 +96,6 @@ const List = () => {
       <Link to="/item">
         <PrimaryButton text="New item" iconProps={{ iconName: "Add" }} />
       </Link>
-      <HoverCard
-        type={HoverCardType.plain}
-        plainCardProps={{ onRenderPlainCard: onRenderPlainCard }}
-        //   componentRef={this._hoverCard}
-        //   onCardHide={this._onCardHide}
-      >
-        <div>{"Hover Over Me"}</div>
-      </HoverCard>
     </>
   );
 };

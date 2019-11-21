@@ -10,7 +10,7 @@ import {
   Checkbox
 } from "office-ui-fabric-react";
 import { Link } from "@reach/router";
-import { initializeIcons } from "@uifabric/icons";
+import { upsertMac } from "../../utils/firebase";
 
 const Container = styled.div`
   width: 80vw;
@@ -20,7 +20,6 @@ const Container = styled.div`
 `;
 
 const Item = () => {
-  
   return (
     <Container>
       <h1>{"Inserisci cose"}</h1>
@@ -54,9 +53,9 @@ const Item = () => {
       <Link to="/list">
         <DefaultButton>{"Annulla"}</DefaultButton>
       </Link>
-      <Link to="/list">
-        <PrimaryButton>{"Salva"}</PrimaryButton>
-      </Link>
+
+        <PrimaryButton onClick={upsertMac}>{"Salva"}</PrimaryButton>
+
     </Container>
   );
 };

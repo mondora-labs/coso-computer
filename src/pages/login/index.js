@@ -4,6 +4,7 @@ import styled from "styled-components";
 
 import { PrimaryButton } from "office-ui-fabric-react";
 import { Link } from "@reach/router";
+import { login } from "../../utils/firebase";
 
 const Container = styled.div`
   width: 100vw;
@@ -13,13 +14,15 @@ const Container = styled.div`
   align-items: center;
 `;
 
+const handleLogin = () => {
+  login();
+};
+
 const Login = () => {
   return (
     <Container>
-        <div id="firebaseui-auth-container"></div>
-        
       <Link to="/list">
-        <PrimaryButton>{"Login"}</PrimaryButton>
+        <PrimaryButton onClick={handleLogin}>{"Login"}</PrimaryButton>
       </Link>
     </Container>
   );
