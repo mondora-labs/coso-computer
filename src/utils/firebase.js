@@ -7,8 +7,18 @@ firebase.initializeApp({
   projectId: "coso-computer"
 });
 
-export const login = () => {
-  firebase.auth().signInWithPopup(new firebase.auth.GoogleAuthProvider());
+export const login = async () => {
+  try {
+    const result = await firebase
+      .auth()
+      .signInWithPopup(new firebase.auth.GoogleAuthProvider());
+
+    console.log({ result });
+    return true;
+  } catch (error) {
+    console.error({ error });
+    return false;
+  }
 };
 
 export const getMacs = async () => {

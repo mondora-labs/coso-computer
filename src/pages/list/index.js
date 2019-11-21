@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 
+import { Link } from "@reach/router";
 import {
   DetailsList,
   IconButton,
@@ -8,47 +9,50 @@ import {
   Dialog,
   DialogFooter,
   DefaultButton,
-  DialogType
+  DialogType,
+  Stack,
+  SelectionMode,
 } from "office-ui-fabric-react";
 
-import { Link } from "@reach/router";
+import Container from "../../components/container";
+
 import { getMacs } from "../../utils/firebase";
 
 const columnsDefinitions = [
   {
     key: "owner",
     fieldName: "owner",
-    name: "Possessore"
+    name: "Owner"
   },
   {
     key: "serial",
     fieldName: "serial",
-    name: "Seriale"
+    name: "Serial"
   },
   {
     key: "dateFrom",
     fieldName: "dateFrom",
-    name: "dateFrom"
+    name: "From"
   },
   {
     key: "dateTo",
     fieldName: "dateTo",
-    name: "dateTo"
+    name: "To"
   },
   {
     key: "hostName",
     fieldName: "hostName",
-    name: "hostName"
+    name: "HostName"
   },
   {
     key: "rentId",
     fieldName: "rentId",
-    name: "rentId"
+    name: "Rent #"
   },
   {
     key: "antivirus",
     fieldName: "antivirus",
-    name: "antivirus",
+    name: "Antivirus",
     onRender: item => (
       <Icon iconName={item.antivirus ? "CheckMark" : "BlockedSite"} />
     )
@@ -56,7 +60,7 @@ const columnsDefinitions = [
   {
     key: "encryption",
     fieldName: "encryption",
-    name: "encryption",
+    name: "Encryption",
     onRender: item => (
       <Icon iconName={item.encryption ? "CheckMark" : "BlockedSite"} />
     )
@@ -75,8 +79,7 @@ const List = () => {
     ...columnsDefinitions,
     {
       key: "actions",
-      name: "Azioni",
-      minWidth: 320,
+      name: "Actions",
       onRender: item => (
         <>
           <IconButton
@@ -96,7 +99,7 @@ const List = () => {
   ];
 
   return (
-    <>
+    <Container>
       <Dialog
         hidden={!isOpen}
         onDismiss={() => setOpen(false)}
@@ -116,15 +119,24 @@ const List = () => {
         </DialogFooter>
       </Dialog>
 
+      <h1>{"Elenco cose"}</h1>
+
       <DetailsList
-        selectionMode={0}
+        selectionMode={SelectionMode.none}
         columns={columns}
         items={items}
-      ></DetailsList>
-      <Link to="/item">
-        <PrimaryButton text="New item" iconProps={{ iconName: "Add" }} />
-      </Link>
-    </>
+      />
+
+      <br />
+
+      <Stack>
+        <Stack.Item align="center">
+          <Link to="/item">
+            <PrimaryButton text="New item" iconProps={{ iconName: "Add" }} />
+          </Link>
+        </Stack.Item>
+      </Stack>
+    </Container>
   );
 };
 

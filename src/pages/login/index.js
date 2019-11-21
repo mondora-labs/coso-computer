@@ -3,7 +3,8 @@ import React from "react";
 import styled from "styled-components";
 
 import { PrimaryButton } from "office-ui-fabric-react";
-import { Link } from "@reach/router";
+import { Link, navigate } from "@reach/router";
+
 import { login } from "../../utils/firebase";
 
 const Container = styled.div`
@@ -14,16 +15,19 @@ const Container = styled.div`
   align-items: center;
 `;
 
-const handleLogin = () => {
-  login();
+const handleLogin = async () => {
+  const result = await login();
+  if (result) {
+    navigate("/list");
+  }
 };
 
 const Login = () => {
   return (
     <Container>
-      <Link to="/list">
-        <PrimaryButton onClick={handleLogin}>{"Login"}</PrimaryButton>
-      </Link>
+      <PrimaryButton onClick={handleLogin} iconProps={{ iconName: "Lock" }}>
+        {"Login"}
+      </PrimaryButton>
     </Container>
   );
 };

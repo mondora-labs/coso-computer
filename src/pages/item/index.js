@@ -11,14 +11,9 @@ import {
 } from "office-ui-fabric-react";
 import { Link } from "@reach/router";
 
-import { upsertMac } from "../../utils/firebase";
+import Container from "../../components/container";
 
-const Container = styled.div`
-  width: 80vw;
-  height: 80vh;
-  justify-content: center;
-  margin: 10vh 10vw;
-`;
+import { upsertMac } from "../../utils/firebase";
 
 const Item = () => {
   return (
