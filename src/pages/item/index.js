@@ -10,6 +10,7 @@ import {
   Checkbox
 } from "office-ui-fabric-react";
 import { Link } from "@reach/router";
+
 import { upsertMac } from "../../utils/firebase";
 
 const Container = styled.div`
@@ -54,8 +55,7 @@ const Item = () => {
         <DefaultButton>{"Annulla"}</DefaultButton>
       </Link>
 
-        <PrimaryButton onClick={upsertMac}>{"Salva"}</PrimaryButton>
-
+      <PrimaryButton onClick={upsertMac}>{"Salva"}</PrimaryButton>
     </Container>
   );
 };

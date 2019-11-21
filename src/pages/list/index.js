@@ -4,13 +4,17 @@ import {
   DetailsList,
   IconButton,
   Icon,
-  PrimaryButton
+  PrimaryButton,
+  Dialog,
+  DialogFooter,
+  DefaultButton,
+  DialogType
 } from "office-ui-fabric-react";
 
 import { Link } from "@reach/router";
 import { getMacs } from "../../utils/firebase";
 
-const columns = [
+const columnsDefinitions = [
   {
     key: "owner",
     fieldName: "owner",
@@ -56,38 +60,62 @@ const columns = [
     onRender: item => (
       <Icon iconName={item.encryption ? "CheckMark" : "BlockedSite"} />
     )
-  },
-  {
-    key: "actions",
-    name: "Azioni",
-    minWidth: 320,
-    onRender: item => (
-      <>
-        <IconButton
-          onClick={() => console.log("note")}
-          iconProps={{ iconName: "More" }}
-        />
-        <Link to={`/item/${item.id}`}>
-          <IconButton iconProps={{ iconName: "EditNote" }} />
-        </Link>
-        <IconButton
-          onClick={() => console.log("ti eliminoh")}
-          iconProps={{ iconName: "Delete" }}
-        />
-      </>
-    )
   }
 ];
 
 const List = () => {
   const [items, setItems] = useState([]);
+  const [isOpen, setOpen] = useState(false);
 
   useEffect(() => {
     getMacs().then(macs => setItems(macs));
   }, []);
 
+  const columns = [
+    ...columnsDefinitions,
+    {
+      key: "actions",
+      name: "Azioni",
+      minWidth: 320,
+      onRender: item => (
+        <>
+          <IconButton
+            onClick={() => console.log("note")}
+            iconProps={{ iconName: "More" }}
+          />
+          <Link to={`/item/${item.id}`}>
+            <IconButton iconProps={{ iconName: "EditNote" }} />
+          </Link>
+          <IconButton
+            onClick={() => setOpen(true)}
+            iconProps={{ iconName: "Delete" }}
+          />
+        </>
+      )
+    }
+  ];
+
   return (
     <>
+      <Dialog
+        hidden={!isOpen}
+        onDismiss={() => setOpen(false)}
+        dialogContentProps={{
+          type: DialogType.normal,
+          title: "Delete me oh?",
+          subText: "Do you want to send this message without a subject?"
+        }}
+      >
+        <DialogFooter>
+          <PrimaryButton onClick={() => setOpen(false)}>
+            {"Elimina"}
+          </PrimaryButton>
+          <DefaultButton onClick={() => setOpen(false)}>
+            {"Annulla"}
+          </DefaultButton>
+        </DialogFooter>
+      </Dialog>
+
       <DetailsList
         selectionMode={0}
         columns={columns}
