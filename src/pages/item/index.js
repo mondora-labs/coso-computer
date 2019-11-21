@@ -7,7 +7,8 @@ import {
   DatePicker,
   PrimaryButton,
   DefaultButton,
-  Checkbox
+  Checkbox,
+  Stack
 } from "office-ui-fabric-react";
 import { Link } from "@reach/router";
 
@@ -43,14 +44,21 @@ const Item = () => {
 
       <TextField label="Note" multiline placeholder="Please enter text here" />
 
-      <Checkbox label="Sul computer è stato installato un antivirus e non verrà disattivato durante l'uso" />
-      <Checkbox label="Sul computer è attivo un sistema di cifratura del disco" />
+      <Stack tokens={{ childrenGap: 16, padding: "16px 0" }}>
+        <Checkbox label="Sul computer è stato installato un antivirus e non verrà disattivato durante l'uso" />
+        <Checkbox label="Sul computer è attivo un sistema di cifratura del disco" />
+      </Stack>
 
-      <Link to="/list">
-        <DefaultButton>{"Annulla"}</DefaultButton>
-      </Link>
-
-      <PrimaryButton onClick={upsertMac}>{"Salva"}</PrimaryButton>
+      <Stack horizontal tokens={{ childrenGap: 8 }}>
+        <Stack.Item>
+          <Link to="/list">
+            <DefaultButton>{"Annulla"}</DefaultButton>
+          </Link>
+        </Stack.Item>
+        <Stack.Item>
+          <PrimaryButton onClick={upsertMac}>{"Salva"}</PrimaryButton>
+        </Stack.Item>
+      </Stack>
     </Container>
   );
 };
