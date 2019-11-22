@@ -11,7 +11,7 @@ import {
   DefaultButton,
   DialogType,
   Stack,
-  SelectionMode,
+  SelectionMode
 } from "office-ui-fabric-react";
 
 import Container from "../../components/container";
@@ -69,7 +69,11 @@ const columnsDefinitions = [
 
 const List = () => {
   const [items, setItems] = useState([]);
-  const [isOpen, setOpen] = useState(false);
+  const [showDelete, setShowDelete] = useState(false);
+  const [note, setNote] = useState({
+    show: false,
+    text: ""
+  });
 
   useEffect(() => {
     getMacs().then(macs => setItems(macs));
@@ -83,14 +87,16 @@ const List = () => {
       onRender: item => (
         <>
           <IconButton
-            onClick={() => console.log("note")}
+            onClick={() =>
+              setNote({ show: true, text: item.note || "Nessuna nota." })
+            }
             iconProps={{ iconName: "More" }}
           />
           <Link to={`/item/${item.id}`}>
             <IconButton iconProps={{ iconName: "EditNote" }} />
           </Link>
           <IconButton
-            onClick={() => setOpen(true)}
+            onClick={() => setShowDelete(true)}
             iconProps={{ iconName: "Delete" }}
           />
         </>
@@ -101,8 +107,18 @@ const List = () => {
   return (
     <Container>
       <Dialog
-        hidden={!isOpen}
-        onDismiss={() => setOpen(false)}
+        hidden={!note.show}
+        onDismiss={() => setNote({ ...note, show: false })}
+        dialogContentProps={{
+          type: DialogType.normal,
+          title: "Notes",
+          subText: note.text
+        }}
+      />
+
+      <Dialog
+        hidden={!showDelete}
+        onDismiss={() => setShowDelete(false)}
         dialogContentProps={{
           type: DialogType.normal,
           title: "Delete me oh?",
@@ -110,10 +126,10 @@ const List = () => {
         }}
       >
         <DialogFooter>
-          <PrimaryButton onClick={() => setOpen(false)}>
+          <PrimaryButton onClick={() => setShowDelete(false)}>
             {"Elimina"}
           </PrimaryButton>
-          <DefaultButton onClick={() => setOpen(false)}>
+          <DefaultButton onClick={() => setShowDelete(false)}>
             {"Annulla"}
           </DefaultButton>
         </DialogFooter>
