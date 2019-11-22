@@ -22,7 +22,7 @@ export const macs = {
 
     return {
       ...state,
-      items: [...state.items, payload]
+      items: [...state.items.filter(mac => mac.id !== payload.id), payload]
     };
   }),
   removeMac: action((state, payload) => {

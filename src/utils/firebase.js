@@ -1,8 +1,6 @@
 import firebase from "firebase";
 import uuid from "uuid/v4";
 
-import { navigate } from "@reach/router";
-
 firebase.initializeApp({
   apiKey: "AIzaSyCSrn0Muuaaa7qElThUF4qSVz7ejh97jUE",
   authDomain: "coso-computer.firebaseapp.com",
@@ -54,11 +52,11 @@ export const upsertMac = async mac => {
         serial: mac.serial || "",
         dateFrom: mac.dateFrom || "",
         dateTo: mac.dateTo || "",
-        hostName: mac.hostName || "<...>",
+        hostname: mac.hostname || "<...>",
         rentId: mac.rentId || "#",
         note: mac.note || "Nessuna nota.",
         antivirus: mac.antivirus || false,
-        encryption: mac.encryption || false,
+        encryption: mac.encryption || false
       });
   } catch (error) {
     console.log(error);
@@ -77,11 +75,13 @@ export const deleteMac = async id => {
       .firestore()
       .collection("macs")
       .doc(id)
-      .delete().then(function() {
+      .delete()
+      .then(function() {
         console.log("Document successfully deleted!");
-    }).catch(function(error) {
+      })
+      .catch(function(error) {
         console.error("Error removing document: ", error);
-    });
+      });
   } catch (error) {
     console.log(error);
   }

@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 
+import { useStoreState, useStoreActions } from "easy-peasy";
+
 import styled from "styled-components";
 
 import { Link } from "@reach/router";
@@ -8,18 +10,18 @@ import {
   IconButton,
   Icon,
   PrimaryButton,
-  Dialog,
-  DialogFooter,
-  DefaultButton,
-  DialogType,
   Stack,
   SelectionMode
 } from "office-ui-fabric-react";
 
 import Container from "../../components/container";
-
-import { useStoreState, useStoreActions } from "easy-peasy";
 import NormalDialog from "../../components/dialog";
+
+const Text = styled.div`
+  display: flex;
+  height: 32px;
+  align-items: center;
+`;
 
 const columnsDefinitions = [
   {
@@ -43,8 +45,8 @@ const columnsDefinitions = [
     name: "To"
   },
   {
-    key: "hostName",
-    fieldName: "hostName",
+    key: "hostname",
+    fieldName: "hostname",
     name: "HostName"
   },
   {
@@ -75,12 +77,6 @@ const columnsDefinitions = [
     )
   }
 ];
-
-const Text = styled.div`
-  display: flex;
-  height: 32px;
-  align-items: center;
-`;
 
 const List = () => {
   const [remove, setRemove] = useState({

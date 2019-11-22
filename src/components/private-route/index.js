@@ -10,7 +10,7 @@ import Container from "../container";
 const PrivateRoute = ({ children }) => {
   const { isLogged } = useStoreState(state => state.user);
 
-  if (!isLogged) {
+  if (!isLogged && false) {
     return (
       <Container>
         <Stack>
