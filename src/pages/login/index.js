@@ -3,7 +3,7 @@ import React from "react";
 import styled from "styled-components";
 
 import { PrimaryButton } from "office-ui-fabric-react";
-import { Link, navigate } from "@reach/router";
+import { navigate } from "@reach/router";
 
 import { login } from "../../utils/firebase";
 

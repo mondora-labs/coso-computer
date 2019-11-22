@@ -52,7 +52,7 @@ export const upsertMac = async mac => {
         dateTo: "20/01/2017",
         hostName: "hostName",
         rentId: "514132",
-        note: "",
+        note: "Nota",
         antivirus: true,
         encryption: true
       });
