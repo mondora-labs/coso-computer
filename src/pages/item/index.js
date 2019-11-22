@@ -29,7 +29,7 @@ const Item = () => {
   };
 
   const onSubmit = (data, e) => {
-    console.log("Submit event", e);
+    console.log("Submit event", data);
   };
 
   useEffect(() => {

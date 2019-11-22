@@ -2,6 +2,8 @@ import React from "react";
 
 import { Router } from "@reach/router";
 
+import PrivateRoute from "../components/private-route";
+
 import Item from "./item";
 import List from "./list";
 import Login from "./login";
@@ -9,10 +11,13 @@ import Login from "./login";
 const App = () => {
   return (
     <Router>
-      <List path="/list" />
-      <Login path="/" />
-      <Item path="/item/:itemId" />
-      <Item path="/item" />
+      <Login default />
+
+      <PrivateRoute path="/app">
+        <List path="/list" />
+        <Item path="/item/:itemId" />
+        <Item path="/item" />
+      </PrivateRoute>
     </Router>
   );
 };

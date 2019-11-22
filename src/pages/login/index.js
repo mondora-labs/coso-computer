@@ -18,7 +18,7 @@ const Container = styled.div`
 const handleLogin = async () => {
   const result = await login();
   if (result) {
-    navigate("/list");
+    navigate("/app/list");
   }
 };
 
