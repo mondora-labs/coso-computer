@@ -1,7 +1,7 @@
 import firebase from "firebase";
 import uuid from "uuid/v4";
 
-import { navigate } from "@reach/router"
+import { navigate } from "@reach/router";
 
 firebase.initializeApp({
   apiKey: "AIzaSyCSrn0Muuaaa7qElThUF4qSVz7ejh97jUE",
@@ -39,26 +39,49 @@ export const getMacs = async () => {
 };
 
 export const upsertMac = async mac => {
-  console.log("upsert a mac");
+  console.log("upsert a mac", mac);
+
+  const id = mac.id || uuid();
 
   try {
     await firebase
       .firestore()
       .collection("macs")
-      .doc(mac.id || uuid())
+      .doc(id)
       .set({
-        id: uuid(),
-        owner: "Owner Name",
-        serial: "C02VX19JHTDF",
-        dateFrom: "20/01/2017",
-        dateTo: "20/01/2017",
-        hostName: "hostName",
-        rentId: "514132",
-        note: "Nota",
-        antivirus: true,
-        encryption: true
+        id: id,
+        owner: mac.owner || "",
+        serial: mac.serial || "",
+        dateFrom: mac.dateFrom || "",
+        dateTo: mac.dateTo || "",
+        hostName: mac.hostName || "<...>",
+        rentId: mac.rentId || "#",
+        note: mac.note || "Nessuna nota.",
+        antivirus: mac.antivirus || false,
+        encryption: mac.encryption || false,
       });
-      navigate("/list");
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const deleteMac = async id => {
+  console.log("delete a mac", id);
+
+  if (!id) {
+    return;
+  }
+
+  try {
+    await firebase
+      .firestore()
+      .collection("macs")
+      .doc(id)
+      .delete().then(function() {
+        console.log("Document successfully deleted!");
+    }).catch(function(error) {
+        console.error("Error removing document: ", error);
+    });
   } catch (error) {
     console.log(error);
   }

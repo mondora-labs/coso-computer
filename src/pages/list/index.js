@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 
+import styled from "styled-components";
+
 import { Link } from "@reach/router";
 import {
   DetailsList,
@@ -16,7 +18,8 @@ import {
 
 import Container from "../../components/container";
 
-import { getMacs } from "../../utils/firebase";
+import { useStoreState, useStoreActions } from "easy-peasy";
+import NormalDialog from "../../components/dialog";
 
 const columnsDefinitions = [
   {
@@ -53,37 +56,59 @@ const columnsDefinitions = [
     key: "antivirus",
     fieldName: "antivirus",
     name: "Antivirus",
+    minWidth: 64,
     onRender: item => (
-      <Icon iconName={item.antivirus ? "CheckMark" : "BlockedSite"} />
+      <Text>
+        <Icon iconName={item.antivirus ? "Accept" : "Warning"} />
+      </Text>
     )
   },
   {
     key: "encryption",
     fieldName: "encryption",
     name: "Encryption",
+    minWidth: 72,
     onRender: item => (
-      <Icon iconName={item.encryption ? "CheckMark" : "BlockedSite"} />
+      <Text>
+        <Icon iconName={item.encryption ? "Accept" : "Warning"} />
+      </Text>
     )
   }
 ];
 
+const Text = styled.div`
+  display: flex;
+  height: 32px;
+  align-items: center;
+`;
+
 const List = () => {
-  const [items, setItems] = useState([]);
-  const [showDelete, setShowDelete] = useState(false);
+  const [remove, setRemove] = useState({
+    show: false,
+    id: ""
+  });
   const [note, setNote] = useState({
     show: false,
     text: ""
   });
 
-  useEffect(() => {
-    getMacs().then(macs => setItems(macs));
-  }, []);
+  const { listMacs, removeMac } = useStoreActions(store => store.macs);
+  const { items } = useStoreState(store => store.macs);
 
-  const columns = [
-    ...columnsDefinitions,
+  useEffect(() => {
+    listMacs();
+  }, [listMacs]);
+
+  const columns = columnsDefinitions.map(columnDefinition => ({
+    onRender: (item, index, column) => <Text>{item[column.fieldName]}</Text>,
+    ...columnDefinition
+  }));
+
+  const actionsColumns = [
     {
       key: "actions",
       name: "Actions",
+      minWidth: 112,
       onRender: item => (
         <>
           <IconButton
@@ -92,11 +117,11 @@ const List = () => {
             }
             iconProps={{ iconName: "More" }}
           />
-          <Link to={`/item/${item.id}`}>
+          <Link to={`/app/item/${item.id}`}>
             <IconButton iconProps={{ iconName: "EditNote" }} />
           </Link>
           <IconButton
-            onClick={() => setShowDelete(true)}
+            onClick={() => setRemove({ show: true, id: item.id })}
             iconProps={{ iconName: "Delete" }}
           />
         </>
@@ -106,40 +131,29 @@ const List = () => {
 
   return (
     <Container>
-      <Dialog
+      <NormalDialog
+        title="Notes"
+        subText={note.text}
         hidden={!note.show}
         onDismiss={() => setNote({ ...note, show: false })}
-        dialogContentProps={{
-          type: DialogType.normal,
-          title: "Notes",
-          subText: note.text
-        }}
       />
 
-      <Dialog
-        hidden={!showDelete}
-        onDismiss={() => setShowDelete(false)}
-        dialogContentProps={{
-          type: DialogType.normal,
-          title: "Delete me oh?",
-          subText: "Do you want to send this message without a subject?"
+      <NormalDialog
+        title="Delete me oh?"
+        subText="E se poi te ne penti?"
+        hidden={!remove.show}
+        onDismiss={() => setRemove({ show: false })}
+        handleConfirm={() => {
+          setRemove({ show: false });
+          removeMac(remove.id);
         }}
-      >
-        <DialogFooter>
-          <PrimaryButton onClick={() => setShowDelete(false)}>
-            {"Elimina"}
-          </PrimaryButton>
-          <DefaultButton onClick={() => setShowDelete(false)}>
-            {"Annulla"}
-          </DefaultButton>
-        </DialogFooter>
-      </Dialog>
+      />
 
       <h1>{"Elenco cose"}</h1>
 
       <DetailsList
         selectionMode={SelectionMode.none}
-        columns={columns}
+        columns={[...columns, ...actionsColumns]}
         items={items}
       />
 
@@ -147,7 +161,7 @@ const List = () => {
 
       <Stack>
         <Stack.Item align="center">
-          <Link to="/item">
+          <Link to="/app/item">
             <PrimaryButton text="New item" iconProps={{ iconName: "Add" }} />
           </Link>
         </Stack.Item>

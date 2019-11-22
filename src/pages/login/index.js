@@ -1,11 +1,10 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 import styled from "styled-components";
+import { useStoreActions, useStoreState } from "easy-peasy";
 
 import { PrimaryButton } from "office-ui-fabric-react";
 import { navigate } from "@reach/router";
-
-import { login } from "../../utils/firebase";
 
 const Container = styled.div`
   width: 100vw;
@@ -15,17 +14,19 @@ const Container = styled.div`
   align-items: center;
 `;
 
-const handleLogin = async () => {
-  const result = await login();
-  if (result) {
-    navigate("/app/list");
-  }
-};
-
 const Login = () => {
+  const { isLogged } = useStoreState(state => state.user);
+  const { doLogin } = useStoreActions(state => state.user);
+
+  useEffect(() => {
+    if (isLogged) {
+      navigate("/app/list");
+    }
+  }, [isLogged]);
+
   return (
     <Container>
-      <PrimaryButton onClick={handleLogin} iconProps={{ iconName: "Lock" }}>
+      <PrimaryButton onClick={doLogin} iconProps={{ iconName: "Lock" }}>
         {"Login"}
       </PrimaryButton>
     </Container>

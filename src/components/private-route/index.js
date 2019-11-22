@@ -1,17 +1,23 @@
 import React from "react";
 
+import { useStoreState } from "easy-peasy";
+
 import { Link } from "@reach/router";
 import { DefaultButton, Stack } from "office-ui-fabric-react";
 
 import Container from "../container";
 
-const PrivateRoute = ({ isLogged, children }) => {
-  if (!isLogged && false) {
+const PrivateRoute = ({ children }) => {
+  const { isLogged } = useStoreState(state => state.user);
+
+  if (!isLogged) {
     return (
       <Container>
         <Stack>
           <Stack.Item align="center">
             <h1>{"Unauthorized"}</h1>
+          </Stack.Item>
+          <Stack.Item align="center">
 
             <Link to="/">
               <DefaultButton iconProps={{ iconName: "home" }}>

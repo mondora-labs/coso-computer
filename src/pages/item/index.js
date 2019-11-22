@@ -1,8 +1,9 @@
 import React, { useEffect } from "react";
 
-import styled from "styled-components";
+import { useStoreActions, useStoreState } from "easy-peasy";
 import useForm from "react-hook-form";
 
+import { Link, navigate } from "@reach/router";
 import {
   TextField,
   DatePicker,
@@ -11,25 +12,37 @@ import {
   Checkbox,
   Stack
 } from "office-ui-fabric-react";
-import { Link } from "@reach/router";
 
 import Container from "../../components/container";
 
-import { upsertMac } from "../../utils/firebase";
+const Item = ({ itemId }) => {
+  const { items } = useStoreState(store => store.macs);
 
-const Item = () => {
-  const { register, handleSubmit, setValue } = useForm();
+  const item = items.find(item => item.id === itemId) || {
+    owner: ""
+  };
+
+  console.log({ items, item, itemId });
+
+  const { register, handleSubmit, setValue } = useForm({
+    defaultValues: item
+  });
+
+  const { addMac, listMacs } = useStoreActions(store => store.macs);
 
   const handleChange = ({ target }) => {
     setValue(target.name, target.value);
-    console.log(target);
   };
-  const handleDateChange = (date) => {
-    setValue("dateFrom", date);
+  const handleDateChange = (date, e) => {
+    console.log(e);
+
+    // setValue("dateFrom", date);
   };
 
-  const onSubmit = (data, e) => {
-    console.log("Submit event", data);
+  const onSubmit = data => {
+    addMac(data);
+
+    navigate("/app/list");
   };
 
   useEffect(() => {
@@ -44,15 +57,20 @@ const Item = () => {
     register({ name: "encryption" });
   }, [register]);
 
+  useEffect(() => {
+    listMacs();
+  }, [listMacs]);
+
   return (
     <Container>
-      <h1>{"Inserisci cose"}</h1>
+      <h1>{itemId ? "Aggiorna cose" : "Inserisci cose"}</h1>
 
       <form onSubmit={handleSubmit(onSubmit)}>
         <TextField
-          onChange={handleChange}
           label="Possessore"
           name="owner"
+          onChange={handleChange}
+          defaultValue={item.owner || ""}
           placeholder="Please enter text here"
         />
         <TextField
@@ -114,8 +132,8 @@ const Item = () => {
 
         <Stack horizontal tokens={{ childrenGap: 8 }}>
           <Stack.Item>
-            <Link to="/list">
-              <DefaultButton>{"Annulla"}</DefaultButton>
+            <Link to="/app/list">
+              <DefaultButton>{"Indietro"}</DefaultButton>
             </Link>
           </Stack.Item>
           <Stack.Item>
