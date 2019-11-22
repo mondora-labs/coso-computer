@@ -6,6 +6,8 @@ const FormikTextfield = ({
   name,
   values,
   label,
+  errors,
+  touched,
   handleChange,
   ...rest
 }) => {
