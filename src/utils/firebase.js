@@ -1,6 +1,8 @@
 import firebase from "firebase";
 import uuid from "uuid/v4";
 
+import { navigate } from "@reach/router"
+
 firebase.initializeApp({
   apiKey: "AIzaSyCSrn0Muuaaa7qElThUF4qSVz7ejh97jUE",
   authDomain: "coso-computer.firebaseapp.com",
@@ -56,6 +58,7 @@ export const upsertMac = async mac => {
         antivirus: true,
         encryption: true
       });
+      navigate("/list");
   } catch (error) {
     console.log(error);
   }
