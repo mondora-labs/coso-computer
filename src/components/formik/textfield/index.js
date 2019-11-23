@@ -6,24 +6,25 @@ const FormikTextfield = ({
   name,
   values,
   label,
-  errors,
-  touched,
+  error,
+  touchedField,
   handleChange,
   ...rest
 }) => {
   const value = values[name];
-
   return (
     <TextField
       name={name}
       label={label}
       placeholder="Please enter text here"
+      errorMessage={ error}
       onChange={(event, text) =>
         handleChange({ target: { name, value: text } })
       }
       value={value}
       {...rest}
     />
+   
   );
 };
 

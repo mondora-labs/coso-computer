@@ -23,42 +23,53 @@ const Text = styled.div`
   align-items: center;
 `;
 
+const onColumnClick = () => {
+  console.log("ciao");
+};
+
 const columnsDefinitions = [
   {
     key: "owner",
     fieldName: "owner",
-    name: "Owner"
+    name: "Owner",
+    onColumnClick: onColumnClick
   },
   {
     key: "serial",
     fieldName: "serial",
-    name: "Serial"
+    name: "Serial",
+    onColumnClick: onColumnClick
   },
   {
     key: "dateFrom",
     fieldName: "dateFrom",
-    name: "From"
+    name: "From",
+    onColumnClick: onColumnClick
   },
   {
     key: "dateTo",
     fieldName: "dateTo",
-    name: "To"
+    name: "To",
+    onColumnClick: onColumnClick
   },
   {
     key: "hostname",
     fieldName: "hostname",
-    name: "HostName"
+    name: "HostName",
+    onColumnClick: onColumnClick
   },
   {
     key: "rentId",
     fieldName: "rentId",
-    name: "Rent #"
+    name: "Rent #",
+    onColumnClick: onColumnClick
   },
   {
     key: "antivirus",
     fieldName: "antivirus",
     name: "Antivirus",
     minWidth: 64,
+    onColumnClick: onColumnClick,
     onRender: item => (
       <Text>
         <Icon iconName={item.antivirus ? "Accept" : "Warning"} />
@@ -70,6 +81,7 @@ const columnsDefinitions = [
     fieldName: "encryption",
     name: "Encryption",
     minWidth: 72,
+    onColumnClick: onColumnClick,
     onRender: item => (
       <Text>
         <Icon iconName={item.encryption ? "Accept" : "Warning"} />
@@ -105,12 +117,12 @@ const List = () => {
       key: "actions",
       name: "Actions",
       minWidth: 112,
+      onColumnClick: onColumnClick,
       onRender: item => (
         <>
           <IconButton
-            onClick={() =>
-              setNote({ show: true, text: item.note || "Nessuna nota." })
-            }
+            disabled={!item.note || item.note === "Nessuna nota."}
+            onClick={() => setNote({ show: true, text: item.note })}
             iconProps={{ iconName: "More" }}
           />
           <Link to={`/app/item/${item.id}`}>

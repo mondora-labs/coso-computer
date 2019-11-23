@@ -6,12 +6,20 @@ import { useStoreActions, useStoreState } from "easy-peasy";
 import { PrimaryButton } from "office-ui-fabric-react";
 import { navigate } from "@reach/router";
 
+import logoM from "../../images/mlogo.png";
+
 const Container = styled.div`
   width: 100vw;
-  height: 100vh;
+  height: 70vh;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
+`;
+const Logo = styled.img`
+  width: 120px;
+  height: 120px;
+  display: block;
 `;
 
 const Login = () => {
@@ -26,9 +34,11 @@ const Login = () => {
 
   return (
     <Container>
-      <PrimaryButton onClick={doLogin} iconProps={{ iconName: "Lock" }}>
-        {"Login"}
-      </PrimaryButton>
+        <Logo src={logoM} />
+        <h1>{"Computer :m"}</h1>
+        <PrimaryButton onClick={doLogin} iconProps={{ iconName: "Lock" }}>
+          {"Login"}
+        </PrimaryButton>
     </Container>
   );
 };

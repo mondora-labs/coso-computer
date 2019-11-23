@@ -6,7 +6,7 @@ import { DatePicker } from "office-ui-fabric-react";
 
 const format = "DD/MM/YYYY";
 
-const FormikDatepicker = ({ name, values, label, handleChange, ...rest }) => {
+const FormikDatepicker = ({ name, values, label, errors, touched, handleChange, ...rest }) => {
   const value = values[name];
 
   return (
