@@ -31,7 +31,6 @@ const Item = ({ itemId }) => {
   const handleSubmit = values => {
     addMac({ id: itemId, ...values });
     navigate("/app/list");
-    //console.log("ciaone");
   };
 
   useEffect(() => {
@@ -47,89 +46,75 @@ const Item = ({ itemId }) => {
         onSubmit={handleSubmit}
         initialValues={item}
         validationSchema={Yup.object().shape({
-          owner: Yup.string().required("owner is required"),
-          serial: Yup.string().required("serial is required"),
-          antivirus: Yup.string().required("antivirus is required"),
-          encryption: Yup.string().required("encryption is required")
+          owner: Yup.string()
+            .min(2, "Too Short!")
+            .max(50, "Too Long!")
+            .required("owner is required"),
+          serial: Yup.string()
+            .min(2, "Too Short!")
+            .max(50, "Too Long!")
+            .required("serial is required"),
+          dateFrom: Yup.string().required("Seleziona data inizio"),
+          dateTo: Yup.string().required("Seleziona data fine")
         })}
       >
         {props => {
-          {
-            const { touched, errors } = props;
-            return (
-              <Form>
-                <FormikTextfield
-                  error={errors.owner}
-                  touchedField={touched.owner}
-                  name="owner"
-                  label="Possessore"
-                  {...props}
-                />
-                <FormikTextfield
-                  error={errors.serial}
-                  name="serial"
-                  label="Numero di serie"
-                  {...props}
-                />
-                <FormikDatepicker
-                  name="dateFrom"
-                  label="Data inizio contratto"
-                  {...props}
-                />
-                <FormikDatepicker
-                  name="dateTo"
-                  label="Data inizio contratto"
-                  {...props}
-                />
-                <FormikTextfield
-                  error={errors.hostname}
-                  name="hostname"
-                  label="Nome computer"
-                  {...props}
-                />
-                <FormikTextfield
-                  error={errors.rentId}
-                  name="rentId"
-                  label="Codice contratto"
-                  {...props}
-                />
-                <FormikTextfield
-                  error={errors.note}
-                  name="note"
-                  label="Note"
-                  multiline
+          return (
+            <Form>
+              <FormikTextfield name="owner" label="Possessore" {...props} />
+              <FormikTextfield
+                name="serial"
+                label="Numero di serie"
+                {...props}
+              />
+              <FormikDatepicker
+                name="dateFrom"
+                label="Data inizio contratto"
+                {...props}
+              />
+              <FormikDatepicker
+                name="dateTo"
+                label="Data fine contratto"
+                {...props}
+              />
+              <FormikTextfield
+                name="hostname"
+                label="Nome computer"
+                {...props}
+              />
+              <FormikTextfield
+                name="rentId"
+                label="Codice contratto"
+                {...props}
+              />
+              <FormikTextfield name="note" label="Note" multiline {...props} />
+
+              <Stack tokens={{ childrenGap: 16, padding: "16px 0" }}>
+                <FormikCheckbox
+                  name="antivirus"
+                  label="Sul computer è stato installato un antivirus e non verrà disattivato durante l'uso"
                   {...props}
                 />
 
-                <Stack tokens={{ childrenGap: 16, padding: "16px 0" }}>
-                  <FormikCheckbox
-                    error={errors.antivirus}
-                    name="antivirus"
-                    label="Sul computer è stato installato un antivirus e non verrà disattivato durante l'uso"
-                    {...props}
-                  />
+                <FormikCheckbox
+                  name="encryption"
+                  label="Sul computer è attivo un sistema di cifratura del disco"
+                  {...props}
+                />
+              </Stack>
 
-                  <FormikCheckbox
-                    error={errors.encryption}
-                    name="encryption"
-                    label="Sul computer è attivo un sistema di cifratura del disco"
-                    {...props}
-                  />
-                </Stack>
-
-                <Stack horizontal tokens={{ childrenGap: 8 }}>
-                  <Stack.Item>
-                    <Link to="/app/list">
-                      <DefaultButton>{"Indietro"}</DefaultButton>
-                    </Link>
-                  </Stack.Item>
-                  <Stack.Item>
-                    <PrimaryButton type="submit">{"Salva"}</PrimaryButton>
-                  </Stack.Item>
-                </Stack>
-              </Form>
-            );
-          }
+              <Stack horizontal tokens={{ childrenGap: 8 }}>
+                <Stack.Item>
+                  <Link to="/app/list">
+                    <DefaultButton>{"Indietro"}</DefaultButton>
+                  </Link>
+                </Stack.Item>
+                <Stack.Item>
+                  <PrimaryButton type="submit">{"Salva"}</PrimaryButton>
+                </Stack.Item>
+              </Stack>
+            </Form>
+          );
         }}
       </Formik>
     </Container>
