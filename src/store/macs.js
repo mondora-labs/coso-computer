@@ -3,7 +3,8 @@ import { action, thunk } from "easy-peasy";
 import { upsertMac, getMacs, deleteMac } from "../utils/firebase";
 
 const defaultState = {
-  items: []
+  items: [],
+  fetched: false
 };
 
 /**
@@ -14,6 +15,7 @@ export const macs = {
   updateItems: action((state, payload) => {
     return {
       ...state,
+      fetched: true,
       items: payload
     };
   }),

@@ -14,7 +14,7 @@ import FormikTextfield from "../../components/formik/textfield";
 import FormikDatepicker from "../../components/formik/datepicker";
 
 const Item = ({ itemId }) => {
-  const { items } = useStoreState(store => store.macs);
+  const { items, fetched, } = useStoreState(store => store.macs);
   const { addMac, listMacs } = useStoreActions(store => store.macs);
 
   const item = items.find(item => item.id === itemId) || {
@@ -34,8 +34,10 @@ const Item = ({ itemId }) => {
   };
 
   useEffect(() => {
-    listMacs();
-  }, [listMacs]);
+    if (!fetched) {
+      listMacs();
+    }
+  }, [fetched, listMacs]);
 
   return (
     <Container>

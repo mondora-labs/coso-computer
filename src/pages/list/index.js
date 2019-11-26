@@ -11,7 +11,8 @@ import {
   Icon,
   PrimaryButton,
   Stack,
-  SelectionMode
+  SelectionMode,
+  TextField
 } from "office-ui-fabric-react";
 
 import Container from "../../components/container";
@@ -102,11 +103,13 @@ const List = () => {
   });
 
   const { listMacs, removeMac } = useStoreActions(store => store.macs);
-  const { items } = useStoreState(store => store.macs);
+  const { items, fetched } = useStoreState(store => store.macs);
 
   useEffect(() => {
-    listMacs();
-  }, [listMacs]);
+    if (!fetched) {
+      listMacs();
+    }
+  }, [fetched, listMacs]);
 
   const columns = columnsDefinitions.map(columnDefinition => ({
     onRender: (item, index, column) => <Text>{item[column.fieldName]}</Text>,
@@ -138,6 +141,15 @@ const List = () => {
     }
   ];
 
+  const [search, setSearch] = useState("");
+  const filteredItems = items.filter(
+    item =>
+      item.owner.toLowerCase().includes(search.toLowerCase()) ||
+      item.serial.toLowerCase().includes(search.toLowerCase()) ||
+      item.hostname.toLowerCase().includes(search.toLowerCase()) ||
+      item.rentId.toLowerCase().includes(search.toLowerCase())
+  );
+
   return (
     <Container>
       <NormalDialog
@@ -159,10 +171,18 @@ const List = () => {
       />
       
 
+      <TextField
+        value={search}
+        onChange={(event, text) => setSearch(text)}
+        label="Search:"
+        placeholder="Search for owner, serial, hostname or rentId"
+        iconProps={{ iconName: 'Search' }}
+      />
+
       <DetailsList
         selectionMode={SelectionMode.none}
         columns={[...columns, ...actionsColumns]}
-        items={items}
+        items={filteredItems}
       />
 
       <br />
