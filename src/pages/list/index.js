@@ -17,7 +17,6 @@ import {
 
 import Container from "../../components/container";
 import NormalDialog from "../../components/dialog";
-import Logo from "../../components/logo";
 
 const Text = styled.div`
   display: flex;

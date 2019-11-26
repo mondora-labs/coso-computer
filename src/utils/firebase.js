@@ -2,7 +2,7 @@ import firebase from "firebase";
 import uuid from "uuid/v4";
 
 firebase.initializeApp({
-  apiKey: "AIzaSyCSrn0Muuaaa7qElThUF4qSVz7ejh97jUE",
+  apiKey: process.env.REACT_APP_API_KEY,
   authDomain: "coso-computer.firebaseapp.com",
   projectId: "coso-computer"
 });
