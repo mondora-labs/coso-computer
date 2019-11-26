@@ -16,6 +16,7 @@ import {
 
 import Container from "../../components/container";
 import NormalDialog from "../../components/dialog";
+import Logo from "../../components/logo";
 
 const Text = styled.div`
   display: flex;
@@ -156,8 +157,7 @@ const List = () => {
           removeMac(remove.id);
         }}
       />
-
-      <h1>{"Elenco cose"}</h1>
+      <Logo height={"24px"} />
 
       <DetailsList
         selectionMode={SelectionMode.none}
