@@ -157,7 +157,7 @@ const List = () => {
           removeMac(remove.id);
         }}
       />
-      <Logo height={"24px"} />
+      
 
       <DetailsList
         selectionMode={SelectionMode.none}

@@ -29,7 +29,7 @@ const Login = () => {
 
   return (
     <Container>
-      <Logo margin={"64px"} height={"32px"} />
+      <Logo height="32px" />
 
       <PrimaryButton onClick={doLogin} iconProps={{ iconName: "Lock" }}>
         {"Login"}

@@ -8,7 +8,6 @@ import { Link, navigate } from "@reach/router";
 import { PrimaryButton, DefaultButton, Stack } from "office-ui-fabric-react";
 
 import Container from "../../components/container";
-import Logo from "../../components/logo";
 
 import FormikCheckbox from "../../components/formik/checkbox";
 import FormikTextfield from "../../components/formik/textfield";
@@ -40,8 +39,6 @@ const Item = ({ itemId }) => {
 
   return (
     <Container>
-      <Logo height={"24px"} />
-
       <Formik
         enableReinitialize={true}
         onSubmit={handleSubmit}

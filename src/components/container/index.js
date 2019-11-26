@@ -1,6 +1,9 @@
-import styled from "styled-components";
+import React from "react";
 
-const Container = styled.div`
+import styled from "styled-components";
+import Logo from "../logo";
+
+const ContainerDiv = styled.div`
   @media (max-width: 1200px) {
     margin: 96px 72px;
   }
@@ -10,5 +13,14 @@ const Container = styled.div`
   margin: 96px 192px;
   justify-content: center;
 `;
+
+const Container = ({children}) => {
+  return(
+    <ContainerDiv>
+      <Logo/>
+      {children}
+    </ContainerDiv>
+  );
+};
 
 export default Container;
