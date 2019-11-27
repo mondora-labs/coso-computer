@@ -5,7 +5,12 @@ import { useStoreActions, useStoreState } from "easy-peasy";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import { Link, navigate } from "@reach/router";
-import { PrimaryButton, DefaultButton, Stack } from "office-ui-fabric-react";
+import {
+  PrimaryButton,
+  DefaultButton,
+  Stack,
+  Text
+} from "office-ui-fabric-react";
 
 import Container from "../../components/container";
 
@@ -14,7 +19,7 @@ import FormikTextfield from "../../components/formik/textfield";
 import FormikDatepicker from "../../components/formik/datepicker";
 
 const Item = ({ itemId }) => {
-  const { items, fetched, } = useStoreState(store => store.macs);
+  const { items, fetched } = useStoreState(store => store.macs);
   const { addMac, listMacs } = useStoreActions(store => store.macs);
 
   const item = items.find(item => item.id === itemId) || {
@@ -101,6 +106,26 @@ const Item = ({ itemId }) => {
                   label="Sul computer è attivo un sistema di cifratura del disco"
                   {...props}
                 />
+
+                <Text>
+                  È inoltre <strong>obbligatorio</strong> compilare il{" "}
+                  <a
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    href="/modulo_consegna.pdf"
+                  >
+                    seguente .pdf
+                  </a>{" "}
+                  e caricarlo in questa folder{" "}
+                  <a
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    href="https://drive.google.com/drive/folders/1EJbn-tS3_d8R8r0_OCFq2Ib301GstInm"
+                  >
+                    Google Drive
+                  </a>
+                  .
+                </Text>
               </Stack>
 
               <Stack horizontal tokens={{ childrenGap: 8 }}>
