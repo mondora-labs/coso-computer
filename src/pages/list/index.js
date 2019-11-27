@@ -32,45 +32,38 @@ const columnsDefinitions = [
   {
     key: "owner",
     fieldName: "owner",
-    name: "Owner",
-    onColumnClick: onColumnClick
+    name: "Owner"
   },
   {
     key: "serial",
     fieldName: "serial",
-    name: "Serial",
-    onColumnClick: onColumnClick
+    name: "Serial"
   },
   {
     key: "dateFrom",
     fieldName: "dateFrom",
-    name: "From",
-    onColumnClick: onColumnClick
+    name: "From"
   },
   {
     key: "dateTo",
     fieldName: "dateTo",
-    name: "To",
-    onColumnClick: onColumnClick
+    name: "To"
   },
   {
     key: "hostname",
     fieldName: "hostname",
-    name: "HostName",
-    onColumnClick: onColumnClick
+    name: "HostName"
   },
   {
     key: "rentId",
     fieldName: "rentId",
-    name: "Rent #",
-    onColumnClick: onColumnClick
+    name: "Rent #"
   },
   {
     key: "antivirus",
     fieldName: "antivirus",
     name: "Antivirus",
     minWidth: 64,
-    onColumnClick: onColumnClick,
     onRender: item => (
       <Text>
         <Icon iconName={item.antivirus ? "Accept" : "Warning"} />
@@ -82,7 +75,6 @@ const columnsDefinitions = [
     fieldName: "encryption",
     name: "Encryption",
     minWidth: 72,
-    onColumnClick: onColumnClick,
     onRender: item => (
       <Text>
         <Icon iconName={item.encryption ? "Accept" : "Warning"} />
@@ -112,6 +104,8 @@ const List = () => {
 
   const columns = columnsDefinitions.map(columnDefinition => ({
     onRender: (item, index, column) => <Text>{item[column.fieldName]}</Text>,
+    isResizable: true,
+    onColumnClick: onColumnClick,
     ...columnDefinition
   }));
 
