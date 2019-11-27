@@ -27,7 +27,7 @@ const FormikDatepicker = ({
       onSelectDate={date => {
         handleChange({ target: { name, value: moment(date).format(format) } });
       }}
-      styles={{ root: { width: 200 } }}
+      styles={{ root: { width: 250 } }}
       {...rest}
     />
   );

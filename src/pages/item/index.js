@@ -17,6 +17,7 @@ import Container from "../../components/container";
 import FormikCheckbox from "../../components/formik/checkbox";
 import FormikTextfield from "../../components/formik/textfield";
 import FormikDatepicker from "../../components/formik/datepicker";
+import FormikDevicepicker from "../../components/formik/devicePicker";
 
 const Item = ({ itemId }) => {
   const { items, fetched } = useStoreState(store => store.macs);
@@ -24,6 +25,9 @@ const Item = ({ itemId }) => {
 
   const item = items.find(item => item.id === itemId) || {
     owner: "",
+    CF: "",
+    device: "",
+    model: "",
     serial: "",
     dateFrom: "",
     dateTo: "",
@@ -55,6 +59,11 @@ const Item = ({ itemId }) => {
             .min(2, "Too Short!")
             .max(50, "Too Long!")
             .required("owner is required"),
+          CF: Yup.string()
+            .length(16, "wrong length")
+            .required("CF is required"),
+          device: Yup.string().required("Device kind is required"),
+          model: Yup.string().min(2, "Too Short!").required("Model name is required"),
           serial: Yup.string()
             .min(2, "Too Short!")
             .max(50, "Too Long!")
@@ -66,12 +75,38 @@ const Item = ({ itemId }) => {
         {props => {
           return (
             <Form>
-              <FormikTextfield name="owner" label="Possessore" {...props} />
+              <FormikTextfield
+                name="owner"
+                label="Nome e Cognome possessore"
+                {...props}
+              />
+              <FormikTextfield
+                name="CF"
+                label="Codice Fiscale possessore"
+                {...props}
+              />
+              <br />
+              <FormikDevicepicker
+                name="device"
+                label="Tipologia dispositivo"
+                {...props}
+              />
+              <FormikTextfield
+                name="model"
+                label="Modello dispositivo"
+                {...props}
+              />
               <FormikTextfield
                 name="serial"
                 label="Numero di serie"
                 {...props}
               />
+              <FormikTextfield
+                name="hostname"
+                label="Nome computer"
+                {...props}
+              />
+              <br />
               <FormikDatepicker
                 name="dateFrom"
                 label="Data inizio contratto"
@@ -80,11 +115,6 @@ const Item = ({ itemId }) => {
               <FormikDatepicker
                 name="dateTo"
                 label="Data fine contratto"
-                {...props}
-              />
-              <FormikTextfield
-                name="hostname"
-                label="Nome computer"
                 {...props}
               />
               <FormikTextfield
