@@ -12,18 +12,17 @@ const FormikTextfield = ({
   ...rest
 }) => {
   const value = values[name];
-  console.log(errors);
+
   return (
     <TextField
       name={name}
       label={label}
       placeholder="Please enter text here"
       errorMessage={touched[name] ? errors[name] : ""}
+      value={value}
       onChange={(event, text) =>
         handleChange({ target: { name, value: text } })
       }
-      styles={{ root: { width: 800 } }}
-      value={value}
       {...rest}
     />
    
