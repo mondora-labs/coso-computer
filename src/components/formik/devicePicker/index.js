@@ -26,6 +26,7 @@ const FormikDevicepicker = ({
   handleChange,
   ...rest
 }) => {
+    console.log(values);
   const value = values[name];
 
   return (
@@ -38,7 +39,7 @@ const FormikDevicepicker = ({
       errorMessage={touched[name] ? errors[name] : ""}
       value={value}
       onChange={(event, text) => {
-        handleChange({ target: { name, value: text } });
+        handleChange({ target: { name, value: text.key } });
       }}
       {...rest}
     />
