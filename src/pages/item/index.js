@@ -12,6 +12,8 @@ import {
   Text
 } from "office-ui-fabric-react";
 
+import createPdf from "../../utils/create-pdf"
+
 import Container from "../../components/container";
 
 import FormikCheckbox from "../../components/formik/checkbox";
@@ -63,7 +65,9 @@ const Item = ({ itemId }) => {
             .length(16, "wrong length")
             .required("CF is required"),
           device: Yup.string().required("Device kind is required"),
-          model: Yup.string().min(2, "Too Short!").required("Model name is required"),
+          model: Yup.string()
+            .min(2, "Too Short!")
+            .required("Model name is required"),
           serial: Yup.string()
             .min(2, "Too Short!")
             .max(50, "Too Long!")
@@ -136,26 +140,26 @@ const Item = ({ itemId }) => {
                   label="Sul computer è attivo un sistema di cifratura del disco"
                   {...props}
                 />
+              </Stack>
 
-                <Text>
-                  È inoltre <strong>obbligatorio</strong> compilare il{" "}
-                  <a
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    href="/modulo_consegna.pdf"
-                  >
-                    seguente .pdf
-                  </a>{" "}
-                  e caricarlo in questa folder{" "}
-                  <a
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    href="https://drive.google.com/drive/folders/1EJbn-tS3_d8R8r0_OCFq2Ib301GstInm"
-                  >
-                    Google Drive
-                  </a>
-                  .
-                </Text>
+              <Stack horizontal tokens={{ childrenGap: 8, padding: "16px 0" }}>
+                <Stack.Item>
+                  <Text>
+                    È inoltre <strong>obbligatorio</strong> firmare la lettera
+                    di assegnamento e caricarla in questa folder{" "}
+                    <a
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      href="https://drive.google.com/drive/folders/1EJbn-tS3_d8R8r0_OCFq2Ib301GstInm"
+                    >
+                      Google Drive
+                    </a>
+                    .
+                  </Text>
+                </Stack.Item>
+                <Stack.Item>
+                  <PrimaryButton onClick={() => createPdf(item)}>{"crea PDF"}</PrimaryButton>
+                </Stack.Item>
               </Stack>
 
               <Stack horizontal tokens={{ childrenGap: 8 }}>
