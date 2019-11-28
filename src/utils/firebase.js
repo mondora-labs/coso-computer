@@ -1,5 +1,8 @@
 import firebase from "firebase";
+import moment from "moment";
 import uuid from "uuid/v4";
+
+import getDiff from "./diff";
 
 firebase.initializeApp({
   apiKey: process.env.REACT_APP_API_KEY,
@@ -31,57 +34,72 @@ export const getMacs = async () => {
 
   querySnapshot.forEach(doc => items.push(doc.data()));
 
-  items.forEach(x => console.log(x.id));
-
   return items;
 };
 
 export const upsertMac = async mac => {
-  console.log("upsert a mac", mac);
-
-  const id = mac.id || uuid();
-
   try {
-    await firebase
-      .firestore()
+    const firestore = firebase.firestore();
+    const batch = firestore.batch();
+
+    const oldDocRef = await firestore
       .collection("macs")
-      .doc(id)
-      .set({
-        id: id,
-        owner: mac.owner || "",
-        serial: mac.serial || "",
-        dateFrom: mac.dateFrom || "",
-        dateTo: mac.dateTo || "",
-        hostname: mac.hostname || "<...>",
-        rentId: mac.rentId || "#",
-        note: mac.note || "Nessuna nota.",
-        antivirus: mac.antivirus || false,
-        encryption: mac.encryption || false
-      });
+      .doc(mac.id)
+      .get();
+
+    const oldMac = oldDocRef.data() || {};
+
+    const newMac = {
+      id: mac.id,
+      owner: mac.owner || "",
+      serial: mac.serial || "",
+      dateFrom: mac.dateFrom || "",
+      dateTo: mac.dateTo || "",
+      hostname: mac.hostname || "",
+      rentId: mac.rentId || "",
+      note: mac.note || "Nessuna nota.",
+      antivirus: mac.antivirus || false,
+      encryption: mac.encryption || false
+    };
+
+    const diff = getDiff(oldMac, newMac);
+    const log = {
+      who: firebase.auth().currentUser.email,
+      timestamp: moment.utc().format(),
+      diff
+    };
+
+    console.log("upsert a mac", mac, log);
+
+    const logRef = firestore.collection("logs").doc(uuid());
+    const macRef = firestore.collection("macs").doc(newMac.id);
+
+    batch.set(logRef, log);
+    batch.set(macRef, newMac);
+    batch.commit();
   } catch (error) {
     console.log(error);
   }
 };
 
-export const deleteMac = async id => {
-  console.log("delete a mac", id);
-
-  if (!id) {
-    return;
-  }
-
+export const deleteMac = async mac => {
   try {
-    await firebase
-      .firestore()
-      .collection("macs")
-      .doc(id)
-      .delete()
-      .then(function() {
-        console.log("Document successfully deleted!");
-      })
-      .catch(function(error) {
-        console.error("Error removing document: ", error);
-      });
+    const log = {
+      who: firebase.auth().currentUser.email,
+      removed: true,
+      record: mac
+    };
+    console.log("delete a mac", mac, log);
+
+    const firestore = firebase.firestore();
+    const batch = firestore.batch();
+
+    const logRef = firestore.collection("logs").doc(uuid());
+    const macRef = firestore.collection("macs").doc(mac.id);
+
+    batch.set(logRef, log);
+    batch.delete(macRef);
+    batch.commit();
   } catch (error) {
     console.log(error);
   }
