@@ -1,4 +1,7 @@
-import firebase from "firebase";
+import firebase from "firebase/app";
+import "firebase/auth";
+import "firebase/firestore";
+
 import moment from "moment";
 import uuid from "uuid/v4";
 
@@ -24,17 +27,28 @@ export const login = async () => {
   }
 };
 
-export const getMacs = async () => {
+export const getCollection = async collectionName => {
   let items = [];
 
   const querySnapshot = await firebase
     .firestore()
-    .collection("macs")
+    .collection(collectionName)
     .get();
 
   querySnapshot.forEach(doc => items.push(doc.data()));
+  console.log("list collection", collectionName, items);
 
   return items;
+};
+
+export const getLogs = async () => {
+  const logs = await getCollection("logs");
+  return logs;
+};
+
+export const getMacs = async () => {
+  const macs = await getCollection("macs");
+  return macs;
 };
 
 export const upsertMac = async mac => {
@@ -86,6 +100,7 @@ export const deleteMac = async mac => {
   try {
     const log = {
       who: firebase.auth().currentUser.email,
+      timestamp: moment.utc().format(),
       removed: true,
       record: mac
     };
