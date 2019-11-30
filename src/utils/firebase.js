@@ -49,7 +49,7 @@ export const upsertMac = async mac => {
       .set({
         id: id,
         owner: mac.owner || "",
-        CF: mac.CF || "",
+        fiscalCode: mac.fiscalCode || "",
         device: mac.device || "",
         model: mac.model || "",
         serial: mac.serial || "",

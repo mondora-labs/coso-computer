@@ -1,19 +1,15 @@
 import React from "react";
 
-import {
-  Dropdown,
-  IDropdownStyles,
-  IDropdownOption
-} from "office-ui-fabric-react/lib/Dropdown";
+import { Dropdown } from "office-ui-fabric-react/lib/Dropdown";
 
-const assetTypes: IDropdownOption[] = [
+const assetTypes = [
   { key: "notebook", text: "Notebook" },
   { key: "smartphone", text: "Smartphone" },
   { key: "tablet", text: "Tablet" },
   { key: "accessori", text: "accessori" }
 ];
 
-const dropdownStyles: Partial<IDropdownStyles> = {
+const dropdownStyles = {
   dropdown: { width: 250 }
 };
 
@@ -26,18 +22,15 @@ const FormikDevicepicker = ({
   handleChange,
   ...rest
 }) => {
-    console.log(values);
-  const value = values[name];
-
   return (
     <Dropdown
       name={name}
-      placeholder="Select an option"
       label={label}
       options={assetTypes}
+      placeholder="Select an option"
       styles={dropdownStyles}
+      defaultSelectedKey={values[name]}
       errorMessage={touched[name] ? errors[name] : ""}
-      value={value}
       onChange={(event, text) => {
         handleChange({ target: { name, value: text.key } });
       }}

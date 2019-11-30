@@ -12,14 +12,14 @@ import {
   Text
 } from "office-ui-fabric-react";
 
-import createPdf from "../../utils/create-pdf"
+import createPdf from "../../utils/create-pdf/create-pdf";
 
 import Container from "../../components/container";
 
 import FormikCheckbox from "../../components/formik/checkbox";
 import FormikTextfield from "../../components/formik/textfield";
 import FormikDatepicker from "../../components/formik/datepicker";
-import FormikDevicepicker from "../../components/formik/devicePicker";
+import FormikDevicepicker from "../../components/formik/device-picker";
 
 const Item = ({ itemId }) => {
   const { items, fetched } = useStoreState(store => store.macs);
@@ -27,7 +27,7 @@ const Item = ({ itemId }) => {
 
   const item = items.find(item => item.id === itemId) || {
     owner: "",
-    CF: "",
+    fiscalCode: "",
     device: "",
     model: "",
     serial: "",
@@ -41,6 +41,7 @@ const Item = ({ itemId }) => {
 
   const handleSubmit = values => {
     addMac({ id: itemId, ...values });
+    createPdf(item);
     navigate("/app/list");
   };
 
@@ -61,7 +62,7 @@ const Item = ({ itemId }) => {
             .min(2, "Too Short!")
             .max(50, "Too Long!")
             .required("owner is required"),
-          CF: Yup.string()
+          fiscalCode: Yup.string()
             .length(16, "wrong length")
             .required("CF is required"),
           device: Yup.string().required("Device kind is required"),
@@ -85,7 +86,7 @@ const Item = ({ itemId }) => {
                 {...props}
               />
               <FormikTextfield
-                name="CF"
+                name="fiscalCode"
                 label="Codice Fiscale possessore"
                 {...props}
               />
@@ -142,27 +143,22 @@ const Item = ({ itemId }) => {
                 />
               </Stack>
 
-              <Stack horizontal tokens={{ childrenGap: 8, padding: "16px 0" }}>
-                <Stack.Item>
-                  <Text>
-                    È inoltre <strong>obbligatorio</strong> firmare la lettera
-                    di assegnamento e caricarla in questa folder{" "}
-                    <a
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      href="https://drive.google.com/drive/folders/1EJbn-tS3_d8R8r0_OCFq2Ib301GstInm"
-                    >
-                      Google Drive
-                    </a>
-                    .
-                  </Text>
-                </Stack.Item>
-                <Stack.Item>
-                  <PrimaryButton onClick={() => createPdf(item)}>{"crea PDF"}</PrimaryButton>
-                </Stack.Item>
-              </Stack>
+              <Text>
+                È inoltre <strong>obbligatorio</strong> firmare la lettera di
+                assegnamento e caricarla in questa folder{" "}
+                <a
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  href="https://drive.google.com/drive/folders/1EJbn-tS3_d8R8r0_OCFq2Ib301GstInm"
+                >
+                  Google Drive
+                </a>
+                .
+                <br />
+                <br />
+              </Text>
 
-              <Stack horizontal tokens={{ childrenGap: 8 }}>
+              <Stack horizontal tokens={{ childrenGap: 16 }}>
                 <Stack.Item>
                   <Link to="/app/list">
                     <DefaultButton>{"Indietro"}</DefaultButton>
