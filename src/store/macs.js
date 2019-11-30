@@ -1,4 +1,5 @@
 import { action, thunk } from "easy-peasy";
+import uuid from "uuid/v4";
 
 import { upsertMac, getMacs, deleteMac } from "../utils/firebase";
 
@@ -20,11 +21,14 @@ export const macs = {
     };
   }),
   addMac: action((state, payload) => {
-    upsertMac(payload);
+    const id = payload.id || uuid();
+    const mac = { ...payload, id };
+
+    upsertMac(mac);
 
     return {
       ...state,
-      items: [...state.items.filter(mac => mac.id !== payload.id), payload]
+      items: [...state.items.filter(mac => mac.id !== payload.id), mac]
     };
   }),
   removeMac: action((state, payload) => {
@@ -32,7 +36,7 @@ export const macs = {
 
     return {
       ...state,
-      items: state.items.filter(x => x.id !== payload)
+      items: state.items.filter(x => x.id !== payload.id)
     };
   }),
   listMacs: thunk(async actions => {

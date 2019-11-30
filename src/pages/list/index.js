@@ -85,8 +85,7 @@ const columnsDefinitions = [
 
 const List = () => {
   const [remove, setRemove] = useState({
-    show: false,
-    id: ""
+    show: false
   });
   const [note, setNote] = useState({
     show: false,
@@ -126,7 +125,7 @@ const List = () => {
             <IconButton iconProps={{ iconName: "EditNote" }} />
           </Link>
           <IconButton
-            onClick={() => setRemove({ show: true, id: item.id })}
+            onClick={() => setRemove({ show: true, mac: item })}
             iconProps={{ iconName: "Delete" }}
           />
         </>
@@ -159,7 +158,7 @@ const List = () => {
         onDismiss={() => setRemove({ show: false })}
         handleConfirm={() => {
           setRemove({ show: false });
-          removeMac(remove.id);
+          removeMac(remove.mac);
         }}
       />
       
