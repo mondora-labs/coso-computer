@@ -21,23 +21,25 @@ import FormikTextfield from "../../components/formik/textfield";
 import FormikDatepicker from "../../components/formik/datepicker";
 import FormikDevicepicker from "../../components/formik/device-picker";
 
+const itemInitialValues = {
+  owner: "",
+  fiscalCode: "",
+  device: "",
+  model: "",
+  serial: "",
+  dateFrom: "",
+  dateTo: "",
+  hostname: "",
+  rentId: "",
+  antivirus: false,
+  encryption: false
+};
+
 const Item = ({ itemId }) => {
   const { items, fetched } = useStoreState(store => store.macs);
   const { addMac, listMacs } = useStoreActions(store => store.macs);
 
-  const item = items.find(item => item.id === itemId) || {
-    owner: "",
-    fiscalCode: "",
-    device: "",
-    model: "",
-    serial: "",
-    dateFrom: "",
-    dateTo: "",
-    hostname: "",
-    rentId: "",
-    antivirus: false,
-    encryption: false
-  };
+  const item = items.find(item => item.id === itemId);
 
   const handleSubmit = values => {
     addMac({ id: itemId, ...values });
@@ -56,7 +58,7 @@ const Item = ({ itemId }) => {
       <Formik
         enableReinitialize={true}
         onSubmit={handleSubmit}
-        initialValues={item}
+        initialValues={{ ...itemInitialValues, ...item }}
         validationSchema={Yup.object().shape({
           owner: Yup.string()
             .min(2, "Too Short!")
