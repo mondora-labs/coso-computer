@@ -6,7 +6,7 @@ const assetTypes = [
   { key: "notebook", text: "Notebook" },
   { key: "smartphone", text: "Smartphone" },
   { key: "tablet", text: "Tablet" },
-  { key: "accessori", text: "accessori" }
+  { key: "accessori", text: "Accessori" }
 ];
 
 const dropdownStyles = {
