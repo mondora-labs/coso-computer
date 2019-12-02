@@ -21,7 +21,8 @@ const getAdditions = log => {
 const getEdits = log => {
   const edits = (log.diff && log.diff.edits) || [];
   return edits.map(
-    edit => `Modificato campo "${edit.field}": "${edit.value.old}" → "${edit.value.new}"`
+    edit =>
+      `Modificato campo "${edit.field}": "${edit.value.old}" → "${edit.value.new}"`
   );
 };
 
@@ -82,7 +83,9 @@ const Logs = () => {
       <DetailsList
         selectionMode={SelectionMode.none}
         columns={columns}
-        items={items}
+        items={items.sort(
+          (a, b) => new Date(b.timestamp) - new Date(a.timestamp)
+        )}
       />
     </Container>
   );
