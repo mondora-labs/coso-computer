@@ -1,16 +1,20 @@
-import { navigate } from "@reach/router";
-
 import { PDFDocument, StandardFonts, rgb, fontkit } from "pdf-lib";
 
 import pdfLetterDefault from "./assets/modulo-consegna.pdf";
 
-const downloadPdf = pdfBytes => {
-  const blob = new Blob([pdfBytes], { type: "application/pdf" });
-  const blobUrl = URL.createObjectURL(blob);
-  let newWindow = window.open("/");
-  newWindow.onload = () => {
-    newWindow.location = URL.createObjectURL(blob);
-  };
+const downloadPdf = (blob, fileName) => {
+  const link = document.createElement("a");
+
+  link.href = URL.createObjectURL(blob);
+  link.download = fileName;
+  // some browser needs the anchor to be in the doc
+  document.body.append(link);
+  link.click();
+  link.remove();
+  // in case the Blob uses a lot of memory
+  window.addEventListener("focus", e => URL.revokeObjectURL(link.href), {
+    once: true
+  });
 };
 
 const customSplit = (str, maxLength) => {
@@ -76,8 +80,11 @@ const createPdf = async item => {
     y: height - 665
   });
 
+  const fileName = "Consegna asset - " + item.owner;
+
   const pdfBytes = await pdfDoc.save();
-  downloadPdf(pdfBytes);
+  const blob = new Blob([pdfBytes], { type: "application/pdf" });
+  downloadPdf(blob, fileName);
 };
 
 export default createPdf;
