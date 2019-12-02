@@ -8,7 +8,7 @@ import { DetailsList, SelectionMode } from "office-ui-fabric-react";
 import Container from "../../components/container";
 
 const getDeletions = log => {
-  return log.removed ? ["Delete record"] : [];
+  return log.removed ? ["Rimosso record"] : [];
 };
 
 const getAdditions = log => {
@@ -21,7 +21,7 @@ const getAdditions = log => {
 const getEdits = log => {
   const edits = (log.diff && log.diff.edits) || [];
   return edits.map(
-    edit => `Campo "${edit.field}": "${edit.value.old}" → "${edit.value.new}"`
+    edit => `Modificato campo "${edit.field}": "${edit.value.old}" → "${edit.value.new}"`
   );
 };
 
@@ -58,7 +58,7 @@ const columns = [
   {
     key: "timestamp",
     name: "Quando",
-    minWidth: 88,
+    minWidth: 96,
     maxWidth: 112,
     onRender: record => {
       var duration = moment.duration(moment().diff(moment(record.timestamp)));
