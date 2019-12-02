@@ -15,8 +15,8 @@ const getDiff = (oldValue, newValue) => {
     .map(x => ({
       field: x.path.join("."),
       value: {
-        new: x.lhs,
-        old: x.rhs
+        old: x.lhs,
+        new: x.rhs
       }
     }));
 
