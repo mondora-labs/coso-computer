@@ -76,7 +76,9 @@ const Item = ({ itemId }) => {
             .max(50, "Too Long!")
             .required("serial is required"),
           dateFrom: Yup.string().required("Seleziona data inizio"),
-          dateTo: Yup.string().required("Seleziona data fine")
+          dateTo: Yup.string().required("Seleziona data fine"),
+          antivirus: Yup.bool().oneOf([true], "Antivirus is required"),
+          encryption: Yup.bool().oneOf([true], "Encryption is required")
         })}
       >
         {props => {
