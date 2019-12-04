@@ -43,7 +43,7 @@ const Item = ({ itemId }) => {
 
   const handleSubmit = values => {
     addMac({ id: itemId, ...values });
-    createPdf(item);
+    createPdf(values);
     navigate("/app/list");
   };
 
