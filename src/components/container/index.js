@@ -21,7 +21,7 @@ const ContainerDiv = styled.div`
   justify-content: center;
 `;
 
-const LogsContainer = styled.div`
+const CommandsContainer = styled.div`
   position: absolute;
   top: 24px;
   right: 24px;
@@ -30,11 +30,18 @@ const LogsContainer = styled.div`
 const Container = ({ children }) => {
   return (
     <>
-      <LogsContainer>
+      <CommandsContainer>
+        <a
+          target="_blank"
+          rel="noopener noreferrer"
+          href="https://drive.google.com/open?id=1EJbn-tS3_d8R8r0_OCFq2Ib301GstInm"
+        >
+          <IconButton iconProps={{ iconName: "BacklogList" }} />
+        </a>
         <Link to="/app/logs">
           <IconButton iconProps={{ iconName: "History" }} />
         </Link>
-      </LogsContainer>
+      </CommandsContainer>
       <ContainerDiv>
         <Logo />
         {children}
