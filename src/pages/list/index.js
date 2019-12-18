@@ -163,13 +163,12 @@ const List = () => {
         }}
       />
       
-
       <TextField
         value={search}
         onChange={(event, text) => setSearch(text)}
         label="Search:"
         placeholder="Search for owner, serial, hostname or rentId"
-        iconProps={{ iconName: 'Search' }}
+        iconProps={{ iconName: "Search" }}
       />
 
       <DetailsList

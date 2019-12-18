@@ -17,8 +17,8 @@ const PrivateRoute = ({ children }) => {
           <Stack.Item align="center">
             <h1>{"Unauthorized"}</h1>
           </Stack.Item>
-          <Stack.Item align="center">
 
+          <Stack.Item align="center">
             <Link to="/">
               <DefaultButton iconProps={{ iconName: "home" }}>
                 {"Back home"}
