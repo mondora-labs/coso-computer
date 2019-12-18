@@ -3,7 +3,7 @@ import React from "react";
 import styled from "styled-components";
 
 import { Link } from "@reach/router";
-import { IconButton, Stack, Icon } from "office-ui-fabric-react";
+import { IconButton } from "office-ui-fabric-react";
 
 import Logo from "../logo";
 
@@ -36,29 +36,7 @@ const Container = ({ children }) => {
         </Link>
       </LogsContainer>
       <ContainerDiv>
-        <Stack horizontal horizontalAlign="space-between">
-          <Stack.Item>
-            <Link to="/list">
-              <Logo />
-            </Link>
-          </Stack.Item>
-
-          <Stack.Item align="end">
-            <a
-              target="_blank"
-              rel="noopener noreferrer"
-              href="https://drive.google.com/open?id=1EJbn-tS3_d8R8r0_OCFq2Ib301GstInm"
-            >
-              <Icon
-                iconName={"OneDriveFolder16"}
-                style={{
-                  color: "rgb(96, 94, 92)",
-                  fontSize: "40px"
-                }}
-              />
-            </a>
-          </Stack.Item>
-        </Stack>
+        <Logo />
         {children}
       </ContainerDiv>
     </>

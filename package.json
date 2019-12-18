@@ -5,6 +5,7 @@
   "dependencies": {
     "@pdf-lib/fontkit": "^0.0.4",
     "@reach/router": "^1.2.1",
+    "deep-diff": "^1.0.2",
     "easy-peasy": "^3.2.3",
     "firebase": "^7.4.0",
     "formik": "^2.0.6",
