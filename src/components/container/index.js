@@ -1,9 +1,14 @@
 import React from "react";
+import { useId } from "@uifabric/react-hooks";
 
 import styled from "styled-components";
 
 import { Link } from "@reach/router";
-import { IconButton } from "office-ui-fabric-react";
+import {
+  IconButton,
+  ITooltipHostStyles,
+  TooltipHost
+} from "office-ui-fabric-react";
 
 import Logo from "../logo";
 
@@ -27,20 +32,32 @@ const CommandsContainer = styled.div`
   right: 24px;
 `;
 
+const tooltipId = "bob";
+const hostStyles = { root: { display: "inline-block" } };
+
 const Container = ({ children }) => {
   return (
     <>
       <CommandsContainer>
-        <a
-          target="_blank"
-          rel="noopener noreferrer"
-          href="https://drive.google.com/open?id=1EJbn-tS3_d8R8r0_OCFq2Ib301GstInm"
+        <TooltipHost
+          content="Cartella moduli firmati"
+          id={"folder-tooltip"}
+          styles={hostStyles}
         >
-          <IconButton iconProps={{ iconName: "FolderList" }} />
-        </a>
-        <Link to="/app/logs">
-          <IconButton iconProps={{ iconName: "History" }} />
-        </Link>
+          <a
+            aria-describedby={"folder-tooltip"}
+            target="_blank"
+            rel="noopener noreferrer"
+            href="https://drive.google.com/open?id=1EJbn-tS3_d8R8r0_OCFq2Ib301GstInm"
+          >
+            <IconButton iconProps={{ iconName: "FolderList" }} />
+          </a>
+        </TooltipHost>
+        <TooltipHost content="Mostra i log" id={"logs-tooltip"} styles={hostStyles}>
+          <Link to="/app/logs" aria-describedby={"folder-tooltip"}>
+            <IconButton iconProps={{ iconName: "History" }} />
+          </Link>
+        </TooltipHost>
       </CommandsContainer>
       <ContainerDiv>
         <Logo />
