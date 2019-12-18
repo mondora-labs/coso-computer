@@ -9,7 +9,9 @@ import {
   PrimaryButton,
   DefaultButton,
   Stack,
-  Text
+  Text,
+  MessageBar,
+  MessageBarType
 } from "office-ui-fabric-react";
 
 import createPdf from "../../utils/create-pdf/create-pdf";
@@ -109,16 +111,52 @@ const Item = ({ itemId }) => {
                 label="Modello dispositivo"
                 {...props}
               />
+              <MessageBar
+                messageBarType={MessageBarType.warning}
+                isMultiline={true}
+              >
+                <b>{"su Mac:"}</b>
+                {" Cmd + spazio > informazioni su questo Mac    "}
+                <br />
+                <b>{"Su windows: "}</b>
+                {' start > "cmd" > "wmic computersystem get model"'}
+                <br />
+                <i>{" es: MacBook Pro (15-inch, 2017)"}</i>
+              </MessageBar>
               <FormikTextfield
                 name="serial"
                 label="Numero di serie"
                 {...props}
               />
+              <MessageBar
+                messageBarType={MessageBarType.warning}
+                isMultiline={true}
+              >
+                <b>{"su Mac:"}</b>
+                {" Cmd + spazio > informazioni su questo Mac    "}
+                <br />
+                <b>{"Su windows: "}</b>
+                {' start > "cmd" > "wmic bios get serialnumber"'}
+                <br />
+                <i>{" es: C02VG3ULXDT6"}</i>
+              </MessageBar>
               <FormikTextfield
                 name="hostname"
                 label="Nome computer"
                 {...props}
               />
+              <MessageBar
+                messageBarType={MessageBarType.warning}
+                isMultiline={true}
+              >
+                <b>{"su Mac:"}</b>
+                {" Preferenze > condivisione > nome computer   "} 
+                <br />
+                <b>{"Su windows: "}</b>
+                {' start > "cmd" > "ipconfig /all" > host name'}
+                <br />
+                <i>{" es: MacBook Pro di Giovanni"}</i>
+              </MessageBar>
               <br />
               <FormikDatepicker
                 name="dateFrom"
@@ -136,7 +174,6 @@ const Item = ({ itemId }) => {
                 {...props}
               />
               <FormikTextfield name="note" label="Note" multiline {...props} />
-
               <Stack tokens={{ childrenGap: 16, padding: "16px 0" }}>
                 <FormikCheckbox
                   name="antivirus"
@@ -150,7 +187,6 @@ const Item = ({ itemId }) => {
                   {...props}
                 />
               </Stack>
-
               <Text>
                 {"È inoltre "}
                 <strong>{"obbligatorio"}</strong>{" "}
@@ -168,7 +204,6 @@ const Item = ({ itemId }) => {
                 <br />
                 <br />
               </Text>
-
               <Stack horizontal tokens={{ childrenGap: 16 }}>
                 <Stack.Item>
                   <Link to="/app/list">
