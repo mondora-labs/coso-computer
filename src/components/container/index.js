@@ -36,7 +36,7 @@ const Container = ({ children }) => {
           rel="noopener noreferrer"
           href="https://drive.google.com/open?id=1EJbn-tS3_d8R8r0_OCFq2Ib301GstInm"
         >
-          <IconButton iconProps={{ iconName: "BacklogList" }} />
+          <IconButton iconProps={{ iconName: "FolderList" }} />
         </a>
         <Link to="/app/logs">
           <IconButton iconProps={{ iconName: "History" }} />
