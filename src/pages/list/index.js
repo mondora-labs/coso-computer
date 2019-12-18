@@ -32,22 +32,22 @@ const columnsDefinitions = [
   {
     key: "owner",
     fieldName: "owner",
-    name: "Owner"
+    name: "Possessore"
   },
   {
     key: "serial",
     fieldName: "serial",
-    name: "Serial"
+    name: "Seriale"
   },
   {
     key: "dateFrom",
     fieldName: "dateFrom",
-    name: "From"
+    name: "Inizio"
   },
   {
     key: "dateTo",
     fieldName: "dateTo",
-    name: "To"
+    name: "Termine"
   },
   {
     key: "hostname",
@@ -57,7 +57,7 @@ const columnsDefinitions = [
   {
     key: "rentId",
     fieldName: "rentId",
-    name: "Rent #"
+    name: "Affitto #"
   },
   {
     key: "antivirus",
@@ -73,7 +73,7 @@ const columnsDefinitions = [
   {
     key: "encryption",
     fieldName: "encryption",
-    name: "Encryption",
+    name: "Cifratura",
     minWidth: 72,
     onRender: item => (
       <Text>
@@ -111,7 +111,7 @@ const List = () => {
   const actionsColumns = [
     {
       key: "actions",
-      name: "Actions",
+      name: "Modifica",
       minWidth: 112,
       onColumnClick: onColumnClick,
       onRender: item => (
@@ -145,14 +145,14 @@ const List = () => {
   return (
     <Container>
       <NormalDialog
-        title="Notes"
+        title="Note"
         subText={note.text}
         hidden={!note.show}
         onDismiss={() => setNote({ ...note, show: false })}
       />
 
       <NormalDialog
-        title="Delete me oh?"
+        title="Mi vuoi cancellare oh?"
         subText="E se poi te ne penti?"
         hidden={!remove.show}
         onDismiss={() => setRemove({ show: false })}
@@ -165,8 +165,8 @@ const List = () => {
       <TextField
         value={search}
         onChange={(event, text) => setSearch(text)}
-        label="Search:"
-        placeholder="Search for owner, serial, hostname or rentId"
+        label="Cerca:"
+        placeholder="Cerca possessore, seriale, hostname o rentId"
         iconProps={{ iconName: "Search" }}
       />
 
@@ -181,7 +181,7 @@ const List = () => {
       <Stack>
         <Stack.Item align="center">
           <Link to="/app/item">
-            <PrimaryButton text="New item" iconProps={{ iconName: "Add" }} />
+            <PrimaryButton text="Aggiungi nuovo" iconProps={{ iconName: "Add" }} />
           </Link>
         </Stack.Item>
       </Stack>

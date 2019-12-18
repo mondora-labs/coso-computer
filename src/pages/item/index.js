@@ -61,24 +61,28 @@ const Item = ({ itemId }) => {
         initialValues={{ ...itemInitialValues, ...item }}
         validationSchema={Yup.object().shape({
           owner: Yup.string()
-            .min(2, "Too Short!")
-            .max(50, "Too Long!")
-            .required("owner is required"),
+            .min(2, "Numero di caratteri insufficiente")
+            .max(50, "Numero di caratteri eccessivo")
+            .required("Nome possessore richiesto"),
           fiscalCode: Yup.string()
-            .length(16, "wrong length")
-            .required("CF is required"),
-          device: Yup.string().required("Device kind is required"),
+            .length(16, "Numero di caratteri incorretto")
+            .required("Codice Fiscale richiesto"),
+          device: Yup.string().required("Tipologia dispositivo richiesta"),
           model: Yup.string()
-            .min(2, "Too Short!")
-            .required("Model name is required"),
+            .min(2, "Numero di caratteri insufficiente")
+            .max(50, "Numero di caratteri eccessivo")
+            .required("Nome modello richiesto"),
           serial: Yup.string()
-            .min(2, "Too Short!")
-            .max(50, "Too Long!")
-            .required("serial is required"),
+            .min(2, "Numero di caratteri insufficiente")
+            .max(50, "Numero di caratteri eccessivo")
+            .required("Codice seriale richiesto"),
           dateFrom: Yup.string().required("Seleziona data inizio"),
           dateTo: Yup.string().required("Seleziona data fine"),
-          antivirus: Yup.bool().oneOf([true], "Antivirus is required"),
-          encryption: Yup.bool().oneOf([true], "Encryption is required")
+          antivirus: Yup.bool().oneOf([true], "L'antivirus è richiesto"),
+          encryption: Yup.bool().oneOf(
+            [true],
+            "La cifratura del disco è richiesta"
+          )
         })}
       >
         {props => {
@@ -91,7 +95,7 @@ const Item = ({ itemId }) => {
               />
               <FormikTextfield
                 name="fiscalCode"
-                label="Codice Fiscale possessore"
+                label="Codice Fiscale"
                 {...props}
               />
               <br />
@@ -148,14 +152,17 @@ const Item = ({ itemId }) => {
               </Stack>
 
               <Text>
-                È inoltre <strong>obbligatorio</strong> firmare la lettera di
-                assegnamento e caricarla in questa folder{" "}
+                {"È inoltre "}
+                <strong>{"obbligatorio"}</strong>{" "}
+                {
+                  "firmare la lettera di assegnamento e caricarla in questa folder  "
+                }
                 <a
                   target="_blank"
                   rel="noopener noreferrer"
                   href="https://drive.google.com/drive/folders/1EJbn-tS3_d8R8r0_OCFq2Ib301GstInm"
                 >
-                  Google Drive
+                  {"Google Drive"}
                 </a>
                 .
                 <br />

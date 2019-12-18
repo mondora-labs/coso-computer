@@ -23,7 +23,7 @@ const FormikDatepicker = ({
       textField={{ value, errorMessage:  touched[name] ? errors[name] : ""}}
       name={name}
       label={label}
-      placeholder="Select a date..."
+      placeholder="Seleziona una data..."
       onSelectDate={date => {
         handleChange({ target: { name, value: moment(date).format(format) } });
       }}
