@@ -1,12 +1,10 @@
 import React from "react";
-import { useId } from "@uifabric/react-hooks";
 
 import styled from "styled-components";
 
 import { Link } from "@reach/router";
 import {
   IconButton,
-  ITooltipHostStyles,
   TooltipHost
 } from "office-ui-fabric-react";
 
@@ -32,7 +30,6 @@ const CommandsContainer = styled.div`
   right: 24px;
 `;
 
-const tooltipId = "bob";
 const hostStyles = { root: { display: "inline-block" } };
 
 const Container = ({ children }) => {
@@ -53,14 +50,20 @@ const Container = ({ children }) => {
             <IconButton iconProps={{ iconName: "FolderList" }} />
           </a>
         </TooltipHost>
-        <TooltipHost content="Mostra i log" id={"logs-tooltip"} styles={hostStyles}>
+        <TooltipHost
+          content="Mostra i log"
+          id={"logs-tooltip"}
+          styles={hostStyles}
+        >
           <Link to="/app/logs" aria-describedby={"folder-tooltip"}>
             <IconButton iconProps={{ iconName: "History" }} />
           </Link>
         </TooltipHost>
       </CommandsContainer>
       <ContainerDiv>
-        <Logo />
+        <Link to="/list">
+          <Logo />
+        </Link>
         {children}
       </ContainerDiv>
     </>

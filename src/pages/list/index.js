@@ -52,6 +52,7 @@ const columnsDefinitions = [
   {
     key: "hostname",
     fieldName: "hostname",
+    minWidth: 240,
     name: "HostName"
   },
   {
@@ -74,7 +75,7 @@ const columnsDefinitions = [
     key: "encryption",
     fieldName: "encryption",
     name: "Cifratura",
-    minWidth: 72,
+    minWidth: 64,
     onRender: item => (
       <Text>
         <Icon iconName={item.encryption ? "Accept" : "Warning"} />

@@ -80,11 +80,8 @@ const Item = ({ itemId }) => {
             .required("Codice seriale richiesto"),
           dateFrom: Yup.string().required("Seleziona data inizio"),
           dateTo: Yup.string().required("Seleziona data fine"),
-          antivirus: Yup.bool().oneOf([true], "L'antivirus è richiesto"),
-          encryption: Yup.bool().oneOf(
-            [true],
-            "La cifratura del disco è richiesta"
-          )
+          antivirus: Yup.bool().oneOf([true], "Antivirus richiesto"),
+          encryption: Yup.bool().oneOf([true], "Cifratura del disco richiesta")
         })}
       >
         {props => {
@@ -115,11 +112,11 @@ const Item = ({ itemId }) => {
                 messageBarType={MessageBarType.warning}
                 isMultiline={true}
               >
-                <b>{"su Mac:"}</b>
-                {" Cmd + spazio > informazioni su questo Mac    "}
+                <b>{"su Mac: "}</b>
+                {" 'informazioni su questo Mac'"}
                 <br />
-                <b>{"Su windows: "}</b>
-                {' start > "cmd" > "wmic computersystem get model"'}
+                <b>{"su Windows: "}</b>
+                {' cmd.exe > "wmic computersystem get model"'}
                 <br />
                 <i>{" es: MacBook Pro (15-inch, 2017)"}</i>
               </MessageBar>
@@ -133,10 +130,10 @@ const Item = ({ itemId }) => {
                 isMultiline={true}
               >
                 <b>{"su Mac:"}</b>
-                {" Cmd + spazio > informazioni su questo Mac    "}
+                {" 'informazioni su questo Mac'"}
                 <br />
-                <b>{"Su windows: "}</b>
-                {' start > "cmd" > "wmic bios get serialnumber"'}
+                <b>{"su Windows: "}</b>
+                {' cmd.exe > "wmic bios get serialnumber"'}
                 <br />
                 <i>{" es: C02VG3ULXDT6"}</i>
               </MessageBar>
@@ -150,12 +147,12 @@ const Item = ({ itemId }) => {
                 isMultiline={true}
               >
                 <b>{"su Mac:"}</b>
-                {" Preferenze > condivisione > nome computer   "} 
+                {" Preferenze > condivisione > nome computer   "}
                 <br />
-                <b>{"Su windows: "}</b>
-                {' start > "cmd" > "ipconfig /all" > host name'}
+                <b>{"su Windows: "}</b>
+                {' cmd.exe > "ipconfig /all" > host name'}
                 <br />
-                <i>{" es: MacBook Pro di Giovanni"}</i>
+                <i>{" es: MacBook Pro di Pikachu"}</i>
               </MessageBar>
               <br />
               <FormikDatepicker
