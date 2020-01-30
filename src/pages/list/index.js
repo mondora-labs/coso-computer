@@ -12,11 +12,16 @@ import {
   PrimaryButton,
   Stack,
   SelectionMode,
-  TextField
+  TextField,
+  TooltipHost,
+  DirectionalHint
 } from "office-ui-fabric-react";
 
 import Container from "../../components/container";
 import NormalDialog from "../../components/dialog";
+
+const hostStylesLink = { root: { display: "inline-block", cursor: "pointer" } };
+const hostStylesIcon = { root: { display: "inline-block", cursor: "default" } };
 
 const Text = styled.div`
   display: flex;
@@ -66,9 +71,19 @@ const columnsDefinitions = [
     name: "Antivirus",
     minWidth: 64,
     onRender: item => (
-      <Text>
-        <Icon iconName={item.antivirus ? "Accept" : "Warning"} />
-      </Text>
+      <TooltipHost
+        content={
+          "Sul dispositivo" +
+          (!item.antivirus ? " NON " : " ") +
+          "è attivo l' antivirus"
+        }
+        styles={hostStylesIcon}
+        directionalHint={DirectionalHint.bottomCenter}
+      >
+        <Text>
+          <Icon iconName={item.antivirus ? "Accept" : "Warning"} />
+        </Text>
+      </TooltipHost>
     )
   },
   {
@@ -77,9 +92,15 @@ const columnsDefinitions = [
     name: "Cifratura",
     minWidth: 64,
     onRender: item => (
-      <Text>
-        <Icon iconName={item.encryption ? "Accept" : "Warning"} />
-      </Text>
+      <TooltipHost
+        content={"I dati" + (!item.encryption ? " NON " : " ") + "sono cifrati"}
+        styles={hostStylesIcon}
+        directionalHint={DirectionalHint.bottomCenter}
+      >
+        <Text>
+          <Icon iconName={item.encryption ? "Accept" : "Warning"} />
+        </Text>
+      </TooltipHost>
     )
   }
 ];
@@ -117,18 +138,38 @@ const List = () => {
       onColumnClick: onColumnClick,
       onRender: item => (
         <>
-          <IconButton
-            disabled={!item.note || item.note === "Nessuna nota."}
-            onClick={() => setNote({ show: true, text: item.note })}
-            iconProps={{ iconName: "More" }}
-          />
-          <Link to={`/app/item/${item.id}`}>
-            <IconButton iconProps={{ iconName: "EditNote" }} />
-          </Link>
-          <IconButton
-            onClick={() => setRemove({ show: true, mac: item })}
-            iconProps={{ iconName: "Delete" }}
-          />
+          <TooltipHost
+            content={item.note != "Nessuna nota." ? "Note" : "Nessuna nota"}
+            styles={hostStylesLink}
+            directionalHint={DirectionalHint.bottomCenter}
+          >
+            <IconButton
+              disabled={!item.note || item.note === "Nessuna nota."}
+              onClick={() => setNote({ show: true, text: item.note })}
+              iconProps={{ iconName: "More" }}
+            />
+          </TooltipHost>
+
+          <TooltipHost
+            content="Modifica"
+            styles={hostStylesLink}
+            directionalHint={DirectionalHint.bottomCenter}
+          >
+            <Link to={`/app/item/${item.id}`}>
+              <IconButton iconProps={{ iconName: "EditNote" }} />
+            </Link>
+          </TooltipHost>
+
+          <TooltipHost
+            content="Elimina"
+            styles={hostStylesLink}
+            directionalHint={DirectionalHint.bottomCenter}
+          >
+            <IconButton
+              onClick={() => setRemove({ show: true, mac: item })}
+              iconProps={{ iconName: "Delete" }}
+            />
+          </TooltipHost>
         </>
       )
     }
@@ -162,7 +203,7 @@ const List = () => {
           removeMac(remove.mac);
         }}
       />
-      
+
       <TextField
         value={search}
         onChange={(event, text) => setSearch(text)}
@@ -182,7 +223,10 @@ const List = () => {
       <Stack>
         <Stack.Item align="center">
           <Link to="/app/item">
-            <PrimaryButton text="Aggiungi nuovo" iconProps={{ iconName: "Add" }} />
+            <PrimaryButton
+              text="Aggiungi nuovo"
+              iconProps={{ iconName: "Add" }}
+            />
           </Link>
         </Stack.Item>
       </Stack>
