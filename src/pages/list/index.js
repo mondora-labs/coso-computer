@@ -29,10 +29,6 @@ const Text = styled.div`
   align-items: center;
 `;
 
-const onColumnClick = () => {
-  console.log("ciao");
-};
-
 const columnsDefinitions = [
   {
     key: "owner",
@@ -105,7 +101,16 @@ const columnsDefinitions = [
   }
 ];
 
+function sortItems(items, columnKey, isSortedDescending){
+  console.log("giorgio ordina cose");
+  const key = columnKey;
+  return items.slice(0).sort((a, b) => ((isSortedDescending ? a[key] < b[key] : a[key] > b[key]) ? 1 : -1));
+}
+
 const List = () => {
+  const [search, setSearch] = useState("");
+  const [sort, setSort] = useState("");
+
   const [remove, setRemove] = useState({
     show: false
   });
@@ -123,7 +128,18 @@ const List = () => {
     }
   }, [fetched, listMacs]);
 
+  const onColumnClick = (event, column) => {
+    const sortField = {
+      key: column.key,
+      direction: sort.key === column.key ? !sort.direction : true
+     }
+     console.log(sortField.direction);
+    setSort(sortField);
+  };
+
   const columns = columnsDefinitions.map(columnDefinition => ({
+    isSorted: columnDefinition.key === sort.key,
+    isSortedDescending : sort.direction,
     onRender: (item, index, column) => <Text>{item[column.fieldName]}</Text>,
     isResizable: true,
     onColumnClick: onColumnClick,
@@ -135,11 +151,10 @@ const List = () => {
       key: "actions",
       name: "Modifica",
       minWidth: 112,
-      onColumnClick: onColumnClick,
       onRender: item => (
         <>
           <TooltipHost
-            content={item.note != "Nessuna nota." ? "Note" : "Nessuna nota"}
+            content={item.note !== "Nessuna nota." ? "Note" : "Nessuna nota"}
             styles={hostStylesLink}
             directionalHint={DirectionalHint.bottomCenter}
           >
@@ -175,8 +190,7 @@ const List = () => {
     }
   ];
 
-  const [search, setSearch] = useState("");
-  const filteredItems = items.filter(
+  const filteredItems = sortItems(items, sort.key, sort.direction).filter(
     item =>
       item.owner.toLowerCase().includes(search.toLowerCase()) ||
       item.serial.toLowerCase().includes(search.toLowerCase()) ||
