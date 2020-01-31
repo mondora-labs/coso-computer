@@ -68,13 +68,13 @@ const columnsDefinitions = [
     minWidth: 64,
     onRender: item => (
       <TooltipHost
+        styles={hostStylesIcon}
+        directionalHint={DirectionalHint.bottomCenter}
         content={
           "Sul dispositivo" +
           (!item.antivirus ? " NON " : " ") +
           "è attivo l' antivirus"
         }
-        styles={hostStylesIcon}
-        directionalHint={DirectionalHint.bottomCenter}
       >
         <Text>
           <Icon iconName={item.antivirus ? "Accept" : "Warning"} />
@@ -89,9 +89,9 @@ const columnsDefinitions = [
     minWidth: 64,
     onRender: item => (
       <TooltipHost
-        content={"I dati" + (!item.encryption ? " NON " : " ") + "sono cifrati"}
         styles={hostStylesIcon}
         directionalHint={DirectionalHint.bottomCenter}
+        content={"I dati" + (!item.encryption ? " NON " : " ") + "sono cifrati"}
       >
         <Text>
           <Icon iconName={item.encryption ? "Accept" : "Warning"} />
@@ -101,16 +101,9 @@ const columnsDefinitions = [
   }
 ];
 
-function sortItems(items, columnKey, isSortedDescending){
-  console.log("giorgio ordina cose");
-  const key = columnKey;
-  return items.slice(0).sort((a, b) => ((isSortedDescending ? a[key] < b[key] : a[key] > b[key]) ? 1 : -1));
-}
-
 const List = () => {
   const [search, setSearch] = useState("");
   const [sort, setSort] = useState("");
-
   const [remove, setRemove] = useState({
     show: false
   });
@@ -128,21 +121,17 @@ const List = () => {
     }
   }, [fetched, listMacs]);
 
-  const onColumnClick = (event, column) => {
-    const sortField = {
-      key: column.key,
-      direction: sort.key === column.key ? !sort.direction : true
-     }
-     console.log(sortField.direction);
-    setSort(sortField);
-  };
-
   const columns = columnsDefinitions.map(columnDefinition => ({
     isSorted: columnDefinition.key === sort.key,
-    isSortedDescending : sort.direction,
+    isSortedDescending: sort.direction,
     onRender: (item, index, column) => <Text>{item[column.fieldName]}</Text>,
     isResizable: true,
-    onColumnClick: onColumnClick,
+    onColumnClick: (ev, column) => {
+      setSort({
+        key: column.key,
+        direction: sort.key === column.key ? !sort.direction : false
+      });
+    },
     ...columnDefinition
   }));
 
@@ -190,13 +179,21 @@ const List = () => {
     }
   ];
 
-  const filteredItems = sortItems(items, sort.key, sort.direction).filter(
-    item =>
-      item.owner.toLowerCase().includes(search.toLowerCase()) ||
-      item.serial.toLowerCase().includes(search.toLowerCase()) ||
-      item.hostname.toLowerCase().includes(search.toLowerCase()) ||
-      item.rentId.toLowerCase().includes(search.toLowerCase())
-  );
+  const filteredItems = items
+    .sort((a, b) =>
+      (sort.direction
+      ? a[sort.key] < b[sort.key]
+      : a[sort.key] > b[sort.key])
+        ? 1
+        : -1
+    )
+    .filter(
+      item =>
+        item.owner.toLowerCase().includes(search.toLowerCase()) ||
+        item.serial.toLowerCase().includes(search.toLowerCase()) ||
+        item.hostname.toLowerCase().includes(search.toLowerCase()) ||
+        item.rentId.toLowerCase().includes(search.toLowerCase())
+    );
 
   return (
     <Container>
