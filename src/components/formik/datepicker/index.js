@@ -13,14 +13,18 @@ const FormikDatepicker = ({
   handleChange,
   ...rest
 }) => {
-  const value = moment.unix(values[name] / 1000).format("DD/MM/YYYY");
-
+  const initialValue = values[name]
+    ? moment.unix(values[name] / 1000)
+    : moment(new Date());
+  console.log(initialValue);
+  const value = initialValue.format("DD/MM/YYYY");
   return (
     <DatePicker
       textField={{ value, errorMessage: touched[name] ? errors[name] : "" }}
       name={name}
       label={label}
       placeholder="Seleziona una data..."
+      initialPickerDate={initialValue.toDate()}
       onSelectDate={date => {
         handleChange({ target: { name, value: date.getTime() } });
       }}
