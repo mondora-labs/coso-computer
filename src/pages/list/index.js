@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 
 import { useStoreState, useStoreActions } from "easy-peasy";
 
+import moment from "moment";
+
 import styled from "styled-components";
 
 import { Link } from "@reach/router";
@@ -43,12 +45,14 @@ const columnsDefinitions = [
   {
     key: "dateFrom",
     fieldName: "dateFrom",
-    name: "Inizio"
+    name: "Inizio",
+    onRender: item => moment.unix(item.dateFrom / 1000).format("DD/MM/YYYY")
   },
   {
     key: "dateTo",
     fieldName: "dateTo",
-    name: "Termine"
+    name: "Termine",
+    onRender: item => moment.unix(item.dateTo / 1000).format("DD/MM/YYYY")
   },
   {
     key: "hostname",

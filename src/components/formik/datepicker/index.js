@@ -4,9 +4,6 @@ import moment from "moment";
 
 import { DatePicker } from "office-ui-fabric-react";
 
-const format = "DD/MM/YYYY";
-
-
 const FormikDatepicker = ({
   name,
   values,
@@ -16,16 +13,16 @@ const FormikDatepicker = ({
   handleChange,
   ...rest
 }) => {
-  const value = values[name];
+  const value = moment.unix(values[name] / 1000).format("DD/MM/YYYY");
 
   return (
     <DatePicker
-      textField={{ value, errorMessage:  touched[name] ? errors[name] : ""}}
+      textField={{ value, errorMessage: touched[name] ? errors[name] : "" }}
       name={name}
       label={label}
       placeholder="Seleziona una data..."
       onSelectDate={date => {
-        handleChange({ target: { name, value: moment(date).format(format) } });
+        handleChange({ target: { name, value: date.getTime() } });
       }}
       styles={{ root: { width: 250 } }}
       {...rest}

@@ -27,6 +27,29 @@ export const login = async () => {
   }
 };
 
+
+const faiCose = data => {
+     console.log("ciao");
+   console.log(data);
+
+  var dateString = data,
+    dateParts = dateString.split("/"),
+    date;
+
+  date = new Date(
+    dateParts[2],
+    parseInt(dateParts[1], 10) - 1,
+    dateParts[0]
+  );
+
+   console.log(date.getTime()); //1379426880000
+   console.log(date); //Tue Sep 17 2013 10:08:00 GMT-0400
+
+   console.log(moment(date).format("DD/MM/YYYY"));
+  return date.getTime();
+  //return data;
+};
+
 export const getCollection = async collectionName => {
   let items = [];
 
@@ -36,6 +59,10 @@ export const getCollection = async collectionName => {
     .get();
 
   querySnapshot.forEach(doc => items.push(doc.data()));
+  items.forEach(item => {
+    item.dateFrom = faiCose(item.dateFrom);
+    item.dateTo = faiCose(item.dateTo);
+  })
   console.log("list collection", collectionName, items);
 
   return items;
