@@ -27,29 +27,6 @@ export const login = async () => {
   }
 };
 
-
-const faiCose = data => {
-     console.log("ciao");
-   console.log(data);
-
-  var dateString = data,
-    dateParts = dateString.split("/"),
-    date;
-
-  date = new Date(
-    dateParts[2],
-    parseInt(dateParts[1], 10) - 1,
-    dateParts[0]
-  );
-
-   console.log(date.getTime()); //1379426880000
-   console.log(date); //Tue Sep 17 2013 10:08:00 GMT-0400
-
-   console.log(moment(date).format("DD/MM/YYYY"));
-  return date.getTime();
-  //return data;
-};
-
 export const getCollection = async collectionName => {
   let items = [];
 
@@ -59,10 +36,6 @@ export const getCollection = async collectionName => {
     .get();
 
   querySnapshot.forEach(doc => items.push(doc.data()));
-  items.forEach(item => {
-    item.dateFrom = faiCose(item.dateFrom);
-    item.dateTo = faiCose(item.dateTo);
-  })
   console.log("list collection", collectionName, items);
 
   return items;
@@ -74,7 +47,7 @@ export const getLogs = async () => {
 };
 
 export const getMacs = async () => {
-  const macs = await getCollection("macs");
+  const macs = await getCollection("computers");
   return macs;
 };
 
@@ -84,7 +57,7 @@ export const upsertMac = async mac => {
     const batch = firestore.batch();
 
     const oldDocRef = await firestore
-      .collection("macs")
+      .collection("computers")
       .doc(mac.id)
       .get();
 
@@ -113,10 +86,10 @@ export const upsertMac = async mac => {
       diff
     };
 
-    console.log("upsert a mac", mac, log);
+    console.log("upsert a computer", mac, log);
 
     const logRef = firestore.collection("logs").doc(uuid());
-    const macRef = firestore.collection("macs").doc(newMac.id);
+    const macRef = firestore.collection("computers").doc(newMac.id);
 
     batch.set(logRef, log);
     batch.set(macRef, newMac);
@@ -134,13 +107,13 @@ export const deleteMac = async mac => {
       removed: true,
       record: mac
     };
-    console.log("delete a mac", mac, log);
+    console.log("delete a computer", mac, log);
 
     const firestore = firebase.firestore();
     const batch = firestore.batch();
 
     const logRef = firestore.collection("logs").doc(uuid());
-    const macRef = firestore.collection("macs").doc(mac.id);
+    const macRef = firestore.collection("computers").doc(mac.id);
 
     batch.set(logRef, log);
     batch.delete(macRef);
