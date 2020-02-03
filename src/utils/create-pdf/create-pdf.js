@@ -1,5 +1,7 @@
 import { PDFDocument, StandardFonts, rgb, fontkit } from "pdf-lib";
 
+import moment from "moment";
+
 import pdfLetterDefault from "./assets/modulo-consegna.pdf";
 
 const downloadPdf = (blob, fileName) => {
@@ -75,7 +77,7 @@ const createPdf = async item => {
     x: 80,
     y: height - 650
   });
-  page.drawText(item.dateFrom, {
+  page.drawText(moment.unix(item.dateFrom / 1000).format("DD/MM/YYYY"), {
     x: 80,
     y: height - 665
   });

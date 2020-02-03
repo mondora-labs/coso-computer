@@ -2,8 +2,6 @@ import React, { useState, useEffect } from "react";
 
 import { useStoreState, useStoreActions } from "easy-peasy";
 
-import { faiCose2 } from "../../utils/firebase";
-
 import moment from "moment";
 
 import styled from "styled-components";
