@@ -23,6 +23,8 @@ import FormikTextfield from "../../components/formik/textfield";
 import FormikDatepicker from "../../components/formik/datepicker";
 import FormikDevicepicker from "../../components/formik/device-picker";
 
+const suggestionStyle = { root: { margin: "5px 0" } };
+
 const itemInitialValues = {
   owner: "",
   fiscalCode: "",
@@ -109,6 +111,7 @@ const Item = ({ itemId }) => {
                 {...props}
               />
               <MessageBar
+                styles={suggestionStyle}
                 messageBarType={MessageBarType.warning}
                 isMultiline={true}
               >
@@ -126,6 +129,7 @@ const Item = ({ itemId }) => {
                 {...props}
               />
               <MessageBar
+                styles={suggestionStyle}
                 messageBarType={MessageBarType.warning}
                 isMultiline={true}
               >
@@ -143,6 +147,7 @@ const Item = ({ itemId }) => {
                 {...props}
               />
               <MessageBar
+                styles={suggestionStyle}
                 messageBarType={MessageBarType.warning}
                 isMultiline={true}
               >

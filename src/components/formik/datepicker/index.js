@@ -16,7 +16,6 @@ const FormikDatepicker = ({
   const initialValue = values[name]
     ? moment.unix(values[name] / 1000)
     : moment(new Date());
-  console.log(initialValue);
   const value = initialValue.format("DD/MM/YYYY");
   return (
     <DatePicker
