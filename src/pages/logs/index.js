@@ -13,18 +13,31 @@ const getDeletions = log => {
 
 const getAdditions = log => {
   const additions = (log.diff && log.diff.additions) || [];
-  return additions.map(
-    edit => `Aggiunto campo "${edit.field}" → "${edit.value}"`
-  );
+
+  return additions.map(edit => {
+    const value = getRenderValue(edit.field, edit.value);
+    return `Aggiunto campo "${edit.field}" → "${value}"`;
+  });
 };
 
 const getEdits = log => {
   const edits = (log.diff && log.diff.edits) || [];
-  return edits.map(
-    edit =>
-      `Modificato campo "${edit.field}": "${edit.value.old}" → "${edit.value.new}"`
-  );
+
+  return edits.map(edit => {
+    const oldValue = getRenderValue(edit.field, edit.value.old);
+    const newValue = getRenderValue(edit.field, edit.value.new);
+
+    return `Modificato campo "${edit.field}": "${oldValue}" → "${newValue}"`;
+  });
 };
+
+const getRenderValue = (fieldName, value) =>
+  ["dateFrom", "dateTo"].includes(fieldName)
+    ? moment
+        .unix(value / 1000)
+        .utc()
+        .format("DD/MM/YYYY")
+    : value;
 
 const getActions = log => {
   const actions = [
