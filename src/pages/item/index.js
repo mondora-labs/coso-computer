@@ -22,7 +22,6 @@ import FormikCheckbox from "../../components/formik/checkbox";
 import FormikTextfield from "../../components/formik/textfield";
 import FormikDatepicker from "../../components/formik/datepicker";
 import FormikDevicepicker from "../../components/formik/device-picker";
-import { values } from "pdf-lib";
 
 const suggestionStyle = { root: { margin: "8px 0" } };
 

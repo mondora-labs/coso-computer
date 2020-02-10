@@ -7,8 +7,20 @@ import { DetailsList, SelectionMode } from "office-ui-fabric-react";
 
 import Container from "../../components/container";
 
+function json2array(json) {
+  var result = [];
+  var keys = Object.keys(json);
+  keys.forEach(key => result.push({ field: key, value: json[key] }));
+  return result;
+}
+
 const getDeletions = log => {
-  return log.removed ? ["Rimosso record"] : [];
+  const deletions = (log.removed && json2array(log.record)) || [];
+
+  return deletions.map(edit => {
+    const value = getRenderValue(edit.field, edit.value);
+    return `Rimosso ${edit.field} : "${value}"`;
+  });
 };
 
 const getAdditions = log => {
