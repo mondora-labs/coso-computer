@@ -81,9 +81,7 @@ const Item = ({ itemId }) => {
             .max(50, "Numero di caratteri eccessivo")
             .required("Codice seriale richiesto"),
           dateFrom: Yup.string().required("Seleziona data inizio"),
-          dateTo: Yup.string().required("Seleziona data fine"),
-          antivirus: Yup.bool().oneOf([true], "Antivirus richiesto"),
-          encryption: Yup.bool().oneOf([true], "Cifratura del disco richiesta")
+          dateTo: Yup.string().required("Seleziona data fine")
         })}
       >
         {props => {
