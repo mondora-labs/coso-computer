@@ -22,8 +22,9 @@ import FormikCheckbox from "../../components/formik/checkbox";
 import FormikTextfield from "../../components/formik/textfield";
 import FormikDatepicker from "../../components/formik/datepicker";
 import FormikDevicepicker from "../../components/formik/device-picker";
+import { values } from "pdf-lib";
 
-const suggestionStyle = { root: { margin: "5px 0" } };
+const suggestionStyle = { root: { margin: "8px 0" } };
 
 const itemInitialValues = {
   owner: "",
@@ -80,8 +81,8 @@ const Item = ({ itemId }) => {
             .min(2, "Numero di caratteri insufficiente")
             .max(50, "Numero di caratteri eccessivo")
             .required("Codice seriale richiesto"),
-          dateFrom: Yup.string().required("Seleziona data inizio"),
-          dateTo: Yup.string().required("Seleziona data fine")
+          dateFrom: Yup.number().required("Seleziona data inizio"),
+          dateTo: Yup.number().required("Seleziona data fine").moreThan(Yup.ref('dateFrom'), "La data di termine deve essere successiva a quella di inizio")
         })}
       >
         {props => {
