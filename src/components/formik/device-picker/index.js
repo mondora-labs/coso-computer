@@ -30,7 +30,7 @@ const FormikDevicepicker = ({
       placeholder="Seleziona un'opzione "
       styles={dropdownStyles}
       defaultSelectedKey={values[name]}
-      errorMessage={touched[name] ? errors[name] : ""}
+      errorMessage={touched[name] && errors[name]}
       onChange={(event, text) => {
         handleChange({ target: { name, value: text.key } });
       }}

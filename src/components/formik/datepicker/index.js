@@ -19,7 +19,7 @@ const FormikDatepicker = ({
   const value = initialValue.format("DD/MM/YYYY");
   return (
     <DatePicker
-      textField={{ value, errorMessage: touched[name] ? errors[name] : "" }}
+      textField={{ value, errorMessage: touched[name] && errors[name]}}
       name={name}
       label={label}
       placeholder="Seleziona una data..."

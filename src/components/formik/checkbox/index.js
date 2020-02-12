@@ -32,7 +32,7 @@ const FormikCheckbox = ({
       <Checkbox
         name={name}
         label={label}
-        className={touched[name] && errors[name] ? errorClass : ""}
+        className={(touched[name] && errors[name]) && errorClass}
         onChange={(event, checked) =>
           handleChange({ target: { name, value: checked } })
         }

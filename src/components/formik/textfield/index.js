@@ -18,7 +18,7 @@ const FormikTextfield = ({
       name={name}
       label={label}
       placeholder="Inserisci testo"
-      errorMessage={touched[name] ? errors[name] : ""}
+      errorMessage={touched[name] && errors[name]}
       value={value}
       onChange={(event, text) =>
         handleChange({ target: { name, value: text } })
