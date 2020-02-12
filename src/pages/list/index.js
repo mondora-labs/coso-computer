@@ -41,13 +41,21 @@ const columnsDefinitions = [
     key: "dateFrom",
     fieldName: "dateFrom",
     name: "Inizio",
-    onRender: item => moment.unix(item.dateFrom / 1000).format("DD/MM/YYYY")
+    onRender: item =>
+      moment
+        .unix(item.dateFrom / 1000)
+        .utc()
+        .format("DD/MM/YYYY")
   },
   {
     key: "dateTo",
     fieldName: "dateTo",
     name: "Termine",
-    onRender: item => moment.unix(item.dateTo / 1000).format("DD/MM/YYYY")
+    onRender: item =>
+      moment
+        .unix(item.dateTo / 1000)
+        .utc()
+        .format("DD/MM/YYYY")
   },
   {
     key: "hostname",

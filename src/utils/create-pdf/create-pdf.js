@@ -77,7 +77,7 @@ const createPdf = async item => {
     x: 80,
     y: height - 650
   });
-  page.drawText(moment.unix(item.dateFrom / 1000).format("DD/MM/YYYY"), {
+  page.drawText(moment.unix(item.dateFrom / 1000).utc().format("DD/MM/YYYY"), {
     x: 80,
     y: height - 665
   });
