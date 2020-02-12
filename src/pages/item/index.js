@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 
+import styled from "styled-components";
 import { useStoreActions, useStoreState } from "easy-peasy";
 
 import { Formik, Form } from "formik";
@@ -23,7 +24,12 @@ import FormikTextfield from "../../components/formik/textfield";
 import FormikDatepicker from "../../components/formik/datepicker";
 import FormikDevicepicker from "../../components/formik/device-picker";
 
-const suggestionStyle = { root: { margin: "8px 0" } };
+const SuggestionBar = styled(MessageBar).attrs({
+  messageBarType: MessageBarType.warning,
+  isMultiline: true
+})`
+  margin: 8px 0;
+`;
 
 const itemInitialValues = {
   owner: "",
@@ -81,7 +87,12 @@ const Item = ({ itemId }) => {
             .max(50, "Numero di caratteri eccessivo")
             .required("Codice seriale richiesto"),
           dateFrom: Yup.number().required("Seleziona data inizio"),
-          dateTo: Yup.number().required("Seleziona data fine").moreThan(Yup.ref('dateFrom'), "La data di termine deve essere successiva a quella di inizio")
+          dateTo: Yup.number()
+            .required("Seleziona data fine")
+            .moreThan(
+              Yup.ref("dateFrom"),
+              "La data di termine deve essere successiva a quella di inizio"
+            )
         })}
       >
         {props => {
@@ -108,11 +119,7 @@ const Item = ({ itemId }) => {
                 label="Modello dispositivo"
                 {...props}
               />
-              <MessageBar
-                styles={suggestionStyle}
-                messageBarType={MessageBarType.warning}
-                isMultiline={true}
-              >
+              <SuggestionBar>
                 <b>{"su Mac: "}</b>
                 {" 'informazioni su questo Mac'"}
                 <br />
@@ -120,17 +127,13 @@ const Item = ({ itemId }) => {
                 {' cmd.exe > "wmic computersystem get model"'}
                 <br />
                 <i>{" es: MacBook Pro (15-inch, 2017)"}</i>
-              </MessageBar>
+              </SuggestionBar>
               <FormikTextfield
                 name="serial"
                 label="Numero di serie"
                 {...props}
               />
-              <MessageBar
-                styles={suggestionStyle}
-                messageBarType={MessageBarType.warning}
-                isMultiline={true}
-              >
+              <SuggestionBar>
                 <b>{"su Mac:"}</b>
                 {" 'informazioni su questo Mac'"}
                 <br />
@@ -138,17 +141,13 @@ const Item = ({ itemId }) => {
                 {' cmd.exe > "wmic bios get serialnumber"'}
                 <br />
                 <i>{" es: C02VG3ULXDT6"}</i>
-              </MessageBar>
+              </SuggestionBar>
               <FormikTextfield
                 name="hostname"
                 label="Nome computer"
                 {...props}
               />
-              <MessageBar
-                styles={suggestionStyle}
-                messageBarType={MessageBarType.warning}
-                isMultiline={true}
-              >
+              <SuggestionBar>
                 <b>{"su Mac:"}</b>
                 {" Preferenze > condivisione > nome computer   "}
                 <br />
@@ -156,7 +155,7 @@ const Item = ({ itemId }) => {
                 {' cmd.exe > "ipconfig /all" > host name'}
                 <br />
                 <i>{" es: MacBook Pro di Pikachu"}</i>
-              </MessageBar>
+              </SuggestionBar>
               <br />
               <FormikDatepicker
                 name="dateFrom"

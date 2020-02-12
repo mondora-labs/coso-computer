@@ -1,7 +1,8 @@
 import React from "react";
 
-import { Checkbox } from "office-ui-fabric-react";
 import styled from "styled-components";
+
+import { Checkbox } from "office-ui-fabric-react";
 import { ErrorMessage } from "formik";
 
 const errorClass = {
@@ -9,7 +10,7 @@ const errorClass = {
   textDecoration: "underline"
 };
 
-const ErrorMessageWrapper = styled.div`
+const ErrorMessageWrapper = styled.span`
   color: rgb(164, 38, 44);
   font-size: 12px;
   height: 8px;
@@ -32,16 +33,16 @@ const FormikCheckbox = ({
       <Checkbox
         name={name}
         label={label}
-        className={(touched[name] && errors[name]) && errorClass}
+        className={touched[name] && errors[name] && errorClass}
         onChange={(event, checked) =>
           handleChange({ target: { name, value: checked } })
         }
         checked={value}
         {...rest}
       />
-      <ErrorMessageWrapper>
-        <ErrorMessage name={name} />
-      </ErrorMessageWrapper>
+      <ErrorMessage name={name}>
+        {msg => <ErrorMessageWrapper>{msg}</ErrorMessageWrapper>}
+      </ErrorMessage>
     </>
   );
 };

@@ -9,10 +9,6 @@ const assetTypes = [
   { key: "accessori", text: "Accessori" }
 ];
 
-const dropdownStyles = {
-  dropdown: { width: 250 }
-};
-
 const FormikDevicepicker = ({
   name,
   values,
@@ -28,7 +24,7 @@ const FormikDevicepicker = ({
       label={label}
       options={assetTypes}
       placeholder="Seleziona un'opzione "
-      styles={dropdownStyles}
+      styles={{dropdown: { width: 250 }}}
       defaultSelectedKey={values[name]}
       errorMessage={touched[name] && errors[name]}
       onChange={(event, text) => {

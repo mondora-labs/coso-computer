@@ -3,7 +3,6 @@ import React, { useState, useEffect } from "react";
 import { useStoreState, useStoreActions } from "easy-peasy";
 
 import moment from "moment";
-
 import styled from "styled-components";
 
 import { Link } from "@reach/router";
@@ -14,16 +13,12 @@ import {
   PrimaryButton,
   Stack,
   SelectionMode,
-  TextField,
-  TooltipHost,
-  DirectionalHint
+  TextField
 } from "office-ui-fabric-react";
 
 import Container from "../../components/container";
+import Tooltip from "../../components/tooltip";
 import NormalDialog from "../../components/dialog";
-
-const hostStylesLink = { root: { display: "inline-block", cursor: "pointer" } };
-const hostStylesIcon = { root: { display: "inline-block", cursor: "default" } };
 
 const Text = styled.div`
   display: flex;
@@ -71,9 +66,8 @@ const columnsDefinitions = [
     name: "Antivirus",
     minWidth: 64,
     onRender: item => (
-      <TooltipHost
-        styles={hostStylesIcon}
-        directionalHint={DirectionalHint.bottomCenter}
+      <Tooltip
+        cursor={"default"}
         content={
           "Sul dispositivo" +
           (!item.antivirus ? " NON " : " ") +
@@ -83,7 +77,7 @@ const columnsDefinitions = [
         <Text>
           <Icon iconName={item.antivirus ? "Accept" : "Warning"} />
         </Text>
-      </TooltipHost>
+      </Tooltip>
     )
   },
   {
@@ -92,15 +86,14 @@ const columnsDefinitions = [
     name: "Cifratura",
     minWidth: 64,
     onRender: item => (
-      <TooltipHost
-        styles={hostStylesIcon}
-        directionalHint={DirectionalHint.bottomCenter}
+      <Tooltip
+        cursor={"default"}
         content={"I dati" + (!item.encryption ? " NON " : " ") + "sono cifrati"}
       >
         <Text>
           <Icon iconName={item.encryption ? "Accept" : "Warning"} />
         </Text>
-      </TooltipHost>
+      </Tooltip>
     )
   }
 ];
@@ -146,38 +139,29 @@ const List = () => {
       minWidth: 112,
       onRender: item => (
         <>
-          <TooltipHost
+          <Tooltip
             content={item.note !== "Nessuna nota." ? "Note" : "Nessuna nota"}
-            styles={hostStylesLink}
-            directionalHint={DirectionalHint.bottomCenter}
+            cursor={"pointer"}
           >
             <IconButton
               disabled={!item.note || item.note === "Nessuna nota."}
               onClick={() => setNote({ show: true, text: item.note })}
               iconProps={{ iconName: "More" }}
             />
-          </TooltipHost>
+          </Tooltip>
 
-          <TooltipHost
-            content="Modifica"
-            styles={hostStylesLink}
-            directionalHint={DirectionalHint.bottomCenter}
-          >
+          <Tooltip content="Modifica" cursor={"pointer"}>
             <Link to={`/app/item/${item.id}`}>
               <IconButton iconProps={{ iconName: "EditNote" }} />
             </Link>
-          </TooltipHost>
+          </Tooltip>
 
-          <TooltipHost
-            content="Elimina"
-            styles={hostStylesLink}
-            directionalHint={DirectionalHint.bottomCenter}
-          >
+          <Tooltip content="Elimina" cursor={"pointer"}>
             <IconButton
               onClick={() => setRemove({ show: true, mac: item })}
               iconProps={{ iconName: "Delete" }}
             />
-          </TooltipHost>
+          </Tooltip>
         </>
       )
     }

@@ -3,12 +3,10 @@ import React from "react";
 import styled from "styled-components";
 
 import { Link } from "@reach/router";
-import {
-  IconButton,
-  TooltipHost
-} from "office-ui-fabric-react";
+import { IconButton } from "office-ui-fabric-react";
 
 import Logo from "../logo";
+import Tooltip from "../tooltip";
 
 const ContainerDiv = styled.div`
   @media (max-width: 1200px) {
@@ -30,17 +28,11 @@ const CommandsContainer = styled.div`
   right: 24px;
 `;
 
-const hostStyles = { root: { display: "inline-block" } };
-
 const Container = ({ children }) => {
   return (
     <>
       <CommandsContainer>
-        <TooltipHost
-          content="Cartella moduli firmati"
-          id={"folder-tooltip"}
-          styles={hostStyles}
-        >
+        <Tooltip content="Cartella moduli firmati" id={"folder-tooltip"}>
           <a
             aria-describedby={"folder-tooltip"}
             target="_blank"
@@ -49,16 +41,12 @@ const Container = ({ children }) => {
           >
             <IconButton iconProps={{ iconName: "FolderList" }} />
           </a>
-        </TooltipHost>
-        <TooltipHost
-          content="Mostra i log"
-          id={"logs-tooltip"}
-          styles={hostStyles}
-        >
+        </Tooltip>
+        <Tooltip content="Mostra i log" id={"logs-tooltip"}>
           <Link to="/app/logs" aria-describedby={"folder-tooltip"}>
             <IconButton iconProps={{ iconName: "History" }} />
           </Link>
-        </TooltipHost>
+        </Tooltip>
       </CommandsContainer>
       <ContainerDiv>
         <Link to="/list">
