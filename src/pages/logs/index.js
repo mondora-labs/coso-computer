@@ -45,10 +45,7 @@ const getEdits = log => {
 
 const getRenderValue = (fieldName, value) =>
   ["dateFrom", "dateTo"].includes(fieldName)
-    ? moment
-        .unix(value / 1000)
-        .utc()
-        .format("DD/MM/YYYY")
+    ? moment.utc(value).format("DD/MM/YYYY")
     : value;
 
 const getActions = log => {

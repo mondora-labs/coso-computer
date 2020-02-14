@@ -41,6 +41,7 @@ const itemInitialValues = {
   dateTo: "",
   hostname: "",
   rentId: "",
+  note: "",
   antivirus: false,
   encryption: false
 };
