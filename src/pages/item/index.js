@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 
+import styled from "styled-components";
 import { useStoreActions, useStoreState } from "easy-peasy";
 
 import { Formik, Form } from "formik";
@@ -9,32 +10,51 @@ import {
   PrimaryButton,
   DefaultButton,
   Stack,
-  Text
+  Text,
+  MessageBar,
+  MessageBarType
 } from "office-ui-fabric-react";
+
+import createPdf from "../../utils/create-pdf/create-pdf";
 
 import Container from "../../components/container";
 
 import FormikCheckbox from "../../components/formik/checkbox";
 import FormikTextfield from "../../components/formik/textfield";
 import FormikDatepicker from "../../components/formik/datepicker";
+import FormikDevicepicker from "../../components/formik/device-picker";
+
+const SuggestionBar = styled(MessageBar).attrs({
+  messageBarType: MessageBarType.warning,
+  isMultiline: true
+})`
+  margin: 8px 0;
+`;
+
+const itemInitialValues = {
+  owner: "",
+  fiscalCode: "",
+  device: "",
+  model: "",
+  serial: "",
+  dateFrom: "",
+  dateTo: "",
+  hostname: "",
+  rentId: "",
+  note: "",
+  antivirus: false,
+  encryption: false
+};
 
 const Item = ({ itemId }) => {
   const { items, fetched } = useStoreState(store => store.macs);
   const { addMac, listMacs } = useStoreActions(store => store.macs);
 
-  const item = items.find(item => item.id === itemId) || {
-    owner: "",
-    serial: "",
-    dateFrom: "",
-    dateTo: "",
-    hostname: "",
-    rentId: "",
-    antivirus: false,
-    encryption: false
-  };
+  const item = items.find(item => item.id === itemId);
 
   const handleSubmit = values => {
     addMac({ id: itemId, ...values });
+    createPdf(values);
     navigate("/app/list");
   };
 
@@ -49,29 +69,95 @@ const Item = ({ itemId }) => {
       <Formik
         enableReinitialize={true}
         onSubmit={handleSubmit}
-        initialValues={item}
+        initialValues={{ ...itemInitialValues, ...item }}
         validationSchema={Yup.object().shape({
           owner: Yup.string()
-            .min(2, "Too Short!")
-            .max(50, "Too Long!")
-            .required("owner is required"),
+            .min(2, "Numero di caratteri insufficiente")
+            .max(50, "Numero di caratteri eccessivo")
+            .required("Nome possessore richiesto"),
+          fiscalCode: Yup.string()
+            .length(16, "Numero di caratteri incorretto")
+            .required("Codice Fiscale richiesto"),
+          device: Yup.string().required("Tipologia dispositivo richiesta"),
+          model: Yup.string()
+            .min(2, "Numero di caratteri insufficiente")
+            .max(50, "Numero di caratteri eccessivo")
+            .required("Nome modello richiesto"),
           serial: Yup.string()
-            .min(2, "Too Short!")
-            .max(50, "Too Long!")
-            .required("serial is required"),
-          dateFrom: Yup.string().required("Seleziona data inizio"),
-          dateTo: Yup.string().required("Seleziona data fine")
+            .min(2, "Numero di caratteri insufficiente")
+            .max(50, "Numero di caratteri eccessivo")
+            .required("Codice seriale richiesto"),
+          dateFrom: Yup.number().required("Seleziona data inizio"),
+          dateTo: Yup.number()
+            .required("Seleziona data fine")
+            .moreThan(
+              Yup.ref("dateFrom"),
+              "La data di termine deve essere successiva a quella di inizio"
+            )
         })}
       >
         {props => {
           return (
             <Form>
-              <FormikTextfield name="owner" label="Possessore" {...props} />
+              <FormikTextfield
+                name="owner"
+                label="Nome e Cognome possessore"
+                {...props}
+              />
+              <FormikTextfield
+                name="fiscalCode"
+                label="Codice Fiscale"
+                {...props}
+              />
+              <br />
+              <FormikDevicepicker
+                name="device"
+                label="Tipologia dispositivo"
+                {...props}
+              />
+              <FormikTextfield
+                name="model"
+                label="Modello dispositivo"
+                {...props}
+              />
+              <SuggestionBar>
+                <b>{"su Mac: "}</b>
+                {" 'informazioni su questo Mac'"}
+                <br />
+                <b>{"su Windows: "}</b>
+                {' cmd.exe > "wmic computersystem get model"'}
+                <br />
+                <i>{" es: MacBook Pro (15-inch, 2017)"}</i>
+              </SuggestionBar>
               <FormikTextfield
                 name="serial"
                 label="Numero di serie"
                 {...props}
               />
+              <SuggestionBar>
+                <b>{"su Mac:"}</b>
+                {" 'informazioni su questo Mac'"}
+                <br />
+                <b>{"su Windows: "}</b>
+                {' cmd.exe > "wmic bios get serialnumber"'}
+                <br />
+                <i>{" es: C02VG3ULXDT6"}</i>
+              </SuggestionBar>
+              <FormikTextfield
+                name="hostname"
+                label="Nome computer"
+                {...props}
+              />
+              <SuggestionBar>
+                <b>{"su Mac:"}</b>
+                {" Preferenze > condivisione > nome computer   "}
+                <br />
+                <b>{"su Windows: "}</b>
+                {' cmd.exe > "ipconfig /all" > host name'}
+                <br />
+                <i>{" es: MacBook Pro di Pikachu"}</i>
+              </SuggestionBar>
+              <br />
               <FormikDatepicker
                 name="dateFrom"
                 label="Data inizio contratto"
@@ -83,17 +169,11 @@ const Item = ({ itemId }) => {
                 {...props}
               />
               <FormikTextfield
-                name="hostname"
-                label="Nome computer"
-                {...props}
-              />
-              <FormikTextfield
                 name="rentId"
                 label="Codice contratto"
                 {...props}
               />
               <FormikTextfield name="note" label="Note" multiline {...props} />
-
               <Stack tokens={{ childrenGap: 16, padding: "16px 0" }}>
                 <FormikCheckbox
                   name="antivirus"
@@ -106,29 +186,25 @@ const Item = ({ itemId }) => {
                   label="Sul computer è attivo un sistema di cifratura del disco"
                   {...props}
                 />
-
-                <Text>
-                  È inoltre <strong>obbligatorio</strong> compilare il{" "}
-                  <a
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    href="/modulo_consegna.pdf"
-                  >
-                    seguente .pdf
-                  </a>{" "}
-                  e caricarlo in questa folder{" "}
-                  <a
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    href="https://drive.google.com/drive/folders/1EJbn-tS3_d8R8r0_OCFq2Ib301GstInm"
-                  >
-                    Google Drive
-                  </a>
-                  .
-                </Text>
               </Stack>
-
-              <Stack horizontal tokens={{ childrenGap: 8 }}>
+              <Text>
+                {"È inoltre "}
+                <strong>{"obbligatorio"}</strong>{" "}
+                {
+                  "firmare la lettera di assegnamento e caricarla in questa folder  "
+                }
+                <a
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  href="https://drive.google.com/drive/folders/1EJbn-tS3_d8R8r0_OCFq2Ib301GstInm"
+                >
+                  {"Google Drive"}
+                </a>
+                .
+                <br />
+                <br />
+              </Text>
+              <Stack horizontal tokens={{ childrenGap: 16 }}>
                 <Stack.Item>
                   <Link to="/app/list">
                     <DefaultButton>{"Indietro"}</DefaultButton>

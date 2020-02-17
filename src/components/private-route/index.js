@@ -15,13 +15,13 @@ const PrivateRoute = ({ children }) => {
       <Container>
         <Stack>
           <Stack.Item align="center">
-            <h1>{"Unauthorized"}</h1>
+            <h1>{"Non autorizzato"}</h1>
           </Stack.Item>
-          <Stack.Item align="center">
 
+          <Stack.Item align="center">
             <Link to="/">
               <DefaultButton iconProps={{ iconName: "home" }}>
-                {"Back home"}
+                {"Torna alla home"}
               </DefaultButton>
             </Link>
           </Stack.Item>

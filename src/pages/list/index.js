@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 
 import { useStoreState, useStoreActions } from "easy-peasy";
 
+import moment from "moment";
 import styled from "styled-components";
 
 import { Link } from "@reach/router";
@@ -16,6 +17,7 @@ import {
 } from "office-ui-fabric-react";
 
 import Container from "../../components/container";
+import Tooltip from "../../components/tooltip";
 import NormalDialog from "../../components/dialog";
 
 const Text = styled.div`
@@ -24,40 +26,39 @@ const Text = styled.div`
   align-items: center;
 `;
 
-const onColumnClick = () => {
-  console.log("ciao");
-};
-
 const columnsDefinitions = [
   {
     key: "owner",
     fieldName: "owner",
-    name: "Owner"
+    name: "Possessore"
   },
   {
     key: "serial",
     fieldName: "serial",
-    name: "Serial"
+    name: "Seriale"
   },
   {
     key: "dateFrom",
     fieldName: "dateFrom",
-    name: "From"
+    name: "Inizio",
+    onRender: item => <Text>{moment(item.dateFrom).format("DD/MM/YYYY")}</Text>
   },
   {
     key: "dateTo",
     fieldName: "dateTo",
-    name: "To"
+    name: "Termine",
+    onRender: item => <Text>{moment(item.dateTo).format("DD/MM/YYYY")}</Text>
   },
   {
     key: "hostname",
     fieldName: "hostname",
+    minWidth: 240,
     name: "HostName"
   },
   {
     key: "rentId",
     fieldName: "rentId",
-    name: "Rent #"
+    name: "Affitto #"
   },
   {
     key: "antivirus",
@@ -65,25 +66,41 @@ const columnsDefinitions = [
     name: "Antivirus",
     minWidth: 64,
     onRender: item => (
-      <Text>
-        <Icon iconName={item.antivirus ? "Accept" : "Warning"} />
-      </Text>
+      <Tooltip
+        cursor={"default"}
+        content={
+          "Sul dispositivo" +
+          (!item.antivirus ? " NON " : " ") +
+          "è attivo l' antivirus"
+        }
+      >
+        <Text>
+          <Icon iconName={item.antivirus ? "Accept" : "Warning"} />
+        </Text>
+      </Tooltip>
     )
   },
   {
     key: "encryption",
     fieldName: "encryption",
-    name: "Encryption",
-    minWidth: 72,
+    name: "Cifratura",
+    minWidth: 64,
     onRender: item => (
-      <Text>
-        <Icon iconName={item.encryption ? "Accept" : "Warning"} />
-      </Text>
+      <Tooltip
+        cursor={"default"}
+        content={"I dati" + (!item.encryption ? " NON " : " ") + "sono cifrati"}
+      >
+        <Text>
+          <Icon iconName={item.encryption ? "Accept" : "Warning"} />
+        </Text>
+      </Tooltip>
     )
   }
 ];
 
 const List = () => {
+  const [search, setSearch] = useState("");
+  const [sort, setSort] = useState("");
   const [remove, setRemove] = useState({
     show: false
   });
@@ -102,57 +119,81 @@ const List = () => {
   }, [fetched, listMacs]);
 
   const columns = columnsDefinitions.map(columnDefinition => ({
+    isSorted: columnDefinition.key === sort.key,
+    isSortedDescending: sort.direction,
     onRender: (item, index, column) => <Text>{item[column.fieldName]}</Text>,
     isResizable: true,
-    onColumnClick: onColumnClick,
+    onColumnClick: (ev, column) => {
+      setSort({
+        key: column.key,
+        direction: sort.key === column.key ? !sort.direction : false
+      });
+    },
     ...columnDefinition
   }));
 
   const actionsColumns = [
     {
       key: "actions",
-      name: "Actions",
+      name: "Modifica",
       minWidth: 112,
-      onColumnClick: onColumnClick,
       onRender: item => (
         <>
-          <IconButton
-            disabled={!item.note || item.note === "Nessuna nota."}
-            onClick={() => setNote({ show: true, text: item.note })}
-            iconProps={{ iconName: "More" }}
-          />
-          <Link to={`/app/item/${item.id}`}>
-            <IconButton iconProps={{ iconName: "EditNote" }} />
-          </Link>
-          <IconButton
-            onClick={() => setRemove({ show: true, mac: item })}
-            iconProps={{ iconName: "Delete" }}
-          />
+          <Tooltip
+            content={item.note !== "Nessuna nota." ? "Note" : "Nessuna nota"}
+            cursor={"pointer"}
+          >
+            <IconButton
+              disabled={!item.note || item.note === "Nessuna nota."}
+              onClick={() => setNote({ show: true, text: item.note })}
+              iconProps={{ iconName: "More" }}
+            />
+          </Tooltip>
+
+          <Tooltip content="Modifica" cursor={"pointer"}>
+            <Link to={`/app/item/${item.id}`}>
+              <IconButton iconProps={{ iconName: "EditNote" }} />
+            </Link>
+          </Tooltip>
+
+          <Tooltip content="Elimina" cursor={"pointer"}>
+            <IconButton
+              onClick={() => setRemove({ show: true, mac: item })}
+              iconProps={{ iconName: "Delete" }}
+            />
+          </Tooltip>
         </>
       )
     }
   ];
 
-  const [search, setSearch] = useState("");
-  const filteredItems = items.filter(
-    item =>
-      item.owner.toLowerCase().includes(search.toLowerCase()) ||
-      item.serial.toLowerCase().includes(search.toLowerCase()) ||
-      item.hostname.toLowerCase().includes(search.toLowerCase()) ||
-      item.rentId.toLowerCase().includes(search.toLowerCase())
-  );
+  const filteredItems = items
+    .sort((a, b) =>
+      (sort.direction
+      ? a[sort.key] < b[sort.key]
+      : a[sort.key] > b[sort.key])
+        ? 1
+        : -1
+    )
+    .filter(
+      item =>
+        item.owner.toLowerCase().includes(search.toLowerCase()) ||
+        item.serial.toLowerCase().includes(search.toLowerCase()) ||
+        item.hostname.toLowerCase().includes(search.toLowerCase()) ||
+        item.rentId.toLowerCase().includes(search.toLowerCase())
+    );
 
   return (
     <Container>
       <NormalDialog
-        title="Notes"
+        title="Note"
         subText={note.text}
         hidden={!note.show}
         onDismiss={() => setNote({ ...note, show: false })}
       />
 
       <NormalDialog
-        title="Delete me oh?"
+        title="Mi vuoi cancellare oh?"
         subText="E se poi te ne penti?"
         hidden={!remove.show}
         onDismiss={() => setRemove({ show: false })}
@@ -161,14 +202,13 @@ const List = () => {
           removeMac(remove.mac);
         }}
       />
-      
 
       <TextField
         value={search}
         onChange={(event, text) => setSearch(text)}
-        label="Search:"
-        placeholder="Search for owner, serial, hostname or rentId"
-        iconProps={{ iconName: 'Search' }}
+        label="Cerca:"
+        placeholder="Cerca possessore, seriale, hostname o rentId"
+        iconProps={{ iconName: "Search" }}
       />
 
       <DetailsList
@@ -182,7 +222,10 @@ const List = () => {
       <Stack>
         <Stack.Item align="center">
           <Link to="/app/item">
-            <PrimaryButton text="New item" iconProps={{ iconName: "Add" }} />
+            <PrimaryButton
+              text="Aggiungi nuovo"
+              iconProps={{ iconName: "Add" }}
+            />
           </Link>
         </Stack.Item>
       </Stack>

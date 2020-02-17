@@ -7,24 +7,46 @@ import { DetailsList, SelectionMode } from "office-ui-fabric-react";
 
 import Container from "../../components/container";
 
+function json2array(json) {
+  var result = [];
+  var keys = Object.keys(json);
+  keys.forEach(key => result.push({ field: key, value: json[key] }));
+  return result;
+}
+
 const getDeletions = log => {
-  return log.removed ? ["Rimosso record"] : [];
+  const deletions = (log.removed && json2array(log.record)) || [];
+
+  return deletions.map(edit => {
+    const value = getRenderValue(edit.field, edit.value);
+    return `Rimosso ${edit.field} : "${value}"`;
+  });
 };
 
 const getAdditions = log => {
   const additions = (log.diff && log.diff.additions) || [];
-  return additions.map(
-    edit => `Aggiunto campo "${edit.field}" → "${edit.value}"`
-  );
+
+  return additions.map(edit => {
+    const value = getRenderValue(edit.field, edit.value);
+    return `Aggiunto campo "${edit.field}" → "${value}"`;
+  });
 };
 
 const getEdits = log => {
   const edits = (log.diff && log.diff.edits) || [];
-  return edits.map(
-    edit =>
-      `Modificato campo "${edit.field}": "${edit.value.old}" → "${edit.value.new}"`
-  );
+
+  return edits.map(edit => {
+    const oldValue = getRenderValue(edit.field, edit.value.old);
+    const newValue = getRenderValue(edit.field, edit.value.new);
+
+    return `Modificato campo "${edit.field}": "${oldValue}" → "${newValue}"`;
+  });
 };
+
+const getRenderValue = (fieldName, value) =>
+  ["dateFrom", "dateTo"].includes(fieldName)
+    ? moment.utc(value).format("DD/MM/YYYY")
+    : value;
 
 const getActions = log => {
   const actions = [

@@ -17,15 +17,14 @@ const FormikTextfield = ({
     <TextField
       name={name}
       label={label}
-      placeholder="Please enter text here"
-      errorMessage={touched[name] ? errors[name] : ""}
+      placeholder="Inserisci testo"
+      errorMessage={touched[name] && errors[name]}
       value={value}
       onChange={(event, text) =>
         handleChange({ target: { name, value: text } })
       }
       {...rest}
     />
-   
   );
 };
 

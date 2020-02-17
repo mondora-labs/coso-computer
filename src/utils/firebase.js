@@ -47,7 +47,7 @@ export const getLogs = async () => {
 };
 
 export const getMacs = async () => {
-  const macs = await getCollection("macs");
+  const macs = await getCollection("computers");
   return macs;
 };
 
@@ -57,7 +57,7 @@ export const upsertMac = async mac => {
     const batch = firestore.batch();
 
     const oldDocRef = await firestore
-      .collection("macs")
+      .collection("computers")
       .doc(mac.id)
       .get();
 
@@ -66,11 +66,14 @@ export const upsertMac = async mac => {
     const newMac = {
       id: mac.id,
       owner: mac.owner || "",
+      fiscalCode: mac.fiscalCode || "",
+      device: mac.device || "",
+      model: mac.model || "",
       serial: mac.serial || "",
       dateFrom: mac.dateFrom || "",
       dateTo: mac.dateTo || "",
-      hostname: mac.hostname || "",
-      rentId: mac.rentId || "",
+      hostname: mac.hostname || "<...>",
+      rentId: mac.rentId || "#",
       note: mac.note || "Nessuna nota.",
       antivirus: mac.antivirus || false,
       encryption: mac.encryption || false
@@ -83,10 +86,10 @@ export const upsertMac = async mac => {
       diff
     };
 
-    console.log("upsert a mac", mac, log);
+    console.log("upsert a computer", mac, log);
 
     const logRef = firestore.collection("logs").doc(uuid());
-    const macRef = firestore.collection("macs").doc(newMac.id);
+    const macRef = firestore.collection("computers").doc(newMac.id);
 
     batch.set(logRef, log);
     batch.set(macRef, newMac);
@@ -104,13 +107,13 @@ export const deleteMac = async mac => {
       removed: true,
       record: mac
     };
-    console.log("delete a mac", mac, log);
+    console.log("delete a computer", mac, log);
 
     const firestore = firebase.firestore();
     const batch = firestore.batch();
 
     const logRef = firestore.collection("logs").doc(uuid());
-    const macRef = firestore.collection("macs").doc(mac.id);
+    const macRef = firestore.collection("computers").doc(mac.id);
 
     batch.set(logRef, log);
     batch.delete(macRef);
