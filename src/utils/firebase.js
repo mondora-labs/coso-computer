@@ -3,7 +3,7 @@ import "firebase/auth";
 import "firebase/firestore";
 
 import moment from "moment";
-import uuid from "uuid/v4";
+import { v4 as uuid } from "uuid";
 
 import getDiff from "./diff";
 

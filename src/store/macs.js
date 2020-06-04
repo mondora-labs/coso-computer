@@ -1,5 +1,5 @@
 import { action, thunk } from "easy-peasy";
-import uuid from "uuid/v4";
+import { v4 as uuid } from "uuid";
 
 import { upsertMac, getMacs, deleteMac } from "../utils/firebase";
 
