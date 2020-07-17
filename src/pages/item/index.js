@@ -12,7 +12,7 @@ import {
   Stack,
   Text,
   MessageBar,
-  MessageBarType
+  MessageBarType,
 } from "office-ui-fabric-react";
 
 import createPdf from "../../utils/create-pdf/create-pdf";
@@ -26,7 +26,7 @@ import FormikDevicepicker from "../../components/formik/device-picker";
 
 const SuggestionBar = styled(MessageBar).attrs({
   messageBarType: MessageBarType.warning,
-  isMultiline: true
+  isMultiline: true,
 })`
   margin: 8px 0;
 `;
@@ -43,16 +43,16 @@ const itemInitialValues = {
   rentId: "",
   note: "",
   antivirus: false,
-  encryption: false
+  encryption: false,
 };
 
 const Item = ({ itemId }) => {
-  const { items, fetched } = useStoreState(store => store.macs);
-  const { addMac, listMacs } = useStoreActions(store => store.macs);
+  const { items, fetched } = useStoreState((store) => store.macs);
+  const { addMac, listMacs } = useStoreActions((store) => store.macs);
 
-  const item = items.find(item => item.id === itemId);
+  const item = items.find((item) => item.id === itemId);
 
-  const handleSubmit = values => {
+  const handleSubmit = (values) => {
     addMac({ id: itemId, ...values });
     createPdf(values);
     navigate("/app/list");
@@ -93,10 +93,10 @@ const Item = ({ itemId }) => {
             .moreThan(
               Yup.ref("dateFrom"),
               "La data di termine deve essere successiva a quella di inizio"
-            )
+            ),
         })}
       >
-        {props => {
+        {(props) => {
           return (
             <Form>
               <FormikTextfield
@@ -160,19 +160,26 @@ const Item = ({ itemId }) => {
               <br />
               <FormikDatepicker
                 name="dateFrom"
-                label="Data inizio contratto"
+                label="Data ricezione"
                 {...props}
               />
-              <FormikDatepicker
-                name="dateTo"
-                label="Data fine contratto"
-                {...props}
-              />
+              <FormikDatepicker name="dateTo" label="Data upcycle" {...props} />
+              <SuggestionBar>
+                {"Consideriamo la vita utile di "}
+                <b>{"3 anni"}</b>
+                {" dalla data di ricezione"}
+              </SuggestionBar>
               <FormikTextfield
                 name="rentId"
-                label="Codice contratto"
+                label="Codice contratto noleggio"
                 {...props}
               />
+              <SuggestionBar>
+                <b>{"Non"}</b>
+                {
+                  " necessario se è il dispositivo è stato acquistato ed è previsto l'upcycle"
+                }
+              </SuggestionBar>
               <FormikTextfield name="note" label="Note" multiline {...props} />
               <Stack tokens={{ childrenGap: 16, padding: "16px 0" }}>
                 <FormikCheckbox
