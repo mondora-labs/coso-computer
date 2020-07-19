@@ -87,12 +87,12 @@ const Item = ({ itemId }) => {
             .min(2, "Numero di caratteri insufficiente")
             .max(50, "Numero di caratteri eccessivo")
             .required("Codice seriale richiesto"),
-          dateFrom: Yup.number().required("Seleziona data inizio"),
+          dateFrom: Yup.number().required("Seleziona data ricezione"),
           dateTo: Yup.number()
-            .required("Seleziona data fine")
+            .required("Seleziona data upcycle")
             .moreThan(
               Yup.ref("dateFrom"),
-              "La data di termine deve essere successiva a quella di inizio"
+              "La data di upcycle deve essere successiva a quella di ricezione"
             ),
         })}
       >
@@ -175,9 +175,9 @@ const Item = ({ itemId }) => {
                 {...props}
               />
               <SuggestionBar>
-                <b>{"Non"}</b>
+                <b>{"Non necessario"}</b>
                 {
-                  " necessario se è il dispositivo è stato acquistato ed è previsto l'upcycle"
+                  " se è il dispositivo è stato acquistato ed è previsto l'upcycle"
                 }
               </SuggestionBar>
               <FormikTextfield name="note" label="Note" multiline {...props} />
@@ -196,9 +196,9 @@ const Item = ({ itemId }) => {
               </Stack>
               <Text>
                 {"È inoltre "}
-                <strong>{"obbligatorio"}</strong>{" "}
+                <strong>{"obbligatorio"}</strong>
                 {
-                  "firmare la lettera di assegnamento e caricarla in questa folder  "
+                  " firmare la lettera di assegnamento e caricarla in questa folder  "
                 }
                 <a
                   target="_blank"
