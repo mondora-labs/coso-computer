@@ -12,7 +12,7 @@ import {
   Stack,
   Text,
   MessageBar,
-  MessageBarType,
+  MessageBarType
 } from "office-ui-fabric-react";
 
 import createPdf from "../../utils/create-pdf/create-pdf";
@@ -53,9 +53,12 @@ const Item = ({ itemId }) => {
   const item = items.find((item) => item.id === itemId);
 
   const handleSubmit = (values) => {
-    addMac({ id: itemId, ...values });
-    createPdf(values);
-    navigate("/app/list");
+    if (values.isPdf) {
+      createPdf(item);
+    } else {
+      addMac({ id: itemId, ...values });
+      navigate("/app/list");
+    }
   };
 
   useEffect(() => {
@@ -218,7 +221,14 @@ const Item = ({ itemId }) => {
                   </Link>
                 </Stack.Item>
                 <Stack.Item>
-                  <PrimaryButton type="submit">{"Salva"}</PrimaryButton>
+                  <DefaultButton type="submit" onClick={(e) => {
+                    props.setFieldValue('isPdf', true)
+                  }}>{"Genera PDF"}</DefaultButton>
+                </Stack.Item>
+                <Stack.Item>
+                  <PrimaryButton type="submit" onClick={(e) => {
+                    props.setFieldValue('isPdf', false)
+                  }}>{"Salva"}</PrimaryButton>
                 </Stack.Item>
               </Stack>
             </Form>
