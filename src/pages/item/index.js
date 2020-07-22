@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 
 import styled from "styled-components";
 import { useStoreActions, useStoreState } from "easy-peasy";
@@ -18,6 +18,7 @@ import {
 import createPdf from "../../utils/create-pdf/create-pdf";
 
 import Container from "../../components/container";
+import NormalDialog from "../../components/dialog";
 
 import FormikCheckbox from "../../components/formik/checkbox";
 import FormikTextfield from "../../components/formik/textfield";
@@ -52,9 +53,17 @@ const Item = ({ itemId }) => {
 
   const item = items.find((item) => item.id === itemId);
 
-  const handleSubmit = (values) => {
+  const [progress, setProgress] = useState({
+    show: false,
+    percent: 0,
+    text: "",
+  });
+
+  const handleSubmit = async (values) => {
     if (values.isPdf) {
-      createPdf(item);
+      setProgress({ show: true });
+      await createPdf(item);
+      setProgress({ show: true, percent: 100 });
     } else {
       addMac({ id: itemId, ...values });
       navigate("/app/list");
@@ -69,6 +78,18 @@ const Item = ({ itemId }) => {
 
   return (
     <Container>
+      <NormalDialog
+        hidden={!progress.show}
+        percent={progress.percent}
+        title = "Creazione PDF"
+        subText = "Ricorda di caricare il file nella apposita cartella"
+        icon = "OneDriveAdd"
+        confirmLabel = "Upload"
+        progressLabel = "Il download inizierà a breve ..."
+        handleConfirm={() => window.open("https://drive.google.com/drive/folders/1EJbn-tS3_d8R8r0_OCFq2Ib301GstInm", "_blank")}
+        onDismiss={() => setProgress({ show: false })}
+      />
+
       <Formik
         enableReinitialize={true}
         onSubmit={handleSubmit}
@@ -201,7 +222,7 @@ const Item = ({ itemId }) => {
                 {"È inoltre "}
                 <strong>{"obbligatorio"}</strong>
                 {
-                  " firmare la lettera di assegnamento e caricarla in questa folder  "
+                  " firmare la lettera di assegnamento in PDF e caricarla in questa folder  "
                 }
                 <a
                   target="_blank"

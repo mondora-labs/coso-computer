@@ -4,30 +4,36 @@ import {
   Dialog,
   DialogType,
   PrimaryButton,
-  DialogFooter
+  DialogFooter,
+  ProgressIndicator
 } from "office-ui-fabric-react";
 
 const NormalDialog = ({
   hidden = true,
-  onDismiss = () => {},
+  onDismiss = () => { },
   title = "",
   subText = "",
   handleConfirm,
-  confirmLabel = "Procedi"
+  confirmLabel = "Procedi",
+  icon = "",
+  progressLabel = "",
+  percent
 }) => {
   return (
     <Dialog
       hidden={hidden}
       onDismiss={onDismiss}
       dialogContentProps={{
-        type: DialogType.normal,
+        type: DialogType.largeHeader,
         title: title,
         subText: subText
       }}
     >
+      {progressLabel && (
+        <ProgressIndicator percentComplete={percent} description={progressLabel} />)}
       {handleConfirm && (
         <DialogFooter>
-          <PrimaryButton onClick={handleConfirm}>{confirmLabel}</PrimaryButton>
+          <PrimaryButton iconProps={{ iconName: icon }} onClick={handleConfirm}>{confirmLabel}</PrimaryButton>
         </DialogFooter>
       )}
     </Dialog>

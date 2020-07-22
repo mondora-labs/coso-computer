@@ -86,7 +86,7 @@ const createPdf = async item => {
 
   const pdfBytes = await pdfDoc.save();
   const blob = new Blob([pdfBytes], { type: "application/pdf" });
-  downloadPdf(blob, fileName);
+  await downloadPdf(blob, fileName);
 };
 
 export default createPdf;
