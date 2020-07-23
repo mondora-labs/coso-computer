@@ -10,12 +10,12 @@ import { Link } from "@reach/router";
 import {
   DetailsList,
   IconButton,
-  Icon,
+  DefaultButton,
   PrimaryButton,
+  Icon,
   Stack,
   SelectionMode,
-  TextField,
-  Button,
+  TextField
 } from "office-ui-fabric-react";
 
 import Container from "../../components/container";
@@ -258,7 +258,7 @@ const List = () => {
           </Link>
         </Stack.Item>
         <Stack.Item align="center">
-          <Button
+          <DefaultButton
             text="Esporta .csv"
             iconProps={{ iconName: "DownloadDocument" }}
             onClick={handleExport}
