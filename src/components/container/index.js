@@ -32,6 +32,11 @@ const Container = ({ children }) => {
   return (
     <>
       <CommandsContainer>
+        <Tooltip content="Mostra lista" id={"list-tooltip"}>
+          <Link to="/app/list" aria-describedby={"list-tooltip"}>
+            <IconButton iconProps={{ iconName: "BulletedList2" }} />
+          </Link>
+        </Tooltip>
         <Tooltip content="Cartella moduli firmati" id={"folder-tooltip"}>
           <a
             aria-describedby={"folder-tooltip"}
