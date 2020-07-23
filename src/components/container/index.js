@@ -47,6 +47,11 @@ const Container = ({ children }) => {
             <IconButton iconProps={{ iconName: "History" }} />
           </Link>
         </Tooltip>
+        <Tooltip content="Mostra upcycled" id={"upcycle-tooltip"}>
+          <Link to="/app/upcycled">
+            <IconButton iconProps={{ iconName: "EngineeringGroup" }} />
+          </Link>
+        </Tooltip>
       </CommandsContainer>
       <ContainerDiv>
         <Link to="/list">

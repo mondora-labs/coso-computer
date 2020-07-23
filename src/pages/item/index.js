@@ -81,11 +81,11 @@ const Item = ({ itemId }) => {
       <NormalDialog
         hidden={!progress.show}
         percent={progress.percent}
-        title = "Creazione PDF"
-        subText = "Ricorda di caricare il file nella apposita cartella"
-        icon = "OneDriveAdd"
-        confirmLabel = "Upload"
-        progressLabel = "Il download inizierà a breve ..."
+        title="Creazione PDF"
+        subText="Ricorda di caricare il file nella apposita cartella"
+        icon="OneDriveAdd"
+        confirmLabel="Upload"
+        progressLabel="Il download inizierà a breve ..."
         handleConfirm={() => window.open("https://drive.google.com/drive/folders/1EJbn-tS3_d8R8r0_OCFq2Ib301GstInm", "_blank")}
         onDismiss={() => setProgress({ show: false })}
       />
