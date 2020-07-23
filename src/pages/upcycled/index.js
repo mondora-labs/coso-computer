@@ -55,7 +55,7 @@ const actionsColumns = [
                 </Tooltip>
 
                 <Tooltip content="Modifica" cursor={"pointer"}>
-                    <Link to={`/app/item`}>
+                    <Link to={`/app/upcycle/`}>
                         <IconButton iconProps={{ iconName: "EditNote" }} />
                     </Link>
                 </Tooltip>

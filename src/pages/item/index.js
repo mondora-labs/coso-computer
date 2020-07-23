@@ -242,6 +242,11 @@ const Item = ({ itemId }) => {
                   </Link>
                 </Stack.Item>
                 <Stack.Item>
+                  <Link to={`/app/upcycle/${itemId}`}>
+                    <DefaultButton>{"Upcycle"}</DefaultButton>
+                  </Link>
+                </Stack.Item>
+                <Stack.Item>
                   <DefaultButton type="submit" onClick={(e) => {
                     props.setFieldValue('isPdf', true)
                   }}>{"Genera PDF"}</DefaultButton>
