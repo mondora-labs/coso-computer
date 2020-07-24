@@ -1,5 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
+import { useStoreState, useStoreActions } from "easy-peasy";
+import styled from "styled-components";
 import {
     DetailsList,
     SelectionMode,
@@ -9,6 +11,12 @@ import {
 import Container from "../../components/container";
 import Tooltip from "../../components/tooltip";
 import UpcycleDialog from "../../components/upcycle-dialog";
+
+const Text = styled.div`
+  display: flex;
+  height: 32px;
+  align-items: center;
+`;
 
 const columnsDefinitions = [
     {
@@ -32,8 +40,8 @@ const columnsDefinitions = [
         name: "Upcycle",
     },
     {
-        key: "receiver",
-        fieldName: "receiver",
+        key: "orgName",
+        fieldName: "orgName",
         name: "Associazione",
     }
 ];
@@ -42,6 +50,21 @@ const Upcycled = () => {
     const [upcycle, setUpcycle] = useState({
         show: false,
     });
+
+    const { listUpcycled } = useStoreActions((store) => store.upcycled);
+    const { items, fetched } = useStoreState((store) => store.upcycled);
+
+    useEffect(() => {
+        if (!fetched) {
+            listUpcycled();
+        }
+    }, [fetched, listUpcycled]);
+
+    const columns = columnsDefinitions.map((columnDefinition) => ({
+        onRender: (item, index, column) => <Text>{item[column.fieldName]}</Text>,
+        isResizable: true,
+        ...columnDefinition,
+    }));
 
     const actionsColumns = [
         {
@@ -58,7 +81,6 @@ const Upcycled = () => {
                             iconProps={{ iconName: "More" }}
                         />
                     </Tooltip>
-
                     <Tooltip content="Modifica" cursor={"pointer"}>
                         <IconButton iconProps={{ iconName: "EditNote" }} onClick={() => setUpcycle({ show: true })} />
                     </Tooltip>
@@ -75,8 +97,8 @@ const Upcycled = () => {
             />
             <DetailsList
                 selectionMode={SelectionMode.none}
-                columns={[...columnsDefinitions, ...actionsColumns]}
-                items={"Upcycled"}
+                columns={[...columns, ...actionsColumns]}
+                items={items}
             />
         </Container>
     );

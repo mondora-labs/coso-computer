@@ -51,6 +51,11 @@ export const getMacs = async () => {
   return macs;
 };
 
+export const getUpcycled = async () => {
+  const upcycled = await getCollection("upcycled");
+  return upcycled;
+};
+
 export const upsertMac = async mac => {
   try {
     const firestore = firebase.firestore();
