@@ -89,7 +89,7 @@ const Upcycled = () => {
                         />
                     </Tooltip>
                     <Tooltip content="Modifica" cursor={"pointer"}>
-                        <IconButton iconProps={{ iconName: "EditNote" }} onClick={() => setUpcycle({ show: true })} />
+                        <IconButton iconProps={{ iconName: "EditNote" }} onClick={() => setUpcycle({ show: true, item: item })} />
                     </Tooltip>
                 </>
             ),
@@ -107,6 +107,7 @@ const Upcycled = () => {
             <UpcycleDialog
                 hidden={!upcycle.show}
                 onDismiss={() => setUpcycle({ show: false })}
+                item={upcycle.item}
             />
             <DetailsList
                 selectionMode={SelectionMode.none}
