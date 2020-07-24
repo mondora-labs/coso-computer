@@ -1,6 +1,7 @@
 import React from "react";
 
 import { Formik, Form } from "formik";
+import * as Yup from "yup";
 import {
     Dialog,
     DialogType,
@@ -12,6 +13,13 @@ import {
 import FormikCheckbox from "../../components/formik/checkbox";
 import FormikTextfield from "../../components/formik/textfield";
 
+const itemInitialValues = {
+    orgName: "",
+    orgAddress: "",
+    orgKind: "",
+    formatted: false,
+};
+
 const UpcycleDialog = ({
     hidden = true,
     onDismiss = () => { },
@@ -19,6 +27,7 @@ const UpcycleDialog = ({
 }) => {
     const handleSubmit = async (values) => {
         console.log("ciao sono submit");
+        console.log(values);
     };
     return (
         <Dialog
@@ -33,7 +42,22 @@ const UpcycleDialog = ({
         >
             <Formik enableReinitialize={true}
                 onSubmit={handleSubmit}
-                initialValues={{ item }}
+                initialValues={{ ...itemInitialValues, ...item }}
+                validationSchema={Yup.object().shape({
+                    orgName: Yup.string()
+                        .min(2, "Numero di caratteri insufficiente")
+                        .max(100, "Numero di caratteri eccessivo")
+                        .required("Nome ente richiesto"),
+                    orgAddress: Yup.string()
+                        .min(2, "Numero di caratteri insufficiente")
+                        .max(100, "Numero di caratteri eccessivo")
+                        .required("Indirizzo ente richiesto"),
+                    orgKind: Yup.string()
+                        .min(2, "Numero di caratteri insufficiente")
+                        .max(100, "Numero di caratteri eccessivo")
+                        .required("Tipologia ente richiesta"),
+                    formatted: Yup.bool().oneOf([true], "Il device deve essere formattato")
+                })}
             >
                 {(props) => {
                     return (
@@ -54,7 +78,7 @@ const UpcycleDialog = ({
                                 {...props}
                             />
                             <br />
-                            <FormikTextfield name="orgNote" label="Note" multiline {...props} />
+                            <FormikTextfield name="note" label="Note" multiline {...props} />
                             <Stack tokens={{ padding: "16px 0" }}>
                                 <FormikCheckbox
                                     name="formatted"
