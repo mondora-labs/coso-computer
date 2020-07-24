@@ -1,5 +1,8 @@
 import React from "react";
 
+import { useStoreActions } from "easy-peasy";
+import { navigate } from "@reach/router";
+
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import {
@@ -25,9 +28,11 @@ const UpcycleDialog = ({
     onDismiss = () => { },
     item = ""
 }) => {
+    const { addUpcycled } = useStoreActions((store) => store.upcycled);
+
     const handleSubmit = async (values) => {
-        console.log("ciao sono submit");
-        console.log(values);
+        addUpcycled(values);
+        navigate("/app/upcycled");
     };
     return (
         <Dialog

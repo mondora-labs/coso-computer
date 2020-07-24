@@ -1,6 +1,6 @@
 import { action, thunk } from "easy-peasy";
 
-import { getUpcycled } from "../utils/firebase";
+import { upsertUpcycled, getUpcycled } from "../utils/firebase";
 
 const defaultState = {
   items: [],
@@ -14,6 +14,13 @@ export const upcycled = {
       ...state,
       fetched: true,
       items: payload
+    };
+  }),
+  addUpcycled: action((state, payload) => {
+    upsertUpcycled(payload);
+    return {
+      ...state,
+      items: [...state.items.filter(upcycled => upcycled.id !== payload.id), upcycled]
     };
   }),
   listUpcycled: thunk(async actions => {

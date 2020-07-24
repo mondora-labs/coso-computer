@@ -104,6 +104,22 @@ export const upsertMac = async mac => {
   }
 };
 
+export const upsertUpcycled = async device => {
+  try {
+    const firestore = firebase.firestore();
+    const batch = firestore.batch();
+
+    console.log("upcycle a computer", device);
+
+    const deviceRef = firestore.collection("upcycled").doc(device.id);
+
+    batch.set(deviceRef, device);
+    batch.commit();
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 export const deleteMac = async mac => {
   try {
     const log = {
