@@ -61,6 +61,7 @@ const Item = ({ itemId }) => {
   });
   const [upcycle, setUpcycle] = useState({
     show: false,
+    item: ""
   });
 
 
@@ -75,7 +76,7 @@ const Item = ({ itemId }) => {
       navigate("/app/list");
     }
     else if (values.action === 'upcycle') {
-      setUpcycle({ show: true });
+      setUpcycle({ show: true, item: item });
     }
   };
 
@@ -101,6 +102,7 @@ const Item = ({ itemId }) => {
 
       <UpcycleDialog
         hidden={!upcycle.show}
+        item={upcycle.item}
         onDismiss={() => setUpcycle({ show: false })}
       />
 
