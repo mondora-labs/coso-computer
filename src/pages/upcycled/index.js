@@ -1,6 +1,5 @@
-import React from "react";
+import React, { useState } from "react";
 
-import { Link } from "@reach/router";
 import {
     DetailsList,
     SelectionMode,
@@ -9,6 +8,7 @@ import {
 
 import Container from "../../components/container";
 import Tooltip from "../../components/tooltip";
+import UpcycleDialog from "../../components/upcycle-dialog";
 
 const columnsDefinitions = [
     {
@@ -38,35 +38,41 @@ const columnsDefinitions = [
     }
 ];
 
-const actionsColumns = [
-    {
-        key: "actions",
-        name: "Modifica",
-        minWidth: 80,
-        onRender: () => (
-            <>
-                <Tooltip
-                    content={"Note"}
-                    cursor={"pointer"}
-                >
-                    <IconButton
-                        iconProps={{ iconName: "More" }}
-                    />
-                </Tooltip>
-
-                <Tooltip content="Modifica" cursor={"pointer"}>
-                    <Link to={`/app/upcycle/`}>
-                        <IconButton iconProps={{ iconName: "EditNote" }} />
-                    </Link>
-                </Tooltip>
-            </>
-        ),
-    },
-];
-
 const Upcycled = () => {
+    const [upcycle, setUpcycle] = useState({
+        show: false,
+    });
+
+    const actionsColumns = [
+        {
+            key: "actions",
+            name: "Modifica",
+            minWidth: 80,
+            onRender: () => (
+                <>
+                    <Tooltip
+                        content={"Note"}
+                        cursor={"pointer"}
+                    >
+                        <IconButton
+                            iconProps={{ iconName: "More" }}
+                        />
+                    </Tooltip>
+
+                    <Tooltip content="Modifica" cursor={"pointer"}>
+                        <IconButton iconProps={{ iconName: "EditNote" }} onClick={() => setUpcycle({ show: true })} />
+                    </Tooltip>
+                </>
+            ),
+        },
+    ];
+
     return (
         <Container>
+            <UpcycleDialog
+                hidden={!upcycle.show}
+                onDismiss={() => setUpcycle({ show: false })}
+            />
             <DetailsList
                 selectionMode={SelectionMode.none}
                 columns={[...columnsDefinitions, ...actionsColumns]}
