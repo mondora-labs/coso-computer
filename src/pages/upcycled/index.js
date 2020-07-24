@@ -11,6 +11,7 @@ import {
 import Container from "../../components/container";
 import Tooltip from "../../components/tooltip";
 import UpcycleDialog from "../../components/upcycle-dialog";
+import NormalDialog from "../../components/dialog";
 
 const Text = styled.div`
   display: flex;
@@ -50,6 +51,10 @@ const Upcycled = () => {
     const [upcycle, setUpcycle] = useState({
         show: false,
     });
+    const [note, setNote] = useState({
+        show: false,
+        text: "",
+    });
 
     const { listUpcycled } = useStoreActions((store) => store.upcycled);
     const { items, fetched } = useStoreState((store) => store.upcycled);
@@ -71,13 +76,15 @@ const Upcycled = () => {
             key: "actions",
             name: "Modifica",
             minWidth: 80,
-            onRender: () => (
+            onRender: (item) => (
                 <>
                     <Tooltip
-                        content={"Note"}
+                        content={item.note !== "Nessuna nota." ? "Note" : "Nessuna nota"}
                         cursor={"pointer"}
                     >
                         <IconButton
+                            disabled={!item.note || item.note === "Nessuna nota."}
+                            onClick={() => setNote({ show: true, text: item.note })}
                             iconProps={{ iconName: "More" }}
                         />
                     </Tooltip>
@@ -91,6 +98,12 @@ const Upcycled = () => {
 
     return (
         <Container>
+            <NormalDialog
+                title="Note"
+                subText={note.text}
+                hidden={!note.show}
+                onDismiss={() => setNote({ ...note, show: false })}
+            />
             <UpcycleDialog
                 hidden={!upcycle.show}
                 onDismiss={() => setUpcycle({ show: false })}
