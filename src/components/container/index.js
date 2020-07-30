@@ -59,7 +59,7 @@ const Container = ({ children }) => {
         </Tooltip>
       </CommandsContainer>
       <ContainerDiv>
-        <Link to="/list">
+        <Link to="/app/list">
           <Logo />
         </Link>
         {children}
