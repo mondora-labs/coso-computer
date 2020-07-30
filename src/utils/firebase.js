@@ -111,6 +111,13 @@ export const upsertUpcycled = async device => {
 
     console.log("upcycle a computer", device);
 
+    const oldDocRef = await firestore
+      .collection("computers")
+      .doc(device.id)
+      .get();
+
+    console.log("ciao", oldDocRef);
+
     const deviceRef = firestore.collection("upcycled").doc(device.id);
 
     batch.set(deviceRef, device);

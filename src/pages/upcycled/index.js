@@ -49,7 +49,6 @@ const columnsDefinitions = [
 ];
 
 const Upcycled = () => {
-    const [search, setSearch] = useState("");
     const [sort, setSort] = useState("");
     const [upcycle, setUpcycle] = useState({
         show: false,
@@ -112,10 +111,6 @@ const Upcycled = () => {
             (sort.direction ? a[sort.key] < b[sort.key] : a[sort.key] > b[sort.key])
                 ? 1
                 : -1
-        ).filter((item) =>
-            item.owner.toLowerCase().includes(search.toLowerCase()) ||
-            item.serial.toLowerCase().includes(search.toLowerCase()) ||
-            item.orgName.toLowerCase().includes(search.toLowerCase())
         );
 
     return (
@@ -130,13 +125,6 @@ const Upcycled = () => {
                 hidden={!upcycle.show}
                 onDismiss={() => setUpcycle({ show: false })}
                 item={upcycle.item}
-            />
-            <TextField
-                value={search}
-                onChange={(event, text) => setSearch(text)}
-                label="Cerca:"
-                placeholder="Cerca possessore, seriale, hostname o rentId"
-                iconProps={{ iconName: "Search" }}
             />
             <DetailsList
                 selectionMode={SelectionMode.none}
