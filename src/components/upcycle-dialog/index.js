@@ -97,9 +97,9 @@ const UpcycleDialog = ({
 
                             <Stack horizontal tokens={{ childrenGap: 16 }}>
                                 <Stack.Item>
-                                    <DefaultButton onClick={() => {
-                                        console.log("Indietro")
-                                    }}>{"Indietro"}</DefaultButton>
+                                    <DefaultButton onClick={() => onDismiss()}>
+                                        {"Indietro"}
+                                    </DefaultButton>
                                 </Stack.Item>
                                 <Stack.Item>
                                     <PrimaryButton type="submit">{"Salva"}</PrimaryButton>
