@@ -232,24 +232,17 @@ const List = () => {
         }}
       />
 
-      <TextField
-        value={search}
-        onChange={(event, text) => setSearch(text)}
-        label="Cerca:"
-        placeholder="Cerca possessore, seriale, hostname o rentId"
-        iconProps={{ iconName: "Search" }}
-      />
-
-      <DetailsList
-        selectionMode={SelectionMode.none}
-        columns={[...columns, ...actionsColumns]}
-        items={filteredItems}
-      />
-
-      <br />
-
-      <Stack tokens={{ childrenGap: "8px" }} horizontal reversed>
-        <Stack.Item align="center">
+      <Stack tokens={{ childrenGap: "8px" }} horizontal>
+        <Stack.Item grow >
+          <TextField
+            value={search}
+            onChange={(event, text) => setSearch(text)}
+            label="Cerca:"
+            placeholder="Cerca possessore, seriale, hostname o rentId"
+            iconProps={{ iconName: "Search" }}
+          />
+        </Stack.Item>
+        <Stack.Item align="end">
           <Link to="/app/item">
             <PrimaryButton
               text="Aggiungi nuovo"
@@ -257,7 +250,7 @@ const List = () => {
             />
           </Link>
         </Stack.Item>
-        <Stack.Item align="center">
+        <Stack.Item align="end">
           <DefaultButton
             text="Esporta .csv"
             iconProps={{ iconName: "DownloadDocument" }}
@@ -265,6 +258,12 @@ const List = () => {
           />
         </Stack.Item>
       </Stack>
+
+      <DetailsList
+        selectionMode={SelectionMode.none}
+        columns={[...columns, ...actionsColumns]}
+        items={filteredItems}
+      />
     </Container>
   );
 };
