@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 
+import moment from "moment";
 import { useStoreState, useStoreActions } from "easy-peasy";
 import styled from "styled-components";
 import {
@@ -34,11 +35,17 @@ const columnsDefinitions = [
         key: "dateFrom",
         fieldName: "dateFrom",
         name: "Acquisto",
+        onRender: (item) => (
+            <Text>{moment(item.dateFrom).format("DD/MM/YYYY")}</Text>
+        ),
     },
     {
         key: "dateUpcycle",
         fieldName: "dateTo",
         name: "Upcycle",
+        onRender: (item) => (
+            <Text>{moment(item.dateTo).format("DD/MM/YYYY")}</Text>
+        ),
     },
     {
         key: "orgName",
