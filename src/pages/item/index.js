@@ -103,6 +103,7 @@ const Item = ({ itemId }) => {
       <UpcycleDialog
         hidden={!upcycle.show}
         item={upcycle.item}
+        origin="item"
         onDismiss={() => setUpcycle({ show: false })}
       />
 

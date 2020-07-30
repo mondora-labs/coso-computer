@@ -5,8 +5,7 @@ import styled from "styled-components";
 import {
     DetailsList,
     SelectionMode,
-    IconButton,
-    TextField
+    IconButton
 } from "office-ui-fabric-react";
 
 import Container from "../../components/container";
@@ -125,6 +124,7 @@ const Upcycled = () => {
                 hidden={!upcycle.show}
                 onDismiss={() => setUpcycle({ show: false })}
                 item={upcycle.item}
+                origin="upcycled"
             />
             <DetailsList
                 selectionMode={SelectionMode.none}

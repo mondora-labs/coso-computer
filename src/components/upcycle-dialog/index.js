@@ -26,12 +26,15 @@ const itemInitialValues = {
 const UpcycleDialog = ({
     hidden = true,
     onDismiss = () => { },
-    item = ""
+    item = "",
+    origin = ""
 }) => {
     const { addUpcycled } = useStoreActions((store) => store.upcycled);
+    const { removeMac } = useStoreActions((store) => store.macs);
 
     const handleSubmit = async (values) => {
         addUpcycled(values);
+        if (origin === "item") { removeMac(values); }
         navigate("/app/upcycled");
     };
     return (
