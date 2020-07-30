@@ -1,12 +1,16 @@
 import React, { useState, useEffect } from "react";
 
 import moment from "moment";
+import stringify from "csv-stringify";
+
 import { useStoreState, useStoreActions } from "easy-peasy";
 import styled from "styled-components";
 import {
     DetailsList,
     SelectionMode,
-    IconButton
+    IconButton,
+    DefaultButton,
+    Stack
 } from "office-ui-fabric-react";
 
 import Container from "../../components/container";
@@ -24,12 +28,12 @@ const columnsDefinitions = [
     {
         key: "owner",
         fieldName: "owner",
-        name: "Ultimo Possessore",
+        name: "Ultimo Possessore"
     },
     {
         key: "serial",
         fieldName: "serial",
-        name: "Seriale",
+        name: "Seriale"
     },
     {
         key: "dateFrom",
@@ -37,7 +41,7 @@ const columnsDefinitions = [
         name: "Acquisto",
         onRender: (item) => (
             <Text>{moment(item.dateFrom).format("DD/MM/YYYY")}</Text>
-        ),
+        )
     },
     {
         key: "dateUpcycle",
@@ -45,12 +49,13 @@ const columnsDefinitions = [
         name: "Upcycle",
         onRender: (item) => (
             <Text>{moment(item.dateTo).format("DD/MM/YYYY")}</Text>
-        ),
+        )
     },
     {
         key: "orgName",
         fieldName: "orgName",
         name: "Associazione",
+        minWidth: 180
     }
 ];
 
@@ -119,6 +124,32 @@ const Upcycled = () => {
                 : -1
         );
 
+    const handleExport = () => {
+        const exportItems = filteredItems.map((item) => ({
+            ...item,
+            dateTo: moment.utc(item.dateTo).format("DD-MM-YYYY"),
+            dateFrom: moment.utc(item.dateFrom).format("DD-MM-YYYY"),
+        }));
+
+        const options = {
+            header: true,
+        };
+
+        stringify(exportItems, options, (err, output) => {
+            var element = document.createElement("a");
+            document.body.appendChild(element);
+
+            element.setAttribute(
+                "href",
+                `data:text/csv;base64,${btoa(unescape(encodeURIComponent(output)))}`
+            );
+            element.setAttribute("target", "_blank");
+            element.setAttribute("download", "upcycled.csv");
+            element.click();
+            document.body.removeChild(element);
+        });
+    };
+
     return (
         <Container>
             <NormalDialog
@@ -138,6 +169,16 @@ const Upcycled = () => {
                 columns={[...columns, ...actionsColumns]}
                 items={filteredItems}
             />
+            <br />
+            <Stack horizontal reversed>
+                <Stack.Item align="center">
+                    <DefaultButton
+                        text="Esporta .csv"
+                        iconProps={{ iconName: "DownloadDocument" }}
+                        onClick={handleExport}
+                    />
+                </Stack.Item>
+            </Stack>
         </Container>
     );
 };
