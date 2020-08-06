@@ -50,7 +50,10 @@ const itemInitialValues = {
 
 const Item = ({ itemId }) => {
   const { items, fetched } = useStoreState((store) => store.macs);
-  const { addMac, listMacs } = useStoreActions((store) => store.macs);
+  const { addMac, listMacs, removeMac } = useStoreActions(
+    (store) => store.macs
+  );
+  const { addUpcycled } = useStoreActions((store) => store.upcycled);
 
   const item = items.find((item) => item.id === itemId);
 
@@ -61,21 +64,18 @@ const Item = ({ itemId }) => {
   });
   const [upcycle, setUpcycle] = useState({
     show: false,
-    item: ""
+    item: "",
   });
 
-
-
   const handleSubmit = async (values) => {
-    if (values.action === 'pdf') {
+    if (values.action === "pdf") {
       setProgress({ show: true });
       await createPdf(item);
       setProgress({ show: true, percent: 100 });
-    } else if (values.action === 'save') {
+    } else if (values.action === "save") {
       addMac({ id: itemId, ...values });
       navigate("/app/list");
-    }
-    else if (values.action === 'upcycle') {
+    } else if (values.action === "upcycle") {
       setUpcycle({ show: true, item: item });
     }
   };
@@ -96,15 +96,24 @@ const Item = ({ itemId }) => {
         icon="OneDriveAdd"
         confirmLabel="Upload"
         progressLabel="Il download inizierà a breve ..."
-        handleConfirm={() => window.open("https://drive.google.com/drive/folders/1EJbn-tS3_d8R8r0_OCFq2Ib301GstInm", "_blank")}
+        handleConfirm={() =>
+          window.open(
+            "https://drive.google.com/drive/folders/1EJbn-tS3_d8R8r0_OCFq2Ib301GstInm",
+            "_blank"
+          )
+        }
         onDismiss={() => setProgress({ show: false })}
       />
 
       <UpcycleDialog
         hidden={!upcycle.show}
         item={upcycle.item}
-        origin="item"
         onDismiss={() => setUpcycle({ show: false })}
+        onSubmit={async (values) => {
+          addUpcycled(values);
+          removeMac(values);
+          navigate("/app/upcycled");
+        }}
       />
 
       <Formik
@@ -259,19 +268,34 @@ const Item = ({ itemId }) => {
                   </Link>
                 </Stack.Item>
                 <Stack.Item>
-                  <DefaultButton type="submit" onClick={(e) => {
-                    props.setFieldValue('action', 'upcycle')
-                  }}>{"Upcycle"}</DefaultButton>
+                  <DefaultButton
+                    type="submit"
+                    onClick={(e) => {
+                      props.setFieldValue("action", "upcycle");
+                    }}
+                  >
+                    {"Upcycle"}
+                  </DefaultButton>
                 </Stack.Item>
                 <Stack.Item>
-                  <DefaultButton type="submit" onClick={(e) => {
-                    props.setFieldValue('action', 'pdf')
-                  }}>{"Genera PDF"}</DefaultButton>
+                  <DefaultButton
+                    type="submit"
+                    onClick={(e) => {
+                      props.setFieldValue("action", "pdf");
+                    }}
+                  >
+                    {"Genera PDF"}
+                  </DefaultButton>
                 </Stack.Item>
                 <Stack.Item>
-                  <PrimaryButton type="submit" onClick={(e) => {
-                    props.setFieldValue('action', 'save')
-                  }}>{"Salva"}</PrimaryButton>
+                  <PrimaryButton
+                    type="submit"
+                    onClick={(e) => {
+                      props.setFieldValue("action", "save");
+                    }}
+                  >
+                    {"Salva"}
+                  </PrimaryButton>
                 </Stack.Item>
               </Stack>
             </Form>
