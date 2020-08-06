@@ -101,7 +101,7 @@ const Upcycled = () => {
                 <>
                     <Tooltip
                         content={item.note !== "Nessuna nota." ? "Note" : "Nessuna nota"}
-                        cursor={"pointer"}
+                        cursor="pointer"
                     >
                         <IconButton
                             disabled={!item.note || item.note === "Nessuna nota."}
@@ -109,7 +109,7 @@ const Upcycled = () => {
                             iconProps={{ iconName: "More" }}
                         />
                     </Tooltip>
-                    <Tooltip content="Modifica" cursor={"pointer"}>
+                    <Tooltip content="Modifica" cursor="pointer">
                         <IconButton iconProps={{ iconName: "EditNote" }} onClick={() => setUpcycle({ show: true, item: item })} />
                     </Tooltip>
                 </>

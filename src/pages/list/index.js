@@ -71,7 +71,7 @@ const columnsDefinitions = [
     minWidth: 64,
     onRender: (item) => (
       <Tooltip
-        cursor={"default"}
+        cursor="default"
         content={
           "Sul dispositivo" +
           (!item.antivirus ? " NON " : " ") +
@@ -91,7 +91,7 @@ const columnsDefinitions = [
     minWidth: 64,
     onRender: (item) => (
       <Tooltip
-        cursor={"default"}
+        cursor="default"
         content={"I dati" + (!item.encryption ? " NON " : " ") + "sono cifrati"}
       >
         <Text>
@@ -145,7 +145,7 @@ const List = () => {
         <>
           <Tooltip
             content={item.note !== "Nessuna nota." ? "Note" : "Nessuna nota"}
-            cursor={"pointer"}
+            cursor="pointer"
           >
             <IconButton
               disabled={!item.note || item.note === "Nessuna nota."}
@@ -154,13 +154,13 @@ const List = () => {
             />
           </Tooltip>
 
-          <Tooltip content="Modifica" cursor={"pointer"}>
+          <Tooltip content="Modifica" cursor="pointer">
             <Link to={`/app/item/${item.id}`}>
               <IconButton iconProps={{ iconName: "EditNote" }} />
             </Link>
           </Tooltip>
 
-          <Tooltip content="Elimina" cursor={"pointer"}>
+          <Tooltip content="Elimina" cursor="pointer">
             <IconButton
               onClick={() => setRemove({ show: true, mac: item })}
               iconProps={{ iconName: "Delete" }}
