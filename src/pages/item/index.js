@@ -19,6 +19,7 @@ import createPdf from "../../utils/create-pdf/create-pdf";
 
 import Container from "../../components/container";
 import NormalDialog from "../../components/dialog";
+import UpcycleDialog from "../../components/upcycle-dialog";
 
 import FormikCheckbox from "../../components/formik/checkbox";
 import FormikTextfield from "../../components/formik/textfield";
@@ -49,7 +50,10 @@ const itemInitialValues = {
 
 const Item = ({ itemId }) => {
   const { items, fetched } = useStoreState((store) => store.macs);
-  const { addMac, listMacs } = useStoreActions((store) => store.macs);
+  const { addMac, listMacs, removeMac } = useStoreActions(
+    (store) => store.macs
+  );
+  const { addUpcycled } = useStoreActions((store) => store.upcycled);
 
   const item = items.find((item) => item.id === itemId);
 
@@ -58,15 +62,21 @@ const Item = ({ itemId }) => {
     percent: 0,
     text: "",
   });
+  const [upcycle, setUpcycle] = useState({
+    show: false,
+    item: "",
+  });
 
   const handleSubmit = async (values) => {
-    if (values.isPdf) {
+    if (values.action === "pdf") {
       setProgress({ show: true });
       await createPdf(item);
       setProgress({ show: true, percent: 100 });
-    } else {
+    } else if (values.action === "save") {
       addMac({ id: itemId, ...values });
       navigate("/app/list");
+    } else if (values.action === "upcycle") {
+      setUpcycle({ show: true, item: item });
     }
   };
 
@@ -81,13 +91,29 @@ const Item = ({ itemId }) => {
       <NormalDialog
         hidden={!progress.show}
         percent={progress.percent}
-        title = "Creazione PDF"
-        subText = "Ricorda di caricare il file nella apposita cartella"
-        icon = "OneDriveAdd"
-        confirmLabel = "Upload"
-        progressLabel = "Il download inizierà a breve ..."
-        handleConfirm={() => window.open("https://drive.google.com/drive/folders/1EJbn-tS3_d8R8r0_OCFq2Ib301GstInm", "_blank")}
+        title="Creazione PDF"
+        subText="Ricorda di caricare il file nella apposita cartella"
+        icon="OneDriveAdd"
+        confirmLabel="Upload"
+        progressLabel="Il download inizierà a breve ..."
+        handleConfirm={() =>
+          window.open(
+            "https://drive.google.com/drive/folders/1EJbn-tS3_d8R8r0_OCFq2Ib301GstInm",
+            "_blank"
+          )
+        }
         onDismiss={() => setProgress({ show: false })}
+      />
+
+      <UpcycleDialog
+        hidden={!upcycle.show}
+        item={upcycle.item}
+        onDismiss={() => setUpcycle({ show: false })}
+        onSubmit={async (values) => {
+          addUpcycled(values);
+          removeMac(values);
+          navigate("/app/upcycled");
+        }}
       />
 
       <Formik
@@ -242,14 +268,34 @@ const Item = ({ itemId }) => {
                   </Link>
                 </Stack.Item>
                 <Stack.Item>
-                  <DefaultButton type="submit" onClick={(e) => {
-                    props.setFieldValue('isPdf', true)
-                  }}>{"Genera PDF"}</DefaultButton>
+                  <DefaultButton
+                    type="submit"
+                    onClick={(e) => {
+                      props.setFieldValue("action", "upcycle");
+                    }}
+                  >
+                    {"Upcycle"}
+                  </DefaultButton>
                 </Stack.Item>
                 <Stack.Item>
-                  <PrimaryButton type="submit" onClick={(e) => {
-                    props.setFieldValue('isPdf', false)
-                  }}>{"Salva"}</PrimaryButton>
+                  <DefaultButton
+                    type="submit"
+                    onClick={(e) => {
+                      props.setFieldValue("action", "pdf");
+                    }}
+                  >
+                    {"Genera PDF"}
+                  </DefaultButton>
+                </Stack.Item>
+                <Stack.Item>
+                  <PrimaryButton
+                    type="submit"
+                    onClick={(e) => {
+                      props.setFieldValue("action", "save");
+                    }}
+                  >
+                    {"Salva"}
+                  </PrimaryButton>
                 </Stack.Item>
               </Stack>
             </Form>

@@ -51,6 +51,11 @@ export const getMacs = async () => {
   return macs;
 };
 
+export const getUpcycled = async () => {
+  const upcycled = await getCollection("upcycled");
+  return upcycled;
+};
+
 export const upsertMac = async mac => {
   try {
     const firestore = firebase.firestore();
@@ -93,6 +98,29 @@ export const upsertMac = async mac => {
 
     batch.set(logRef, log);
     batch.set(macRef, newMac);
+    batch.commit();
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const upsertUpcycled = async device => {
+  try {
+    const firestore = firebase.firestore();
+    const batch = firestore.batch();
+
+    console.log("upcycle a computer", device);
+
+    const oldDocRef = await firestore
+      .collection("computers")
+      .doc(device.id)
+      .get();
+
+    console.log("ciao", oldDocRef);
+
+    const deviceRef = firestore.collection("upcycled").doc(device.id);
+
+    batch.set(deviceRef, device);
     batch.commit();
   } catch (error) {
     console.log(error);

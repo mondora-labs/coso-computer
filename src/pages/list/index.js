@@ -10,12 +10,12 @@ import { Link } from "@reach/router";
 import {
   DetailsList,
   IconButton,
-  Icon,
+  DefaultButton,
   PrimaryButton,
+  Icon,
   Stack,
   SelectionMode,
-  TextField,
-  Button,
+  TextField
 } from "office-ui-fabric-react";
 
 import Container from "../../components/container";
@@ -71,7 +71,7 @@ const columnsDefinitions = [
     minWidth: 64,
     onRender: (item) => (
       <Tooltip
-        cursor={"default"}
+        cursor="default"
         content={
           "Sul dispositivo" +
           (!item.antivirus ? " NON " : " ") +
@@ -91,7 +91,7 @@ const columnsDefinitions = [
     minWidth: 64,
     onRender: (item) => (
       <Tooltip
-        cursor={"default"}
+        cursor="default"
         content={"I dati" + (!item.encryption ? " NON " : " ") + "sono cifrati"}
       >
         <Text>
@@ -145,7 +145,7 @@ const List = () => {
         <>
           <Tooltip
             content={item.note !== "Nessuna nota." ? "Note" : "Nessuna nota"}
-            cursor={"pointer"}
+            cursor="pointer"
           >
             <IconButton
               disabled={!item.note || item.note === "Nessuna nota."}
@@ -154,13 +154,13 @@ const List = () => {
             />
           </Tooltip>
 
-          <Tooltip content="Modifica" cursor={"pointer"}>
+          <Tooltip content="Modifica" cursor="pointer">
             <Link to={`/app/item/${item.id}`}>
               <IconButton iconProps={{ iconName: "EditNote" }} />
             </Link>
           </Tooltip>
 
-          <Tooltip content="Elimina" cursor={"pointer"}>
+          <Tooltip content="Elimina" cursor="pointer">
             <IconButton
               onClick={() => setRemove({ show: true, mac: item })}
               iconProps={{ iconName: "Delete" }}
@@ -232,24 +232,17 @@ const List = () => {
         }}
       />
 
-      <TextField
-        value={search}
-        onChange={(event, text) => setSearch(text)}
-        label="Cerca:"
-        placeholder="Cerca possessore, seriale, hostname o rentId"
-        iconProps={{ iconName: "Search" }}
-      />
-
-      <DetailsList
-        selectionMode={SelectionMode.none}
-        columns={[...columns, ...actionsColumns]}
-        items={filteredItems}
-      />
-
-      <br />
-
-      <Stack tokens={{ childrenGap: "8px" }} horizontal reversed>
-        <Stack.Item align="center">
+      <Stack tokens={{ childrenGap: "8px" }} horizontal>
+        <Stack.Item grow >
+          <TextField
+            value={search}
+            onChange={(event, text) => setSearch(text)}
+            label="Cerca:"
+            placeholder="Cerca possessore, seriale, hostname o rentId"
+            iconProps={{ iconName: "Search" }}
+          />
+        </Stack.Item>
+        <Stack.Item align="end">
           <Link to="/app/item">
             <PrimaryButton
               text="Aggiungi nuovo"
@@ -257,14 +250,20 @@ const List = () => {
             />
           </Link>
         </Stack.Item>
-        <Stack.Item align="center">
-          <Button
+        <Stack.Item align="end">
+          <DefaultButton
             text="Esporta .csv"
             iconProps={{ iconName: "DownloadDocument" }}
             onClick={handleExport}
           />
         </Stack.Item>
       </Stack>
+
+      <DetailsList
+        selectionMode={SelectionMode.none}
+        columns={[...columns, ...actionsColumns]}
+        items={filteredItems}
+      />
     </Container>
   );
 };

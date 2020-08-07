@@ -9,6 +9,7 @@ import Item from "./item";
 import List from "./list";
 import Login from "./login";
 import Logs from "./logs";
+import Upcycled from "./upcycled";
 
 import store from "../store";
 
@@ -23,6 +24,7 @@ const App = () => {
           <Item path="/item/:itemId" />
           <Item path="/item" />
           <Logs path="/logs" />
+          <Upcycled path="/upcycled" />
         </PrivateRoute>
       </Router>
     </StoreProvider>

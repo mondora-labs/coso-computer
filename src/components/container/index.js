@@ -32,9 +32,14 @@ const Container = ({ children }) => {
   return (
     <>
       <CommandsContainer>
-        <Tooltip content="Cartella moduli firmati" id={"folder-tooltip"}>
+        <Tooltip content="Mostra lista" id="list-tooltip">
+          <Link to="/app/list" aria-describedby="list-tooltip">
+            <IconButton iconProps={{ iconName: "BulletedList2" }} />
+          </Link>
+        </Tooltip>
+        <Tooltip content="Cartella moduli firmati" id="folder-tooltip">
           <a
-            aria-describedby={"folder-tooltip"}
+            aria-describedby="folder-tooltip"
             target="_blank"
             rel="noopener noreferrer"
             href="https://drive.google.com/open?id=1EJbn-tS3_d8R8r0_OCFq2Ib301GstInm"
@@ -42,14 +47,19 @@ const Container = ({ children }) => {
             <IconButton iconProps={{ iconName: "FolderList" }} />
           </a>
         </Tooltip>
-        <Tooltip content="Mostra i log" id={"logs-tooltip"}>
-          <Link to="/app/logs" aria-describedby={"folder-tooltip"}>
+        <Tooltip content="Mostra i log" id="logs-tooltip">
+          <Link to="/app/logs" aria-describedby="logs-tooltip">
             <IconButton iconProps={{ iconName: "History" }} />
+          </Link>
+        </Tooltip>
+        <Tooltip content="Mostra upcycled" id="upcycle-tooltip">
+          <Link to="/app/upcycled" aria-describedby="upcycle-tooltip">
+            <IconButton iconProps={{ iconName: "EngineeringGroup" }} />
           </Link>
         </Tooltip>
       </CommandsContainer>
       <ContainerDiv>
-        <Link to="/list">
+        <Link to="/app/list">
           <Logo />
         </Link>
         {children}
