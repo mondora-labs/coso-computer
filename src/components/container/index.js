@@ -32,6 +32,11 @@ const Container = ({ children }) => {
   return (
     <>
       <CommandsContainer>
+        <Tooltip content="Mostra lista completa" id={"list-tooltip"}>
+          <Link to="/app/list" aria-describedby={"list-tooltip"}>
+            <IconButton iconProps={{ iconName: "BulletedList2" }} />
+          </Link>
+        </Tooltip>
         <Tooltip content="Cartella moduli firmati" id={"folder-tooltip"}>
           <a
             aria-describedby={"folder-tooltip"}
@@ -43,13 +48,13 @@ const Container = ({ children }) => {
           </a>
         </Tooltip>
         <Tooltip content="Mostra i log" id={"logs-tooltip"}>
-          <Link to="/app/logs" aria-describedby={"folder-tooltip"}>
+          <Link to="/app/logs" aria-describedby={"logs-tooltip"}>
             <IconButton iconProps={{ iconName: "History" }} />
           </Link>
         </Tooltip>
       </CommandsContainer>
       <ContainerDiv>
-        <Link to="/list">
+        <Link to="../landing">
           <Logo />
         </Link>
         {children}
