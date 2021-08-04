@@ -12,7 +12,7 @@ import {
   Stack,
   Text,
   MessageBar,
-  MessageBarType
+  MessageBarType,
 } from "office-ui-fabric-react";
 
 import createPdf from "../../utils/create-pdf/create-pdf";
@@ -48,6 +48,7 @@ const itemInitialValues = {
 };
 
 const Item = ({ itemId }) => {
+  const user = useStoreState((state) => state.user);
   const { items, fetched } = useStoreState((store) => store.macs);
   const { addMac, listMacs } = useStoreActions((store) => store.macs);
 
@@ -81,19 +82,28 @@ const Item = ({ itemId }) => {
       <NormalDialog
         hidden={!progress.show}
         percent={progress.percent}
-        title = "Creazione PDF"
-        subText = "Ricorda di caricare il file nella apposita cartella"
-        icon = "OneDriveAdd"
-        confirmLabel = "Upload"
-        progressLabel = "Il download inizierà a breve ..."
-        handleConfirm={() => window.open("https://drive.google.com/drive/folders/1EJbn-tS3_d8R8r0_OCFq2Ib301GstInm", "_blank")}
+        title="Creazione PDF"
+        subText="Ricorda di caricare il file nella apposita cartella"
+        icon="OneDriveAdd"
+        confirmLabel="Upload"
+        progressLabel="Il download inizierà a breve ..."
+        handleConfirm={() =>
+          window.open(
+            "https://drive.google.com/drive/folders/1EJbn-tS3_d8R8r0_OCFq2Ib301GstInm",
+            "_blank"
+          )
+        }
         onDismiss={() => setProgress({ show: false })}
       />
 
       <Formik
         enableReinitialize={true}
         onSubmit={handleSubmit}
-        initialValues={{ ...itemInitialValues, ...item }}
+        initialValues={{
+          ...itemInitialValues,
+          ...{ owner: user.name },
+          ...item,
+        }}
         validationSchema={Yup.object().shape({
           owner: Yup.string()
             .min(2, "Numero di caratteri insufficiente")
@@ -242,14 +252,24 @@ const Item = ({ itemId }) => {
                   </Link>
                 </Stack.Item>
                 <Stack.Item>
-                  <DefaultButton type="submit" onClick={(e) => {
-                    props.setFieldValue('isPdf', true)
-                  }}>{"Genera PDF"}</DefaultButton>
+                  <DefaultButton
+                    type="submit"
+                    onClick={(e) => {
+                      props.setFieldValue("isPdf", true);
+                    }}
+                  >
+                    {"Genera PDF"}
+                  </DefaultButton>
                 </Stack.Item>
                 <Stack.Item>
-                  <PrimaryButton type="submit" onClick={(e) => {
-                    props.setFieldValue('isPdf', false)
-                  }}>{"Salva"}</PrimaryButton>
+                  <PrimaryButton
+                    type="submit"
+                    onClick={(e) => {
+                      props.setFieldValue("isPdf", false);
+                    }}
+                  >
+                    {"Salva"}
+                  </PrimaryButton>
                 </Stack.Item>
               </Stack>
             </Form>
