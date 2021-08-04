@@ -10,7 +10,7 @@ import getDiff from "./diff";
 firebase.initializeApp({
   apiKey: process.env.REACT_APP_API_KEY,
   authDomain: "coso-computer.firebaseapp.com",
-  projectId: "coso-computer"
+  projectId: "coso-computer",
 });
 
 export const login = async () => {
@@ -18,16 +18,14 @@ export const login = async () => {
     const result = await firebase
       .auth()
       .signInWithPopup(new firebase.auth.GoogleAuthProvider());
-
-    console.log({ result });
-    return true;
+    return { isLogged: true, user: result.user };
   } catch (error) {
     console.error({ error });
     return false;
   }
 };
 
-export const getCollection = async collectionName => {
+export const getCollection = async (collectionName) => {
   let items = [];
 
   const querySnapshot = await firebase
@@ -35,7 +33,7 @@ export const getCollection = async collectionName => {
     .collection(collectionName)
     .get();
 
-  querySnapshot.forEach(doc => items.push(doc.data()));
+  querySnapshot.forEach((doc) => items.push(doc.data()));
   console.log("list collection", collectionName, items);
 
   return items;
@@ -51,15 +49,12 @@ export const getMacs = async () => {
   return macs;
 };
 
-export const upsertMac = async mac => {
+export const upsertMac = async (mac) => {
   try {
     const firestore = firebase.firestore();
     const batch = firestore.batch();
 
-    const oldDocRef = await firestore
-      .collection("computers")
-      .doc(mac.id)
-      .get();
+    const oldDocRef = await firestore.collection("computers").doc(mac.id).get();
 
     const oldMac = oldDocRef.data() || {};
 
@@ -76,14 +71,14 @@ export const upsertMac = async mac => {
       rentId: mac.rentId || "#",
       note: mac.note || "Nessuna nota.",
       antivirus: mac.antivirus || false,
-      encryption: mac.encryption || false
+      encryption: mac.encryption || false,
     };
 
     const diff = getDiff(oldMac, newMac);
     const log = {
       who: firebase.auth().currentUser.email,
       timestamp: moment.utc().format(),
-      diff
+      diff,
     };
 
     console.log("upsert a computer", mac, log);
@@ -99,13 +94,13 @@ export const upsertMac = async mac => {
   }
 };
 
-export const deleteMac = async mac => {
+export const deleteMac = async (mac) => {
   try {
     const log = {
       who: firebase.auth().currentUser.email,
       timestamp: moment.utc().format(),
       removed: true,
-      record: mac
+      record: mac,
     };
     console.log("delete a computer", mac, log);
 
