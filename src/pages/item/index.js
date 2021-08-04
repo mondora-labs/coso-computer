@@ -66,7 +66,7 @@ const Item = ({ itemId }) => {
       setProgress({ show: true, percent: 100 });
     } else {
       addMac({ id: itemId, ...values });
-      navigate("/app/list");
+      navigate("/app/landing");
     }
   };
 

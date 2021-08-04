@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 
 import { useStoreState, useStoreActions } from "easy-peasy";
 import moment from "moment";
-
+import { Link } from "@reach/router";
 import {
   Persona,
   PersonaSize,
@@ -12,6 +12,8 @@ import {
   DocumentCardStatus,
   DocumentCardActions,
   DocumentCardLogo,
+  PrimaryButton,
+  Stack,
 } from "office-ui-fabric-react";
 
 import styled from "styled-components";
@@ -21,7 +23,7 @@ import NormalDialog from "../../components/dialog";
 
 const Card = styled(DocumentCard)`
   display: inline-block;
-  margin: 16px;
+  margin: 24px 32px 24px 0;
   max-width: 320px;
   width: 100%;
 `;
@@ -32,7 +34,10 @@ const Landing = () => {
     show: false,
     text: "",
   });
-  const { listMacs } = useStoreActions((store) => store.macs);
+  const [remove, setRemove] = useState({
+    show: false,
+  });
+  const { listMacs, removeMac } = useStoreActions((store) => store.macs);
   const { items, fetched } = useStoreState((store) => store.macs);
 
   useEffect(() => {
@@ -51,12 +56,14 @@ const Landing = () => {
     },
     {
       iconProps: { iconName: "EditNote" },
-      onClick: () => console.log("Edit"),
+      onClick: () => {
+        window.location.href = `/app/item/${item.id}`;
+      },
       ariaLabel: "Modifica elemento",
     },
     {
       iconProps: { iconName: "Delete" },
-      onClick: () => console.log("Elimina"),
+      onClick: () => setRemove({ show: true, mac: item }),
       ariaLabel: "Elimina elemento",
     },
   ];
@@ -81,6 +88,17 @@ const Landing = () => {
         hidden={!note.show}
         onDismiss={() => setNote({ ...note, show: false })}
       />
+      <NormalDialog
+        title="Mi vuoi cancellare oh?"
+        subText="E se poi te ne penti?"
+        hidden={!remove.show}
+        onDismiss={() => setRemove({ show: false })}
+        handleConfirm={() => {
+          setRemove({ show: false });
+          removeMac(remove.mac);
+        }}
+      />
+
       <Persona {...profile} size={PersonaSize.size120} />
 
       {userItems.map((item) => (
@@ -116,6 +134,17 @@ const Landing = () => {
           <DocumentCardActions actions={documentCardActions(item)} />
         </Card>
       ))}
+
+      <Stack horizontal>
+        <Stack.Item align="center">
+          <Link to="/app/item">
+            <PrimaryButton
+              text="Aggiungi nuovo"
+              iconProps={{ iconName: "Add" }}
+            />
+          </Link>
+        </Stack.Item>
+      </Stack>
     </Container>
   );
 };
