@@ -27,7 +27,10 @@ const Card = styled(DocumentCard)`
   max-width: 320px;
   width: 100%;
 `;
-
+const CardTitle = styled(DocumentCardTitle)`
+  height: auto;
+  padding: 8px;
+`;
 const Landing = () => {
   const user = useStoreState((state) => state.user);
   const [note, setNote] = useState({
@@ -103,19 +106,18 @@ const Landing = () => {
 
       {userItems.map((item) => (
         <Card key={item.id}>
-          <DocumentCardLogo logoIcon={iconMap.get(item.device)} />
+          <Stack horizontal>
+            <Stack.Item align="center">
+              <DocumentCardLogo logoIcon={iconMap.get(item.device)} />
+            </Stack.Item>
+            <Stack.Item align="center">
+              <CardTitle title={item.hostname} />
+            </Stack.Item>
+          </Stack>
+          <br />
           <DocumentCardDetails>
-            <DocumentCardTitle title={item.hostname} shouldTruncate />
-            <DocumentCardTitle
-              title={`Modello: ${item.model}`}
-              shouldTruncate
-              showAsSecondaryTitle
-            />
-            <DocumentCardTitle
-              title={`Seriale: ${item.serial}`}
-              shouldTruncate
-              showAsSecondaryTitle
-            />
+            <CardTitle title={`Modello: ${item.model}`} showAsSecondaryTitle />
+            <CardTitle title={`Seriale: ${item.serial}`} showAsSecondaryTitle />
             <DocumentCardStatus
               statusIcon="Calendar"
               status={`${moment(item.dateFrom).format("DD/MM/YYYY")} - ${moment(
