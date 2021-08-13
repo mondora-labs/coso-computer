@@ -5,7 +5,7 @@ import { useStoreActions, useStoreState } from "easy-peasy";
 
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
-import { Link, navigate } from "@reach/router";
+import { navigate } from "@reach/router";
 import {
   PrimaryButton,
   DefaultButton,
@@ -247,9 +247,9 @@ const Item = ({ itemId }) => {
               </Text>
               <Stack horizontal tokens={{ childrenGap: 16 }}>
                 <Stack.Item>
-                  <Link to="/app/list">
-                    <DefaultButton>{"Indietro"}</DefaultButton>
-                  </Link>
+                  <DefaultButton onClick={() => window.history.back()}>
+                    {"Indietro"}
+                  </DefaultButton>
                 </Stack.Item>
                 <Stack.Item>
                   <DefaultButton
