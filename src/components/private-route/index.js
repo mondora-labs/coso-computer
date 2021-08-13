@@ -8,14 +8,14 @@ import { DefaultButton, Stack } from "office-ui-fabric-react";
 import Container from "../container";
 
 const PrivateRoute = ({ children }) => {
-  const { isLogged } = useStoreState(state => state.user);
+  const { isLogged } = useStoreState((state) => state.user);
 
-  if (!isLogged && false) {
+  if (!isLogged) {
     return (
       <Container>
         <Stack>
           <Stack.Item align="center">
-            <h1>{"Non autorizzato"}</h1>
+            <p>{"Non autorizzato"}</p>
           </Stack.Item>
 
           <Stack.Item align="center">
