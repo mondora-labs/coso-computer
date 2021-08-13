@@ -23,7 +23,7 @@ import NormalDialog from "../../components/dialog";
 import FormikCheckbox from "../../components/formik/checkbox";
 import FormikTextfield from "../../components/formik/textfield";
 import FormikDatepicker from "../../components/formik/datepicker";
-import FormikDevicepicker from "../../components/formik/device-picker";
+import FormikPicker from "../../components/formik/formik-picker";
 
 const SuggestionBar = styled(MessageBar).attrs({
   messageBarType: MessageBarType.warning,
@@ -46,6 +46,22 @@ const itemInitialValues = {
   antivirus: false,
   encryption: false,
 };
+
+const assetTypes = ["Notebook", "Smartphone", "Tablet", "Accessori"].map(
+  (item) => ({ key: item.toLocaleLowerCase(), text: item })
+);
+
+const assetModels = [
+  "MacBook Pro (16-inch, 2019)",
+  "MacBook Pro (15-inch, 2016)",
+  "MacBook Pro (13-inch, 2020)",
+  "MacBook Air (Retina, 13-inch, 2020)",
+  "Dell XPS 15 9500",
+  "Surface Book 3",
+  "ThinkPad X1 Carbon Gen 8",
+  "iPad Wi-Fi 128GB",
+  "Altro ( Note )",
+].map((item) => ({ key: item, text: item }));
 
 const Item = ({ itemId }) => {
   const user = useStoreState((state) => state.user);
@@ -144,12 +160,15 @@ const Item = ({ itemId }) => {
                 {...props}
               />
               <br />
-              <FormikDevicepicker
+              <FormikPicker
+                options={assetTypes}
                 name="device"
                 label="Tipologia dispositivo"
                 {...props}
               />
-              <FormikTextfield
+              <br />
+              <FormikPicker
+                options={assetModels}
                 name="model"
                 label="Modello dispositivo"
                 {...props}
@@ -209,10 +228,8 @@ const Item = ({ itemId }) => {
                 {...props}
               />
               <SuggestionBar>
-                <b>{"Non necessario"}</b>
-                {
-                  " se è il dispositivo è stato acquistato ed è previsto l'upcycle"
-                }
+                <b>{"Non necessario,"}</b>
+                {" lascia vuoto se non lo conosci"}
               </SuggestionBar>
               <FormikTextfield name="note" label="Note" multiline {...props} />
               <Stack tokens={{ childrenGap: 16, padding: "16px 0" }}>

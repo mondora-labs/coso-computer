@@ -60,9 +60,9 @@ const columnsDefinitions = [
     name: "HostName",
   },
   {
-    key: "rentId",
-    fieldName: "rentId",
-    name: "Affitto #",
+    key: "model",
+    fieldName: "model",
+    name: "Modello",
   },
   {
     key: "antivirus",
