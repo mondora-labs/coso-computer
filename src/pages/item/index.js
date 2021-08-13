@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 
 import styled from "styled-components";
 import { useStoreActions, useStoreState } from "easy-peasy";
+import CodiceFiscale from "codice-fiscale-js";
 
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
@@ -127,6 +128,9 @@ const Item = ({ itemId }) => {
             .required("Nome possessore richiesto"),
           fiscalCode: Yup.string()
             .length(16, "Numero di caratteri incorretto")
+            .test("cf test", "Codice fiscale non valido", (cf) =>
+              CodiceFiscale.check(cf)
+            )
             .required("Codice Fiscale richiesto"),
           device: Yup.string().required("Tipologia dispositivo richiesta"),
           model: Yup.string()

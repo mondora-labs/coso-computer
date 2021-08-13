@@ -3351,6 +3351,11 @@ code-point-at@^1.0.0:
   resolved "https://registry.yarnpkg.com/code-point-at/-/code-point-at-1.1.0.tgz#0d070b4d043a5bea33a2f1a40e2edb3d9a4ccf77"
   integrity sha1-DQcLTQQ6W+ozovGkDi7bPZpMz3c=
 
+codice-fiscale-js@^2.3.9:
+  version "2.3.9"
+  resolved "https://registry.yarnpkg.com/codice-fiscale-js/-/codice-fiscale-js-2.3.9.tgz#05930c3a8d2893b37efa833eb2a96c220025911e"
+  integrity sha512-yrJBn11+t+sYT1fuseBptLkvQ8WkjZdtEOHl7mW4KfLwHCiksqWAhOCzbzpJojy2rex58RwMenAZwwXvMOfQkQ==
+
 collection-visit@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/collection-visit/-/collection-visit-1.0.0.tgz#4bc0373c164bc3291b4d368c829cf1a80a59dca0"
