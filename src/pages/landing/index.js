@@ -103,39 +103,53 @@ const Landing = () => {
       />
 
       <Persona {...profile} size={PersonaSize.size120} />
-
-      {userItems.map((item) => (
-        <Card key={item.id}>
-          <Stack horizontal>
-            <Stack.Item align="center">
-              <DocumentCardLogo logoIcon={iconMap.get(item.device)} />
-            </Stack.Item>
-            <Stack.Item align="center">
-              <CardTitle title={item.hostname} />
-            </Stack.Item>
-          </Stack>
+      <h2>{"I miei devices:"}</h2>
+      {userItems.length ? (
+        userItems.map((item) => (
+          <Card key={item.id}>
+            <Stack horizontal>
+              <Stack.Item align="center">
+                <DocumentCardLogo logoIcon={iconMap.get(item.device)} />
+              </Stack.Item>
+              <Stack.Item align="center">
+                <CardTitle title={item.hostname} />
+              </Stack.Item>
+            </Stack>
+            <br />
+            <DocumentCardDetails>
+              <CardTitle
+                title={`Modello: ${item.model}`}
+                showAsSecondaryTitle
+              />
+              <CardTitle
+                title={`Seriale: ${item.serial}`}
+                showAsSecondaryTitle
+              />
+              <DocumentCardStatus
+                statusIcon="Calendar"
+                status={`${moment(item.dateFrom).format(
+                  "DD/MM/YYYY"
+                )} - ${moment(item.dateFrom).format("DD/MM/YYYY")}`}
+              />
+              <DocumentCardStatus
+                statusIcon={item.antivirus ? "Accept" : "Warning"}
+                status="Antivirus"
+              />
+              <DocumentCardStatus
+                statusIcon={item.encryption ? "Accept" : "Warning"}
+                status="Cifratura disco"
+              />
+            </DocumentCardDetails>
+            <DocumentCardActions actions={documentCardActions(item)} />
+          </Card>
+        ))
+      ) : (
+        <p>
+          {"Nessun device trovato,"}
           <br />
-          <DocumentCardDetails>
-            <CardTitle title={`Modello: ${item.model}`} showAsSecondaryTitle />
-            <CardTitle title={`Seriale: ${item.serial}`} showAsSecondaryTitle />
-            <DocumentCardStatus
-              statusIcon="Calendar"
-              status={`${moment(item.dateFrom).format("DD/MM/YYYY")} - ${moment(
-                item.dateFrom
-              ).format("DD/MM/YYYY")}`}
-            />
-            <DocumentCardStatus
-              statusIcon={item.antivirus ? "Accept" : "Warning"}
-              status="Antivirus"
-            />
-            <DocumentCardStatus
-              statusIcon={item.encryption ? "Accept" : "Warning"}
-              status="Cifratura disco"
-            />
-          </DocumentCardDetails>
-          <DocumentCardActions actions={documentCardActions(item)} />
-        </Card>
-      ))}
+          {"Inizia aggiungendone uno"}
+        </p>
+      )}
 
       <Stack horizontal>
         <Stack.Item align="center">
