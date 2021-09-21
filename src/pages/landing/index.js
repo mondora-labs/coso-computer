@@ -23,13 +23,17 @@ import NormalDialog from "../../components/dialog";
 
 const Card = styled(DocumentCard)`
   display: inline-block;
-  margin: 24px 32px 24px 0;
+  margin: 0 32px 32px 0;
   max-width: 320px;
   width: 100%;
 `;
 const CardTitle = styled(DocumentCardTitle)`
   height: auto;
   padding: 8px;
+`;
+const CardStatus = styled(DocumentCardStatus)`
+  display: flex;
+  align-items: center;
 `;
 const Landing = () => {
   const user = useStoreState((state) => state.user);
@@ -49,7 +53,9 @@ const Landing = () => {
     }
   }, [fetched, listMacs]);
 
-  const userItems = items.filter((item) => item.owner === user.name);
+  const userItems = items
+    .filter((item) => item.owner === user.name)
+    .sort((a, b) => (a.dateFrom < b.dateFrom ? 1 : -1));
 
   const documentCardActions = (item) => [
     {
@@ -103,7 +109,9 @@ const Landing = () => {
       />
 
       <Persona {...profile} size={PersonaSize.size120} />
+      <br />
       <h2>{"I miei devices:"}</h2>
+      <br />
       {userItems.length ? (
         userItems.map((item) => (
           <Card key={item.id}>
@@ -113,29 +121,29 @@ const Landing = () => {
               </Stack.Item>
               <Stack.Item align="center">
                 <CardTitle title={item.hostname} />
+                <CardTitle
+                  title={`Modello: ${item.model}`}
+                  showAsSecondaryTitle
+                />
+                <CardTitle
+                  title={`Seriale: ${item.serial}`}
+                  showAsSecondaryTitle
+                />
               </Stack.Item>
             </Stack>
             <br />
             <DocumentCardDetails>
-              <CardTitle
-                title={`Modello: ${item.model}`}
-                showAsSecondaryTitle
-              />
-              <CardTitle
-                title={`Seriale: ${item.serial}`}
-                showAsSecondaryTitle
-              />
-              <DocumentCardStatus
+              <CardStatus
                 statusIcon="Calendar"
                 status={`${moment(item.dateFrom).format(
                   "DD/MM/YYYY"
                 )} - ${moment(item.dateFrom).format("DD/MM/YYYY")}`}
               />
-              <DocumentCardStatus
+              <CardStatus
                 statusIcon={item.antivirus ? "Accept" : "Warning"}
                 status="Antivirus"
               />
-              <DocumentCardStatus
+              <CardStatus
                 statusIcon={item.encryption ? "Accept" : "Warning"}
                 status="Cifratura disco"
               />

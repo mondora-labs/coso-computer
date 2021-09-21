@@ -32,6 +32,11 @@ const Container = ({ children }) => {
   return (
     <>
       <CommandsContainer>
+        <Tooltip content="Mostra i miei dispositivi" id={"user-tooltip"}>
+          <Link to="/app/landing" aria-describedby={"user-tooltip"}>
+            <IconButton iconProps={{ iconName: "UserGauge" }} />
+          </Link>
+        </Tooltip>
         <Tooltip content="Mostra lista completa" id={"list-tooltip"}>
           <Link to="/app/list" aria-describedby={"list-tooltip"}>
             <IconButton iconProps={{ iconName: "BulletedList2" }} />
