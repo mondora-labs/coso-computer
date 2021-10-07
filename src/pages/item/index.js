@@ -2,17 +2,18 @@ import React, { useState, useEffect } from "react";
 
 import styled from "styled-components";
 import { useStoreActions, useStoreState } from "easy-peasy";
+import CodiceFiscale from "codice-fiscale-js";
 
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
-import { Link, navigate } from "@reach/router";
+import { navigate } from "@reach/router";
 import {
   PrimaryButton,
   DefaultButton,
   Stack,
   Text,
   MessageBar,
-  MessageBarType
+  MessageBarType,
 } from "office-ui-fabric-react";
 
 import createPdf from "../../utils/create-pdf/create-pdf";
@@ -23,7 +24,9 @@ import NormalDialog from "../../components/dialog";
 import FormikCheckbox from "../../components/formik/checkbox";
 import FormikTextfield from "../../components/formik/textfield";
 import FormikDatepicker from "../../components/formik/datepicker";
-import FormikDevicepicker from "../../components/formik/device-picker";
+import FormikPicker from "../../components/formik/formik-picker";
+
+import { GOOGLE_FOLDER } from "../../config";
 
 const SuggestionBar = styled(MessageBar).attrs({
   messageBarType: MessageBarType.warning,
@@ -47,7 +50,29 @@ const itemInitialValues = {
   encryption: false,
 };
 
+const assetTypes = ["Notebook", "Smartphone", "Tablet", "Accessori"].map(
+  (item) => ({ key: item.toLocaleLowerCase(), text: item })
+);
+
+const assetModels = [
+  'MacBook Pro 16"',
+  'MacBook Pro 15"',
+  'MacBook Pro 13"',
+  'MacBook Air 13"',
+  "Dell XPS 15 9500",
+  "Surface Pro 8",
+  "Surface Pro 7",
+  "Surface Book 3",
+  "ThinkPad X1",
+  "iPad Pro",
+  "iPad Air",
+  "iPad mini",
+  "iPad",
+  "Altro (Note)",
+].map((item) => ({ key: item, text: item }));
+
 const Item = ({ itemId }) => {
+  const user = useStoreState((state) => state.user);
   const { items, fetched } = useStoreState((store) => store.macs);
   const { addMac, listMacs } = useStoreActions((store) => store.macs);
 
@@ -66,7 +91,7 @@ const Item = ({ itemId }) => {
       setProgress({ show: true, percent: 100 });
     } else {
       addMac({ id: itemId, ...values });
-      navigate("/app/list");
+      navigate("/app/landing");
     }
   };
 
@@ -81,19 +106,23 @@ const Item = ({ itemId }) => {
       <NormalDialog
         hidden={!progress.show}
         percent={progress.percent}
-        title = "Creazione PDF"
-        subText = "Ricorda di caricare il file nella apposita cartella"
-        icon = "OneDriveAdd"
-        confirmLabel = "Upload"
-        progressLabel = "Il download inizierà a breve ..."
-        handleConfirm={() => window.open("https://drive.google.com/drive/folders/1EJbn-tS3_d8R8r0_OCFq2Ib301GstInm", "_blank")}
+        title="Creazione PDF"
+        subText="Ricorda di caricare il file nella apposita cartella"
+        icon="OneDriveAdd"
+        confirmLabel="Upload"
+        progressLabel="Il download inizierà a breve ..."
+        handleConfirm={() => window.open(GOOGLE_FOLDER, "_blank")}
         onDismiss={() => setProgress({ show: false })}
       />
 
       <Formik
         enableReinitialize={true}
         onSubmit={handleSubmit}
-        initialValues={{ ...itemInitialValues, ...item }}
+        initialValues={{
+          ...itemInitialValues,
+          ...{ owner: user.name },
+          ...item,
+        }}
         validationSchema={Yup.object().shape({
           owner: Yup.string()
             .min(2, "Numero di caratteri insufficiente")
@@ -101,6 +130,9 @@ const Item = ({ itemId }) => {
             .required("Nome possessore richiesto"),
           fiscalCode: Yup.string()
             .length(16, "Numero di caratteri incorretto")
+            .test("cf test", "Codice fiscale non valido", (cf) =>
+              CodiceFiscale.check(cf)
+            )
             .required("Codice Fiscale richiesto"),
           device: Yup.string().required("Tipologia dispositivo richiesta"),
           model: Yup.string()
@@ -134,12 +166,15 @@ const Item = ({ itemId }) => {
                 {...props}
               />
               <br />
-              <FormikDevicepicker
+              <FormikPicker
+                options={assetTypes}
                 name="device"
                 label="Tipologia dispositivo"
                 {...props}
               />
-              <FormikTextfield
+              <br />
+              <FormikPicker
+                options={assetModels}
                 name="model"
                 label="Modello dispositivo"
                 {...props}
@@ -199,10 +234,8 @@ const Item = ({ itemId }) => {
                 {...props}
               />
               <SuggestionBar>
-                <b>{"Non necessario"}</b>
-                {
-                  " se è il dispositivo è stato acquistato ed è previsto l'upcycle"
-                }
+                <b>{"Non necessario,"}</b>
+                {" lascia vuoto se non lo conosci"}
               </SuggestionBar>
               <FormikTextfield name="note" label="Note" multiline {...props} />
               <Stack tokens={{ childrenGap: 16, padding: "16px 0" }}>
@@ -227,7 +260,7 @@ const Item = ({ itemId }) => {
                 <a
                   target="_blank"
                   rel="noopener noreferrer"
-                  href="https://drive.google.com/drive/u/0/folders/1tkTVZ5snIbjTXbUL0FgCnBrD0fKWXUTj"
+                  href={GOOGLE_FOLDER}
                 >
                   {"Google Drive"}
                 </a>
@@ -237,19 +270,29 @@ const Item = ({ itemId }) => {
               </Text>
               <Stack horizontal tokens={{ childrenGap: 16 }}>
                 <Stack.Item>
-                  <Link to="/app/list">
-                    <DefaultButton>{"Indietro"}</DefaultButton>
-                  </Link>
+                  <DefaultButton onClick={() => window.history.back()}>
+                    {"Indietro"}
+                  </DefaultButton>
                 </Stack.Item>
                 <Stack.Item>
-                  <DefaultButton type="submit" onClick={(e) => {
-                    props.setFieldValue('isPdf', true)
-                  }}>{"Genera PDF"}</DefaultButton>
+                  <DefaultButton
+                    type="submit"
+                    onClick={(e) => {
+                      props.setFieldValue("isPdf", true);
+                    }}
+                  >
+                    {"Genera PDF"}
+                  </DefaultButton>
                 </Stack.Item>
                 <Stack.Item>
-                  <PrimaryButton type="submit" onClick={(e) => {
-                    props.setFieldValue('isPdf', false)
-                  }}>{"Salva"}</PrimaryButton>
+                  <PrimaryButton
+                    type="submit"
+                    onClick={(e) => {
+                      props.setFieldValue("isPdf", false);
+                    }}
+                  >
+                    {"Salva"}
+                  </PrimaryButton>
                 </Stack.Item>
               </Stack>
             </Form>

@@ -52,21 +52,16 @@ const columnsDefinitions = [
     name: "Termine",
   },
   {
-    key: "hostname",
-    fieldName: "hostname",
-    minWidth: 240,
-    name: "HostName",
-  },
-  {
-    key: "rentId",
-    fieldName: "rentId",
-    name: "Affitto #",
+    key: "model",
+    fieldName: "model",
+    name: "Modello",
+    minWidth: 176,
   },
   {
     key: "antivirus",
     fieldName: "antivirus",
     name: "Antivirus",
-    minWidth: 64,
+    minWidth: 60,
     onRender: (item) => (
       <Tooltip
         cursor={"default"}
@@ -86,7 +81,7 @@ const columnsDefinitions = [
     key: "encryption",
     fieldName: "encryption",
     name: "Cifratura",
-    minWidth: 64,
+    minWidth: 56,
     onRender: (item) => (
       <Tooltip
         cursor={"default"}
@@ -231,7 +226,7 @@ const List = () => {
         value={search}
         onChange={(event, text) => setSearch(text)}
         label="Cerca:"
-        placeholder="Cerca possessore, seriale, hostname o rentId"
+        placeholder="Cerca possessore, seriale..."
         iconProps={{ iconName: "Search" }}
       />
 
@@ -240,8 +235,6 @@ const List = () => {
         columns={[...columns, ...actionsColumns]}
         items={filteredItems}
       />
-
-      <br />
 
       <Stack tokens={{ childrenGap: "8px" }} horizontal reversed>
         <Stack.Item align="center">

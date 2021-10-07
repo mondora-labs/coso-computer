@@ -5,19 +5,21 @@ import {
   DialogType,
   PrimaryButton,
   DialogFooter,
-  ProgressIndicator
+  ProgressIndicator,
+  DefaultButton,
 } from "office-ui-fabric-react";
 
 const NormalDialog = ({
   hidden = true,
-  onDismiss = () => { },
+  onDismiss = () => {},
   title = "",
   subText = "",
   handleConfirm,
   confirmLabel = "Procedi",
+  cancelLabel = "Cancella",
   icon = "",
   progressLabel = "",
-  percent
+  percent,
 }) => {
   return (
     <Dialog
@@ -26,14 +28,21 @@ const NormalDialog = ({
       dialogContentProps={{
         type: DialogType.largeHeader,
         title: title,
-        subText: subText
+        subText: subText,
       }}
     >
       {progressLabel && (
-        <ProgressIndicator percentComplete={percent} description={progressLabel} />)}
+        <ProgressIndicator
+          percentComplete={percent}
+          description={progressLabel}
+        />
+      )}
       {handleConfirm && (
         <DialogFooter>
-          <PrimaryButton iconProps={{ iconName: icon }} onClick={handleConfirm}>{confirmLabel}</PrimaryButton>
+          <DefaultButton onClick={onDismiss}>{cancelLabel}</DefaultButton>
+          <PrimaryButton iconProps={{ iconName: icon }} onClick={handleConfirm}>
+            {confirmLabel}
+          </PrimaryButton>
         </DialogFooter>
       )}
     </Dialog>

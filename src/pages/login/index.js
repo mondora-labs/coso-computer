@@ -18,12 +18,12 @@ const Container = styled.div`
 `;
 
 const Login = () => {
-  const { isLogged } = useStoreState(state => state.user);
-  const { doLogin } = useStoreActions(state => state.user);
+  const { isLogged } = useStoreState((state) => state.user);
+  const { doLogin } = useStoreActions((state) => state.user);
 
   useEffect(() => {
     if (isLogged) {
-      navigate("/app/list");
+      navigate("/app/landing");
     }
   }, [isLogged]);
 
