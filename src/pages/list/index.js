@@ -28,6 +28,8 @@ const Text = styled.div`
   align-items: center;
 `;
 
+const DATE_FORMAT = "DD/MM/YYYY";
+
 const columnsDefinitions = [
   {
     key: "owner",
@@ -40,18 +42,14 @@ const columnsDefinitions = [
     name: "Seriale",
   },
   {
-    key: "dateFrom",
-    fieldName: "dateFrom",
+    key: "dateFromString",
+    fieldName: "dateFromString",
     name: "Inizio",
-    onRender: (item) => (
-      <Text>{moment(item.dateFrom).format("DD/MM/YYYY")}</Text>
-    ),
   },
   {
-    key: "dateTo",
-    fieldName: "dateTo",
+    key: "dateToString",
+    fieldName: "dateToString",
     name: "Termine",
-    onRender: (item) => <Text>{moment(item.dateTo).format("DD/MM/YYYY")}</Text>,
   },
   {
     key: "hostname",
@@ -172,31 +170,28 @@ const List = () => {
   ];
 
   const filteredItems = items
+    .map((item) => ({
+      ...item,
+      dateToString: moment(item.dateTo).format(DATE_FORMAT),
+      dateFromString: moment(item.dateFrom).format(DATE_FORMAT),
+    }))
     .sort((a, b) =>
       (sort.direction ? a[sort.key] < b[sort.key] : a[sort.key] > b[sort.key])
         ? 1
         : -1
     )
-    .filter(
-      (item) =>
-        item.owner.toLowerCase().includes(search.toLowerCase()) ||
-        item.serial.toLowerCase().includes(search.toLowerCase()) ||
-        item.hostname.toLowerCase().includes(search.toLowerCase()) ||
-        item.rentId.toLowerCase().includes(search.toLowerCase())
+    .filter((item) =>
+      Object.values(item)
+        .map((val) => `${val}`.toLocaleLowerCase())
+        .some((val) => val.includes(search.toLocaleLowerCase()))
     );
 
   const handleExport = () => {
-    const exportItems = filteredItems.map((item) => ({
-      ...item,
-      dateTo: moment.utc(item.dateTo).format("DD-MM-YYYY"),
-      dateFrom: moment.utc(item.dateFrom).format("DD-MM-YYYY"),
-    }));
-
     const options = {
       header: true,
     };
 
-    stringify(exportItems, options, (err, output) => {
+    stringify(filteredItems, options, (err, output) => {
       var element = document.createElement("a");
       document.body.appendChild(element);
 
