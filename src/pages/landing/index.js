@@ -1,40 +1,32 @@
-import React, { useState, useEffect } from "react";
-
-import { useStoreState, useStoreActions } from "easy-peasy";
-import moment from "moment";
 import { Link } from "@reach/router";
+import { useStoreActions, useStoreState } from "easy-peasy";
+import moment from "moment";
 import {
-  Persona,
-  PersonaSize,
   DocumentCard,
-  DocumentCardDetails,
-  DocumentCardTitle,
-  DocumentCardStatus,
   DocumentCardActions,
-  DocumentCardLogo,
+  DocumentCardDetails,
+  DocumentCardStatus,
+  Icon,
+  Persona,
+  PersonaPresence,
+  PersonaSize,
   PrimaryButton,
   Stack,
+  Text,
 } from "office-ui-fabric-react";
-
-import styled from "styled-components";
+import React, { useEffect, useState } from "react";
 
 import Container from "../../components/container";
 import NormalDialog from "../../components/dialog";
 
-const Card = styled(DocumentCard)`
-  display: inline-block;
-  margin: 0 32px 32px 0;
-  max-width: 320px;
-  width: 100%;
-`;
-const CardTitle = styled(DocumentCardTitle)`
-  height: auto;
-  padding: 8px;
-`;
-const CardStatus = styled(DocumentCardStatus)`
-  display: flex;
-  align-items: center;
-`;
+const FORMAT = "DD/MM/YYYY";
+const ICONS = {
+  notebook: "ThisPC",
+  smartphone: "CellPhone",
+  tablet: "Tablet",
+  accessori: "Headset",
+};
+
 const Landing = () => {
   const user = useStoreState((state) => state.user);
   const [note, setNote] = useState({
@@ -83,12 +75,6 @@ const Landing = () => {
     secondaryText: user.email,
   };
 
-  const iconMap = new Map();
-  iconMap.set("notebook", "ThisPC");
-  iconMap.set("smartphone", "CellPhone");
-  iconMap.set("tablet", "Tablet");
-  iconMap.set("accessori", "Headset");
-
   return (
     <Container>
       <NormalDialog
@@ -108,66 +94,91 @@ const Landing = () => {
         }}
       />
 
-      <Persona {...profile} size={PersonaSize.size120} />
-      <br />
-      <h2>{"I miei devices:"}</h2>
-      <br />
-      {userItems.length ? (
-        userItems.map((item) => (
-          <Card key={item.id}>
-            <Stack horizontal>
+      <Stack tokens={{ childrenGap: 16 }}>
+        <Persona {...profile} size={PersonaSize.size120} />
+
+        <Text variant="xLargePlus">{"I miei dispositivi:"}</Text>
+
+        <Stack horizontal tokens={{ childrenGap: 16 }} wrap>
+          {userItems.length ? (
+            userItems
+              .map((item) => ({
+                ...item,
+                dateFrom: moment(item.dateFrom).format(FORMAT),
+                dateTo: moment(item.dateTo).format(FORMAT),
+              }))
+              .map((item) => (
+                <Stack.Item styles={{ root: { width: 320 } }}>
+                  <DocumentCard key={item.id}>
+                    <Stack
+                      horizontal
+                      tokens={{ padding: 24, childrenGap: -16 }}
+                    >
+                      <Stack.Item align="center">
+                        <Persona
+                          size={PersonaSize.size56}
+                          presence={
+                            moment(item.dateTo).isAfter(moment.now())
+                              ? PersonaPresence.online
+                              : PersonaPresence.busy
+                          }
+                          onRenderInitials={() => (
+                            <Icon iconName={ICONS[item.device]} />
+                          )}
+                        />
+                      </Stack.Item>
+                      <Stack>
+                        <Stack.Item>
+                          <Text variant="xLarge">{item.hostname} </Text>
+                        </Stack.Item>
+                        <Stack.Item>
+                          <Text>{item.model} </Text>
+                        </Stack.Item>
+                        <Stack.Item>
+                          <Text>{item.serial} </Text>
+                        </Stack.Item>
+                      </Stack>
+                    </Stack>
+                    <DocumentCardDetails>
+                      <DocumentCardStatus
+                        statusIcon="Calendar"
+                        status={`${item.dateFrom} - ${item.dateTo}`}
+                      />
+                      <DocumentCardStatus
+                        statusIcon={item.antivirus ? "Accept" : "Warning"}
+                        status="Antivirus"
+                      />
+                      <DocumentCardStatus
+                        statusIcon={item.encryption ? "Accept" : "Warning"}
+                        status="Cifratura disco"
+                      />
+                    </DocumentCardDetails>
+                    <DocumentCardActions actions={documentCardActions(item)} />
+                  </DocumentCard>
+                </Stack.Item>
+              ))
+          ) : (
+            <Stack>
               <Stack.Item align="center">
-                <DocumentCardLogo logoIcon={iconMap.get(item.device)} />
+                <Text>{"Nessun device trovato."}</Text>
               </Stack.Item>
               <Stack.Item align="center">
-                <CardTitle title={item.hostname} />
-                <CardTitle
-                  title={`Modello: ${item.model}`}
-                  showAsSecondaryTitle
-                />
-                <CardTitle
-                  title={`Seriale: ${item.serial}`}
-                  showAsSecondaryTitle
-                />
+                <Text>{"Per iniziare, aggiungine uno."}</Text>
               </Stack.Item>
             </Stack>
-            <br />
-            <DocumentCardDetails>
-              <CardStatus
-                statusIcon="Calendar"
-                status={`${moment(item.dateFrom).format(
-                  "DD/MM/YYYY"
-                )} - ${moment(item.dateFrom).format("DD/MM/YYYY")}`}
-              />
-              <CardStatus
-                statusIcon={item.antivirus ? "Accept" : "Warning"}
-                status="Antivirus"
-              />
-              <CardStatus
-                statusIcon={item.encryption ? "Accept" : "Warning"}
-                status="Cifratura disco"
-              />
-            </DocumentCardDetails>
-            <DocumentCardActions actions={documentCardActions(item)} />
-          </Card>
-        ))
-      ) : (
-        <p>
-          {"Nessun device trovato,"}
-          <br />
-          {"Inizia aggiungendone uno"}
-        </p>
-      )}
+          )}
+        </Stack>
 
-      <Stack horizontal>
-        <Stack.Item align="center">
-          <Link to="/app/item">
-            <PrimaryButton
-              text="Aggiungi nuovo"
-              iconProps={{ iconName: "Add" }}
-            />
-          </Link>
-        </Stack.Item>
+        <Stack horizontal>
+          <Stack.Item align="center">
+            <Link to="/app/item">
+              <PrimaryButton
+                text="Aggiungi nuovo"
+                iconProps={{ iconName: "Add" }}
+              />
+            </Link>
+          </Stack.Item>
+        </Stack>
       </Stack>
     </Container>
   );

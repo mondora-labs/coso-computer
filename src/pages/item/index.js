@@ -53,15 +53,20 @@ const assetTypes = ["Notebook", "Smartphone", "Tablet", "Accessori"].map(
 );
 
 const assetModels = [
-  "MacBook Pro (16-inch, 2019)",
-  "MacBook Pro (15-inch, 2016)",
-  "MacBook Pro (13-inch, 2020)",
-  "MacBook Air (Retina, 13-inch, 2020)",
+  'MacBook Pro 16"',
+  'MacBook Pro 15"',
+  'MacBook Pro 13"',
+  'MacBook Air 13"',
   "Dell XPS 15 9500",
+  "Surface Pro 8",
+  "Surface Pro 7",
   "Surface Book 3",
-  "ThinkPad X1 Carbon Gen 8",
-  "iPad Wi-Fi 128GB",
-  "Altro ( Note )",
+  "ThinkPad X1",
+  "iPad Pro",
+  "iPad Air",
+  "iPad mini",
+  "iPad",
+  "Altro (Note)",
 ].map((item) => ({ key: item, text: item }));
 
 const Item = ({ itemId }) => {
