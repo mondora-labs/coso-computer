@@ -26,6 +26,8 @@ import FormikTextfield from "../../components/formik/textfield";
 import FormikDatepicker from "../../components/formik/datepicker";
 import FormikPicker from "../../components/formik/formik-picker";
 
+import { GOOGLE_FOLDER } from "../../config";
+
 const SuggestionBar = styled(MessageBar).attrs({
   messageBarType: MessageBarType.warning,
   isMultiline: true,
@@ -109,12 +111,7 @@ const Item = ({ itemId }) => {
         icon="OneDriveAdd"
         confirmLabel="Upload"
         progressLabel="Il download inizierà a breve ..."
-        handleConfirm={() =>
-          window.open(
-            "https://drive.google.com/drive/folders/1EJbn-tS3_d8R8r0_OCFq2Ib301GstInm",
-            "_blank"
-          )
-        }
+        handleConfirm={() => window.open(GOOGLE_FOLDER, "_blank")}
         onDismiss={() => setProgress({ show: false })}
       />
 
@@ -263,7 +260,7 @@ const Item = ({ itemId }) => {
                 <a
                   target="_blank"
                   rel="noopener noreferrer"
-                  href="https://drive.google.com/drive/u/0/folders/1tkTVZ5snIbjTXbUL0FgCnBrD0fKWXUTj"
+                  href={GOOGLE_FOLDER}
                 >
                   {"Google Drive"}
                 </a>

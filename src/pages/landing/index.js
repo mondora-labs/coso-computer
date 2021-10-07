@@ -108,8 +108,8 @@ const Landing = () => {
                 dateTo: moment(item.dateTo).format(FORMAT),
               }))
               .map((item) => (
-                <Stack.Item styles={{ root: { width: 320 } }}>
-                  <DocumentCard key={item.id}>
+                <Stack.Item styles={{ root: { width: 320 } }} key={item.id}>
+                  <DocumentCard>
                     <Stack
                       horizontal
                       tokens={{ padding: 24, childrenGap: -16 }}

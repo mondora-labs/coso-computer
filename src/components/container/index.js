@@ -8,6 +8,8 @@ import { IconButton } from "office-ui-fabric-react";
 import Logo from "../logo";
 import Tooltip from "../tooltip";
 
+import { GOOGLE_FOLDER } from "../../config";
+
 const ContainerDiv = styled.div`
   @media (max-width: 1200px) {
     margin: 96px 72px;
@@ -47,7 +49,7 @@ const Container = ({ children }) => {
             aria-describedby={"folder-tooltip"}
             target="_blank"
             rel="noopener noreferrer"
-            href="https://drive.google.com/drive/u/0/folders/1tkTVZ5snIbjTXbUL0FgCnBrD0fKWXUTj"
+            href={GOOGLE_FOLDER}
           >
             <IconButton iconProps={{ iconName: "FolderList" }} />
           </a>

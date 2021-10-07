@@ -5,16 +5,14 @@ import { macs } from "./macs";
 import { logs } from "./logs";
 
 const store = createStore(
-  persist(
-    {
-      user,
-      macs,
-      logs,
-    },
-    {
-      disableImmer: true,
-    }
-  )
+  persist({
+    user,
+    macs,
+    logs,
+  }),
+  {
+    disableImmer: true,
+  }
 );
 
 export default store;
