@@ -27,10 +27,52 @@ const Text = styled.div`
   height: 32px;
   align-items: center;
 `;
+const StyledIcon = styled(Icon)`
+  ${(props) => props.color && "color: green;"};
+  margin: auto;
+  font-size: 16px;
+  margin-top: 10px;
+`;
 
 const DATE_FORMAT = "DD/MM/YYYY";
 
+const ICONS = {
+  notebook: "ThisPC",
+  smartphone: "CellPhone",
+  tablet: "Tablet",
+  accessori: "Headset",
+};
+
 const columnsDefinitions = [
+  {
+    key: "ownership",
+    fieldName: "ownership",
+    iconName: "Devices2",
+    isIconOnly: true,
+    minWidth: 16,
+    maxWidth: 16,
+    background: "red",
+    onRender: (item) => (
+      <Tooltip
+        cursor={"default"}
+        content={
+          "Il dispositivo è " +
+          (!item.ownership
+            ? "affidato a livello personale "
+            : "un muletto aziendale")
+        }
+      >
+        <StyledIcon
+          color={item.ownership === "muletto"}
+          iconName={
+            item.ownership === "muletto"
+              ? "ConstructionCone"
+              : ICONS[item.device]
+          }
+        />
+      </Tooltip>
+    ),
+  },
   {
     key: "owner",
     fieldName: "owner",
@@ -175,6 +217,7 @@ const List = () => {
         ? 1
         : -1
     )
+    .sort((a, b) => (a.ownership === "muletto" ? -1 : 1))
     .filter((item) =>
       Object.values(item)
         .map((val) => `${val}`.toLocaleLowerCase())
