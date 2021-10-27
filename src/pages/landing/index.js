@@ -140,6 +140,12 @@ const Landing = () => {
                       </Stack>
                     </Stack>
                     <DocumentCardDetails>
+                      {item.ownership && (
+                        <DocumentCardStatus
+                          statusIcon="ConstructionCone"
+                          status={"Muletto aziendale"}
+                        />
+                      )}
                       <DocumentCardStatus
                         statusIcon="Calendar"
                         status={`${item.dateFrom} - ${item.dateTo}`}
