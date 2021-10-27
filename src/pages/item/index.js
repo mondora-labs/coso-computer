@@ -25,6 +25,7 @@ import FormikCheckbox from "../../components/formik/checkbox";
 import FormikTextfield from "../../components/formik/textfield";
 import FormikDatepicker from "../../components/formik/datepicker";
 import FormikPicker from "../../components/formik/formik-picker";
+import FormikChoiceGroup from "../../components/formik/choicegroup";
 
 import { GOOGLE_FOLDER } from "../../config";
 
@@ -38,6 +39,7 @@ const SuggestionBar = styled(MessageBar).attrs({
 const itemInitialValues = {
   owner: "",
   fiscalCode: "",
+  ownership: "",
   device: "",
   model: "",
   serial: "",
@@ -134,6 +136,7 @@ const Item = ({ itemId }) => {
               CodiceFiscale.check(cf)
             )
             .required("Codice Fiscale richiesto"),
+          ownership: Yup.string().required("Ownership dispositivo richiesta"),
           device: Yup.string().required("Tipologia dispositivo richiesta"),
           model: Yup.string()
             .min(2, "Numero di caratteri insufficiente")
@@ -166,6 +169,25 @@ const Item = ({ itemId }) => {
                 {...props}
               />
               <br />
+
+              <FormikChoiceGroup
+                label="Uso dispositivo"
+                name="ownership"
+                options={[
+                  {
+                    key: "assigned",
+                    text: "Personale",
+                    icon: "FabricUserFolder",
+                  },
+                  {
+                    key: "muletto",
+                    text: "Muletto",
+                    icon: "Group",
+                  },
+                ]}
+                {...props}
+              />
+
               <FormikPicker
                 options={assetTypes}
                 name="device"
