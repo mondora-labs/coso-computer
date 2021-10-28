@@ -4,7 +4,6 @@ import { useStoreState, useStoreActions } from "easy-peasy";
 import stringify from "csv-stringify";
 
 import moment from "moment";
-import styled from "styled-components";
 
 import { Link } from "@reach/router";
 import {
@@ -16,23 +15,12 @@ import {
   SelectionMode,
   TextField,
   Button,
+  Text,
 } from "office-ui-fabric-react";
 
 import Container from "../../components/container";
 import Tooltip from "../../components/tooltip";
 import NormalDialog from "../../components/dialog";
-
-const Text = styled.div`
-  display: flex;
-  height: 32px;
-  align-items: center;
-`;
-const StyledIcon = styled(Icon)`
-  ${(props) => props.color && "color: green;"};
-  margin: auto;
-  font-size: 16px;
-  margin-top: 10px;
-`;
 
 const DATE_FORMAT = "DD/MM/YYYY";
 
@@ -43,6 +31,18 @@ const ICONS = {
   accessori: "Headset",
 };
 
+const OWNERSHIP_DECORATIONS = {
+  assigned: {
+    label: "Il dispositivo è personale",
+    icon: (device) => ICONS[device],
+  },
+  muletto: {
+    label: "Il dispositivo è un muletto",
+    icon: () => "ConstructionCone",
+    color: "orange",
+  },
+};
+
 const columnsDefinitions = [
   {
     key: "ownership",
@@ -51,27 +51,23 @@ const columnsDefinitions = [
     isIconOnly: true,
     minWidth: 16,
     maxWidth: 16,
-    background: "red",
-    onRender: (item) => (
-      <Tooltip
-        cursor={"default"}
-        content={
-          "Il dispositivo è " +
-          (!item.ownership
-            ? "affidato a livello personale "
-            : "un muletto aziendale")
-        }
-      >
-        <StyledIcon
-          color={item.ownership === "muletto"}
-          iconName={
-            item.ownership === "muletto"
-              ? "ConstructionCone"
-              : ICONS[item.device]
-          }
-        />
-      </Tooltip>
-    ),
+    onRender: (item) => {
+      const decorations = OWNERSHIP_DECORATIONS[item.ownership || "assigned"];
+      return (
+        <ListItem>
+          <Tooltip cursor={"default"} content={decorations.label}>
+            <Icon
+              styles={{
+                root: {
+                  color: decorations.color,
+                },
+              }}
+              iconName={decorations.icon(item.device)}
+            />
+          </Tooltip>
+        </ListItem>
+      );
+    },
   },
   {
     key: "owner",
@@ -105,18 +101,20 @@ const columnsDefinitions = [
     name: "Antivirus",
     minWidth: 60,
     onRender: (item) => (
-      <Tooltip
-        cursor={"default"}
-        content={
-          "Sul dispositivo" +
-          (!item.antivirus ? " NON " : " ") +
-          "è attivo l' antivirus"
-        }
-      >
-        <Text>
-          <Icon iconName={item.antivirus ? "Accept" : "Warning"} />
-        </Text>
-      </Tooltip>
+      <ListItem>
+        <Tooltip
+          cursor={"default"}
+          content={
+            "Sul dispositivo" +
+            (!item.antivirus ? " NON " : " ") +
+            "è attivo l' antivirus"
+          }
+        >
+          <Text>
+            <Icon iconName={item.antivirus ? "Accept" : "Warning"} />
+          </Text>
+        </Tooltip>
+      </ListItem>
     ),
   },
   {
@@ -125,17 +123,27 @@ const columnsDefinitions = [
     name: "Cifratura",
     minWidth: 56,
     onRender: (item) => (
-      <Tooltip
-        cursor={"default"}
-        content={"I dati" + (!item.encryption ? " NON " : " ") + "sono cifrati"}
-      >
-        <Text>
-          <Icon iconName={item.encryption ? "Accept" : "Warning"} />
-        </Text>
-      </Tooltip>
+      <ListItem>
+        <Tooltip
+          cursor={"default"}
+          content={
+            "I dati" + (!item.encryption ? " NON " : " ") + "sono cifrati"
+          }
+        >
+          <Text>
+            <Icon iconName={item.encryption ? "Accept" : "Warning"} />
+          </Text>
+        </Tooltip>
+      </ListItem>
     ),
   },
 ];
+
+const ListItem = ({ children, verticalAlign = "center" }) => (
+  <Stack verticalAlign={verticalAlign} styles={{ root: { height: "100%" } }}>
+    <Stack.Item>{children}</Stack.Item>
+  </Stack>
+);
 
 const List = () => {
   const [search, setSearch] = useState("");
@@ -160,7 +168,11 @@ const List = () => {
   const columns = columnsDefinitions.map((columnDefinition) => ({
     isSorted: columnDefinition.key === sort.key,
     isSortedDescending: sort.direction,
-    onRender: (item, index, column) => <Text>{item[column.fieldName]}</Text>,
+    onRender: (item, index, column) => (
+      <ListItem>
+        <Text variant="small">{item[column.fieldName]}</Text>
+      </ListItem>
+    ),
     isResizable: true,
     onColumnClick: (ev, column) => {
       setSort({
@@ -177,7 +189,7 @@ const List = () => {
       name: "Modifica",
       minWidth: 112,
       onRender: (item) => (
-        <>
+        <ListItem>
           <Tooltip
             content={item.note !== "Nessuna nota." ? "Note" : "Nessuna nota"}
             cursor={"pointer"}
@@ -188,20 +200,18 @@ const List = () => {
               iconProps={{ iconName: "More" }}
             />
           </Tooltip>
-
           <Tooltip content="Modifica" cursor={"pointer"}>
             <Link to={`/app/item/${item.id}`}>
               <IconButton iconProps={{ iconName: "EditNote" }} />
             </Link>
           </Tooltip>
-
           <Tooltip content="Elimina" cursor={"pointer"}>
             <IconButton
               onClick={() => setRemove({ show: true, mac: item })}
               iconProps={{ iconName: "Delete" }}
             />
           </Tooltip>
-        </>
+        </ListItem>
       ),
     },
   ];
