@@ -140,7 +140,7 @@ const Landing = () => {
                       </Stack>
                     </Stack>
                     <DocumentCardDetails>
-                      {item.ownership && (
+                      {item.ownership === "muletto" && (
                         <DocumentCardStatus
                           statusIcon="ConstructionCone"
                           status={"Muletto aziendale"}
