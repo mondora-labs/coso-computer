@@ -1,15 +1,7 @@
 import React from "react";
 
-import styled from "styled-components";
-
 import { ChoiceGroup } from "office-ui-fabric-react";
-import { ErrorMessage } from "formik";
-
-const ErrorMessageWrapper = styled.span`
-  color: rgb(164, 38, 44);
-  font-size: 12px;
-  height: 8px;
-`;
+import ErrorBar from "../error-bar";
 
 const FormikChoiceGroup = ({
   name,
@@ -40,9 +32,7 @@ const FormikChoiceGroup = ({
           handleChange({ target: { name, value: option.key } });
         }}
       />
-      <ErrorMessage name={name}>
-        {(msg) => <ErrorMessageWrapper>{msg}</ErrorMessageWrapper>}
-      </ErrorMessage>
+      <ErrorBar name={name} />
     </>
   );
 };
