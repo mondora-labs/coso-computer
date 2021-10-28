@@ -1,21 +1,12 @@
 import React from "react";
 
-import styled from "styled-components";
-
 import { Checkbox } from "office-ui-fabric-react";
-import { ErrorMessage } from "formik";
+import ErrorBar from "../error-bar";
 
 const errorClass = {
   color: "rgb(164, 38, 44)",
-  textDecoration: "underline"
+  textDecoration: "underline",
 };
-
-const ErrorMessageWrapper = styled.span`
-  color: rgb(164, 38, 44);
-  font-size: 12px;
-  height: 8px;
-  margin: 0 24px !important;
-`;
 
 const FormikCheckbox = ({
   name,
@@ -40,9 +31,7 @@ const FormikCheckbox = ({
         checked={value}
         {...rest}
       />
-      <ErrorMessage name={name}>
-        {msg => <ErrorMessageWrapper>{msg}</ErrorMessageWrapper>}
-      </ErrorMessage>
+      <ErrorBar name={name} />
     </>
   );
 };
