@@ -6,7 +6,8 @@ import CodiceFiscale from "codice-fiscale-js";
 
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
-import { navigate } from "@reach/router";
+import { navigate, useLocation } from "@reach/router";
+import { parse } from "query-string";
 import {
   PrimaryButton,
   DefaultButton,
@@ -74,6 +75,8 @@ const assetModels = [
 ].map((item) => ({ key: item, text: item }));
 
 const Item = ({ itemId }) => {
+  const searchParams = parse(useLocation().search);
+
   const user = useStoreState((state) => state.user);
   const { items, fetched } = useStoreState((store) => store.macs);
   const { addMac, listMacs } = useStoreActions((store) => store.macs);
@@ -159,10 +162,16 @@ const Item = ({ itemId }) => {
           return (
             <Form>
               <FormikTextfield
+                disabled={!(searchParams.superUser && searchParams.unsafeEdits)}
                 name="owner"
                 label="Nome e Cognome possessore"
                 {...props}
               />
+              {searchParams.superUser && searchParams.unsafeEdits && (
+                <SuggestionBar>
+                  {"Da grandi poteri derivano grandi responsabilità"}
+                </SuggestionBar>
+              )}
               <FormikTextfield
                 name="fiscalCode"
                 label="Codice Fiscale"
