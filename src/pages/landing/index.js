@@ -46,7 +46,13 @@ const Landing = () => {
   }, [fetched, listMacs]);
 
   const userItems = items
-    .filter((item) => item.owner.toLowerCase() === user.name.toLowerCase())
+    .filter((item) => {
+      if (item.ownerEmail) {
+        return item.ownerEmail.toLowerCase() === user.email.toLowerCase();
+      }
+
+      return item.owner.toLowerCase() === user.name.toLowerCase();
+    })
     .sort((a, b) => (a.dateFrom < b.dateFrom ? 1 : -1));
 
   const documentCardActions = (item) => [

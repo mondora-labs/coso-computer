@@ -125,7 +125,7 @@ const Item = ({ itemId }) => {
         onSubmit={handleSubmit}
         initialValues={{
           ...itemInitialValues,
-          ...{ owner: user.name },
+          ...{ owner: user.name, ownerEmail: user.email },
           ...item,
         }}
         validationSchema={Yup.object().shape({
