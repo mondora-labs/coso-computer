@@ -46,7 +46,7 @@ const Landing = () => {
   }, [fetched, listMacs]);
 
   const userItems = items
-    .filter((item) => item.owner === user.name)
+    .filter((item) => item.owner.toLowerCase() === user.name.toLowerCase())
     .sort((a, b) => (a.dateFrom < b.dateFrom ? 1 : -1));
 
   const documentCardActions = (item) => [
@@ -142,8 +142,7 @@ const Landing = () => {
                     <DocumentCardDetails>
                       <DocumentCardStatus
                         statusIcon={
-                          (item.ownership === "muletto" &&
-                            "Group") ||
+                          (item.ownership === "muletto" && "Group") ||
                           (item.ownership === "assigned" && "UserFollowed") ||
                           "Warning"
                         }
