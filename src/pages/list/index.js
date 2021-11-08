@@ -187,7 +187,7 @@ const List = () => {
     {
       key: "actions",
       name: "Modifica",
-      minWidth: 112,
+      minWidth: 72,
       onRender: (item) => (
         <ListItem>
           <Tooltip
@@ -205,12 +205,12 @@ const List = () => {
               <IconButton iconProps={{ iconName: "EditNote" }} />
             </Link>
           </Tooltip>
-          <Tooltip content="Elimina" cursor={"pointer"}>
+          {/* <Tooltip content="Elimina" cursor={"pointer"}>
             <IconButton
               onClick={() => setRemove({ show: true, mac: item })}
               iconProps={{ iconName: "Delete" }}
             />
-          </Tooltip>
+          </Tooltip> */}
         </ListItem>
       ),
     },
