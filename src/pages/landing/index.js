@@ -124,7 +124,7 @@ const Landing = () => {
                         <Persona
                           size={PersonaSize.size56}
                           presence={
-                            moment(item.dateTo).isAfter(moment.now())
+                            moment(item.dateTo).isAfter(moment())
                               ? PersonaPresence.online
                               : PersonaPresence.busy
                           }
