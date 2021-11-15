@@ -10,32 +10,32 @@ import Container from "../../components/container";
 function json2array(json) {
   var result = [];
   var keys = Object.keys(json);
-  keys.forEach(key => result.push({ field: key, value: json[key] }));
+  keys.forEach((key) => result.push({ field: key, value: json[key] }));
   return result;
 }
 
-const getDeletions = log => {
+const getDeletions = (log) => {
   const deletions = (log.removed && json2array(log.record)) || [];
 
-  return deletions.map(edit => {
+  return deletions.map((edit) => {
     const value = getRenderValue(edit.field, edit.value);
     return `Rimosso ${edit.field} : "${value}"`;
   });
 };
 
-const getAdditions = log => {
+const getAdditions = (log) => {
   const additions = (log.diff && log.diff.additions) || [];
 
-  return additions.map(edit => {
+  return additions.map((edit) => {
     const value = getRenderValue(edit.field, edit.value);
     return `Aggiunto campo "${edit.field}" → "${value}"`;
   });
 };
 
-const getEdits = log => {
+const getEdits = (log) => {
   const edits = (log.diff && log.diff.edits) || [];
 
-  return edits.map(edit => {
+  return edits.map((edit) => {
     const oldValue = getRenderValue(edit.field, edit.value.old);
     const newValue = getRenderValue(edit.field, edit.value.new);
 
@@ -48,11 +48,11 @@ const getRenderValue = (fieldName, value) =>
     ? moment.utc(value).format("DD/MM/YYYY")
     : value;
 
-const getActions = log => {
+const getActions = (log) => {
   const actions = [
     ...getEdits(log),
     ...getAdditions(log),
-    ...getDeletions(log)
+    ...getDeletions(log),
   ];
   return actions;
 };
@@ -63,36 +63,38 @@ const columns = [
     fieldName: "who",
     minWidth: 128,
     maxWidth: 256,
-    name: "Utente"
+    name: "Utente",
   },
   {
     key: "action",
     name: "Azione",
     minWidth: 320,
-    onRender: record => {
+    onRender: (record) => {
       return getActions(record).map((log, index) => (
         <span key={index}>
           {log}
           <br />
         </span>
       ));
-    }
+    },
   },
   {
     key: "timestamp",
     name: "Quando",
     minWidth: 96,
     maxWidth: 112,
-    onRender: record => {
-      var duration = moment.duration(moment().diff(moment(record.timestamp)));
+    onRender: (record) => {
+      var duration = moment.duration(
+        moment.utc().diff(moment.utc(record.timestamp))
+      );
       return <span>{duration.humanize()} ago</span>;
-    }
-  }
+    },
+  },
 ];
 
 const Logs = () => {
-  const { listLogs } = useStoreActions(store => store.logs);
-  const { items, fetched } = useStoreState(store => store.logs);
+  const { listLogs } = useStoreActions((store) => store.logs);
+  const { items, fetched } = useStoreState((store) => store.logs);
 
   useEffect(() => {
     if (!fetched) {

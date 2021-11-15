@@ -4,7 +4,8 @@ import styled from "styled-components";
 import { useStoreActions, useStoreState } from "easy-peasy";
 
 import { PrimaryButton } from "office-ui-fabric-react";
-import { navigate } from "@reach/router";
+import { navigate, useLocation } from "@reach/router";
+import { parse } from "query-string";
 
 import Logo from "../../components/logo";
 
@@ -18,14 +19,20 @@ const Container = styled.div`
 `;
 
 const Login = () => {
+  const { superUser, unsafeEdits, unsafeDelete } = parse(useLocation().search);
+
   const { isLogged } = useStoreState((state) => state.user);
-  const { doLogin } = useStoreActions((state) => state.user);
+  const { doLogin, setPermissions } = useStoreActions((state) => state.user);
 
   useEffect(() => {
     if (isLogged) {
       navigate("/app/landing");
     }
   }, [isLogged]);
+
+  useEffect(() => {
+    setPermissions({ superUser, unsafeEdits, unsafeDelete });
+  }, [superUser, unsafeEdits, unsafeDelete, setPermissions]);
 
   return (
     <Container>

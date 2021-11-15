@@ -6,8 +6,7 @@ import CodiceFiscale from "codice-fiscale-js";
 
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
-import { navigate, useLocation } from "@reach/router";
-import { parse } from "query-string";
+import { navigate } from "@reach/router";
 import {
   PrimaryButton,
   DefaultButton,
@@ -75,9 +74,8 @@ const assetModels = [
 ].map((item) => ({ key: item, text: item }));
 
 const Item = ({ itemId }) => {
-  const searchParams = parse(useLocation().search);
+  const { email, name, permissions } = useStoreState((state) => state.user);
 
-  const user = useStoreState((state) => state.user);
   const { items, fetched } = useStoreState((store) => store.macs);
   const { addMac, listMacs } = useStoreActions((store) => store.macs);
 
@@ -125,7 +123,7 @@ const Item = ({ itemId }) => {
         onSubmit={handleSubmit}
         initialValues={{
           ...itemInitialValues,
-          ...{ owner: user.name, ownerEmail: user.email },
+          ...{ owner: name, ownerEmail: email },
           ...item,
         }}
         validationSchema={Yup.object().shape({
@@ -162,12 +160,12 @@ const Item = ({ itemId }) => {
           return (
             <Form>
               <FormikTextfield
-                disabled={!(searchParams.superUser && searchParams.unsafeEdits)}
+                disabled={!(permissions.superUser && permissions.unsafeEdits)}
                 name="owner"
                 label="Nome e Cognome possessore"
                 {...props}
               />
-              {searchParams.superUser && searchParams.unsafeEdits && (
+              {permissions.superUser && permissions.unsafeEdits && (
                 <SuggestionBar>
                   {"Da grandi poteri derivano grandi responsabilità"}
                 </SuggestionBar>

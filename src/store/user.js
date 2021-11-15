@@ -4,12 +4,21 @@ import { login } from "../utils/firebase";
 
 const defaultState = {
   isLogged: false,
+  name: undefined,
+  email: undefined,
+  photo: undefined,
+  permissions: {},
 };
 
 export const user = {
   ...defaultState,
+  setPermissions: action((state, payload) => {
+    return {
+      ...state,
+      permissions: payload,
+    };
+  }),
   updateLogin: action((state, payload) => {
-    console.log(payload);
     return {
       ...state,
       isLogged: payload.isLogged,

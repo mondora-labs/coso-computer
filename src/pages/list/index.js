@@ -158,6 +158,7 @@ const List = () => {
 
   const { listMacs, removeMac } = useStoreActions((store) => store.macs);
   const { items, fetched } = useStoreState((store) => store.macs);
+  const { permissions } = useStoreState((store) => store.user);
 
   useEffect(() => {
     if (!fetched) {
@@ -187,7 +188,7 @@ const List = () => {
     {
       key: "actions",
       name: "Modifica",
-      minWidth: 72,
+      minWidth: 96,
       onRender: (item) => (
         <ListItem>
           <Tooltip
@@ -205,12 +206,14 @@ const List = () => {
               <IconButton iconProps={{ iconName: "EditNote" }} />
             </Link>
           </Tooltip>
-          {/* <Tooltip content="Elimina" cursor={"pointer"}>
-            <IconButton
-              onClick={() => setRemove({ show: true, mac: item })}
-              iconProps={{ iconName: "Delete" }}
-            />
-          </Tooltip> */}
+          {permissions.superUser && permissions.unsafeDelete && (
+            <Tooltip content="Elimina" cursor={"pointer"}>
+              <IconButton
+                onClick={() => setRemove({ show: true, mac: item })}
+                iconProps={{ iconName: "Delete" }}
+              />
+            </Tooltip>
+          )}
         </ListItem>
       ),
     },
@@ -219,8 +222,8 @@ const List = () => {
   const filteredItems = items
     .map((item) => ({
       ...item,
-      dateToString: moment(item.dateTo).format(DATE_FORMAT),
-      dateFromString: moment(item.dateFrom).format(DATE_FORMAT),
+      dateToString: moment.utc(item.dateTo).format(DATE_FORMAT),
+      dateFromString: moment.utc(item.dateFrom).format(DATE_FORMAT),
     }))
     .sort((a, b) =>
       (sort.direction ? a[sort.key] < b[sort.key] : a[sort.key] > b[sort.key])

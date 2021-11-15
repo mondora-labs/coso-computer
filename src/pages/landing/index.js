@@ -110,8 +110,8 @@ const Landing = () => {
             userItems
               .map((item) => ({
                 ...item,
-                dateFrom: moment(item.dateFrom).format(FORMAT),
-                dateTo: moment(item.dateTo).format(FORMAT),
+                dateFrom: moment.utc(item.dateFrom).format(FORMAT),
+                dateTo: moment.utc(item.dateTo).format(FORMAT),
               }))
               .map((item) => (
                 <Stack.Item styles={{ root: { width: 320 } }} key={item.id}>
@@ -124,7 +124,9 @@ const Landing = () => {
                         <Persona
                           size={PersonaSize.size56}
                           presence={
-                            moment(item.dateTo).isAfter(moment())
+                            moment
+                              .utc(item.dateTo, FORMAT)
+                              .isAfter(moment.utc())
                               ? PersonaPresence.online
                               : PersonaPresence.busy
                           }

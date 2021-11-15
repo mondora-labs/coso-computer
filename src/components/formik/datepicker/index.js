@@ -26,7 +26,7 @@ const FormikDatepicker = ({
         label={label}
         placeholder="Seleziona una data..."
         value={value.toDate()}
-        formatDate={(date) => moment(date).format("DD/MM/YYYY")}
+        formatDate={(date) => moment.utc(date).format("DD/MM/YYYY")}
         onSelectDate={(date) => {
           handleChange({
             target: { name, value: date.getTime() },
