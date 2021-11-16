@@ -61,6 +61,7 @@ export const upsertMac = async (mac) => {
     const newMac = {
       id: mac.id,
       owner: mac.owner || "",
+      ownerEmail: mac.ownerEmail || "",
       fiscalCode: mac.fiscalCode || "",
       ownership: mac.ownership || "",
       device: mac.device || "",
@@ -68,8 +69,8 @@ export const upsertMac = async (mac) => {
       serial: mac.serial || "",
       dateFrom: mac.dateFrom || "",
       dateTo: mac.dateTo || "",
-      hostname: mac.hostname || "<...>",
-      rentId: mac.rentId || "#",
+      hostname: mac.hostname || "",
+      rentId: mac.rentId || "",
       note: mac.note || "Nessuna nota.",
       antivirus: mac.antivirus || false,
       encryption: mac.encryption || false,

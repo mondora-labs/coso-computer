@@ -36,7 +36,7 @@ const SuggestionBar = styled(MessageBar).attrs({
   margin: 8px 0;
 `;
 
-const itemInitialValues = {
+const ITEM_INITIAL_VALUES = {
   owner: "",
   fiscalCode: "",
   ownership: "",
@@ -52,11 +52,44 @@ const itemInitialValues = {
   encryption: false,
 };
 
-const assetTypes = ["Notebook", "Smartphone", "Tablet", "Accessori"].map(
+const VALIDATION_SCHEMA = Yup.object().shape({
+  owner: Yup.string()
+    .min(2, "Numero di caratteri insufficiente")
+    .max(50, "Numero di caratteri eccessivo")
+    .required("Nome possessore richiesto"),
+  ownerEmail: Yup.string()
+    .email("Email non valida")
+    .required("Email richiesta"),
+  fiscalCode: Yup.string()
+    .length(16, "Numero di caratteri incorretto")
+    .test("cf test", "Codice fiscale non valido", (cf) =>
+      CodiceFiscale.check(cf)
+    )
+    .required("Codice Fiscale richiesto"),
+  ownership: Yup.string().required("Ownership dispositivo richiesta"),
+  device: Yup.string().required("Tipologia dispositivo richiesta"),
+  model: Yup.string()
+    .min(2, "Numero di caratteri insufficiente")
+    .max(50, "Numero di caratteri eccessivo")
+    .required("Nome modello richiesto"),
+  serial: Yup.string()
+    .min(2, "Numero di caratteri insufficiente")
+    .max(50, "Numero di caratteri eccessivo")
+    .required("Codice seriale richiesto"),
+  dateFrom: Yup.number().required("Seleziona data ricezione"),
+  dateTo: Yup.number()
+    .required("Seleziona data upcycle")
+    .moreThan(
+      Yup.ref("dateFrom"),
+      "La data di upcycle deve essere successiva a quella di ricezione"
+    ),
+});
+
+const ASSET_TYPES = ["Notebook", "Smartphone", "Tablet", "Accessori"].map(
   (item) => ({ key: item.toLocaleLowerCase(), text: item })
 );
 
-const assetModels = [
+const ASSET_MODELS = [
   'MacBook Pro 16"',
   'MacBook Pro 15"',
   'MacBook Pro 13"',
@@ -104,6 +137,8 @@ const Item = ({ itemId }) => {
     }
   }, [fetched, listMacs]);
 
+  const isUnsafeEditEnabled = permissions.superUser && permissions.unsafeEdits;
+
   return (
     <Container>
       <NormalDialog
@@ -118,58 +153,55 @@ const Item = ({ itemId }) => {
         onDismiss={() => setProgress({ show: false })}
       />
 
+      {console.log(item)}
+
       <Formik
         enableReinitialize={true}
         onSubmit={handleSubmit}
         initialValues={{
-          ...itemInitialValues,
-          ...{ owner: name, ownerEmail: email },
+          ...ITEM_INITIAL_VALUES,
+          ...{
+            owner: item?.name || name,
+            ownerEmail: item?.ownerEmail || email,
+          },
           ...item,
         }}
-        validationSchema={Yup.object().shape({
-          owner: Yup.string()
-            .min(2, "Numero di caratteri insufficiente")
-            .max(50, "Numero di caratteri eccessivo")
-            .required("Nome possessore richiesto"),
-          fiscalCode: Yup.string()
-            .length(16, "Numero di caratteri incorretto")
-            .test("cf test", "Codice fiscale non valido", (cf) =>
-              CodiceFiscale.check(cf)
-            )
-            .required("Codice Fiscale richiesto"),
-          ownership: Yup.string().required("Ownership dispositivo richiesta"),
-          device: Yup.string().required("Tipologia dispositivo richiesta"),
-          model: Yup.string()
-            .min(2, "Numero di caratteri insufficiente")
-            .max(50, "Numero di caratteri eccessivo")
-            .required("Nome modello richiesto"),
-          serial: Yup.string()
-            .min(2, "Numero di caratteri insufficiente")
-            .max(50, "Numero di caratteri eccessivo")
-            .required("Codice seriale richiesto"),
-          dateFrom: Yup.number().required("Seleziona data ricezione"),
-          dateTo: Yup.number()
-            .required("Seleziona data upcycle")
-            .moreThan(
-              Yup.ref("dateFrom"),
-              "La data di upcycle deve essere successiva a quella di ricezione"
-            ),
-        })}
+        validationSchema={VALIDATION_SCHEMA}
       >
         {(props) => {
           return (
             <Form>
               <FormikTextfield
-                disabled={!(permissions.superUser && permissions.unsafeEdits)}
+                disabled={!isUnsafeEditEnabled}
                 name="owner"
                 label="Nome e Cognome possessore"
                 {...props}
               />
-              {permissions.superUser && permissions.unsafeEdits && (
+              {isUnsafeEditEnabled && (
                 <SuggestionBar>
                   {"Da grandi poteri derivano grandi responsabilità"}
                 </SuggestionBar>
               )}
+
+              <FormikTextfield
+                disabled={!isUnsafeEditEnabled}
+                name="ownerEmail"
+                label="Email possessore"
+                {...props}
+              />
+              {isUnsafeEditEnabled && (
+                <SuggestionBar>
+                  <b>{"Attenzione: "}</b>
+                  {
+                    "l'email é il campo di correlazione che permette di capire chi é l'effettivo proprietario (ció che sará visualizzato in dashboard personale), assicurati che la mail corretta. "
+                  }
+                  <br />
+                  <i>
+                    {"Si assume che il proprietario sia chi modifica l'item."}
+                  </i>
+                </SuggestionBar>
+              )}
+
               <FormikTextfield
                 name="fiscalCode"
                 label="Codice Fiscale"
@@ -196,14 +228,14 @@ const Item = ({ itemId }) => {
               />
 
               <FormikPicker
-                options={assetTypes}
+                options={ASSET_TYPES}
                 name="device"
                 label="Tipologia dispositivo"
                 {...props}
               />
               <br />
               <FormikPicker
-                options={assetModels}
+                options={ASSET_MODELS}
                 name="model"
                 label="Modello dispositivo"
                 {...props}
@@ -299,7 +331,7 @@ const Item = ({ itemId }) => {
               </Text>
               <Stack horizontal tokens={{ childrenGap: 16 }}>
                 <Stack.Item>
-                  <DefaultButton onClick={() => window.history.back()}>
+                  <DefaultButton onClick={() => navigate(-1)}>
                     {"Indietro"}
                   </DefaultButton>
                 </Stack.Item>

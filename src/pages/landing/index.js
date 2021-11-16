@@ -3,10 +3,10 @@ import { useStoreActions, useStoreState } from "easy-peasy";
 import moment from "moment";
 import {
   DocumentCard,
-  DocumentCardActions,
   DocumentCardDetails,
   DocumentCardStatus,
   Icon,
+  IconButton,
   Persona,
   PersonaPresence,
   PersonaSize,
@@ -19,6 +19,8 @@ import React, { useEffect, useState } from "react";
 import Container from "../../components/container";
 import NormalDialog from "../../components/dialog";
 
+import { isItemPersonal } from "../../utils/misc";
+
 const FORMAT = "DD/MM/YYYY";
 const ICONS = {
   notebook: "ThisPC",
@@ -28,7 +30,6 @@ const ICONS = {
 };
 
 const Landing = () => {
-  const user = useStoreState((state) => state.user);
   const [note, setNote] = useState({
     show: false,
     text: "",
@@ -36,8 +37,10 @@ const Landing = () => {
   const [remove, setRemove] = useState({
     show: false,
   });
+
   const { listMacs, removeMac } = useStoreActions((store) => store.macs);
   const { items, fetched } = useStoreState((store) => store.macs);
+  const user = useStoreState((state) => state.user);
 
   useEffect(() => {
     if (!fetched) {
@@ -46,34 +49,8 @@ const Landing = () => {
   }, [fetched, listMacs]);
 
   const userItems = items
-    .filter((item) => {
-      if (item.ownerEmail) {
-        return item.ownerEmail.toLowerCase() === user.email.toLowerCase();
-      }
-
-      return item.owner.toLowerCase() === user.name.toLowerCase();
-    })
+    .filter((item) => isItemPersonal(user, item))
     .sort((a, b) => (a.dateFrom < b.dateFrom ? 1 : -1));
-
-  const documentCardActions = (item) => [
-    {
-      iconProps: { iconName: "More" },
-      onClick: () => setNote({ show: true, text: item.note }),
-      ariaLabel: "Note",
-    },
-    {
-      iconProps: { iconName: "EditNote" },
-      onClick: () => {
-        window.location.href = `/app/item/${item.id}`;
-      },
-      ariaLabel: "Modifica elemento",
-    },
-    {
-      iconProps: { iconName: "Delete" },
-      onClick: () => setRemove({ show: true, mac: item }),
-      ariaLabel: "Elimina elemento",
-    },
-  ];
 
   const profile = {
     imageUrl: user.photo,
@@ -175,7 +152,28 @@ const Landing = () => {
                         status="Cifratura disco"
                       />
                     </DocumentCardDetails>
-                    <DocumentCardActions actions={documentCardActions(item)} />
+
+                    <Stack horizontal tokens={{ padding: 12, childrenGap: 8 }}>
+                      <Stack.Item>
+                        <IconButton
+                          iconProps={{ iconName: "More" }}
+                          onClick={() =>
+                            setNote({ show: true, text: item.note })
+                          }
+                        />
+                      </Stack.Item>
+                      <Stack.Item>
+                        <Link to={`/app/item/${item.id}`}>
+                          <IconButton iconProps={{ iconName: "EditNote" }} />
+                        </Link>
+                      </Stack.Item>
+                      <Stack.Item>
+                        <IconButton
+                          iconProps={{ iconName: "Delete" }}
+                          onClick={() => setRemove({ show: true, mac: item })}
+                        />
+                      </Stack.Item>
+                    </Stack>
                   </DocumentCard>
                 </Stack.Item>
               ))

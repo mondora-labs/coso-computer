@@ -22,6 +22,8 @@ import Container from "../../components/container";
 import Tooltip from "../../components/tooltip";
 import NormalDialog from "../../components/dialog";
 
+import { isItemPersonal } from "../../utils/misc";
+
 const DATE_FORMAT = "DD/MM/YYYY";
 
 const ICONS = {
@@ -158,7 +160,7 @@ const List = () => {
 
   const { listMacs, removeMac } = useStoreActions((store) => store.macs);
   const { items, fetched } = useStoreState((store) => store.macs);
-  const { permissions } = useStoreState((store) => store.user);
+  const user = useStoreState((store) => store.user);
 
   useEffect(() => {
     if (!fetched) {
@@ -184,10 +186,15 @@ const List = () => {
     ...columnDefinition,
   }));
 
+  const isUnsafeDeleteEnabled =
+    user.permissions.superUser && user.permissions.unsafeDelete;
+  const isUnsafeEditEnabled =
+    user.permissions.superUser && user.permissions.unsafeEdits;
+
   const actionsColumns = [
     {
       key: "actions",
-      name: "Modifica",
+      name: "Azioni",
       minWidth: 96,
       onRender: (item) => (
         <ListItem>
@@ -201,12 +208,14 @@ const List = () => {
               iconProps={{ iconName: "More" }}
             />
           </Tooltip>
-          <Tooltip content="Modifica" cursor={"pointer"}>
-            <Link to={`/app/item/${item.id}`}>
-              <IconButton iconProps={{ iconName: "EditNote" }} />
-            </Link>
-          </Tooltip>
-          {permissions.superUser && permissions.unsafeDelete && (
+          {(isItemPersonal(user, item) || isUnsafeEditEnabled) && (
+            <Tooltip content="Modifica" cursor={"pointer"}>
+              <Link to={`/app/item/${item.id}`}>
+                <IconButton iconProps={{ iconName: "EditNote" }} />
+              </Link>
+            </Tooltip>
+          )}
+          {isUnsafeDeleteEnabled && (
             <Tooltip content="Elimina" cursor={"pointer"}>
               <IconButton
                 onClick={() => setRemove({ show: true, mac: item })}
@@ -292,7 +301,7 @@ const List = () => {
         items={filteredItems}
       />
 
-      <Stack tokens={{ childrenGap: "8px" }} horizontal reversed>
+      <Stack tokens={{ childrenGap: 8, padding: 16 }} horizontal reversed>
         <Stack.Item align="center">
           <Link to="/app/item">
             <PrimaryButton
