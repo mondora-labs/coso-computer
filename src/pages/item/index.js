@@ -92,6 +92,7 @@ const ASSET_TYPES = ["Notebook", "Smartphone", "Tablet", "Accessori"].map(
 const ASSET_MODELS = [
   'MacBook Pro 16"',
   'MacBook Pro 15"',
+  'MacBook Pro 14"',
   'MacBook Pro 13"',
   'MacBook Air 13"',
   "Dell XPS 15 9500",
