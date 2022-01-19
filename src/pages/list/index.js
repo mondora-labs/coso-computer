@@ -51,8 +51,8 @@ const columnsDefinitions = [
     fieldName: "ownership",
     iconName: "Devices2",
     isIconOnly: true,
-    minWidth: 16,
-    maxWidth: 16,
+    minWidth: 18,
+    maxWidth: 18,
     onRender: (item) => {
       const decorations = OWNERSHIP_DECORATIONS[item.ownership || "assigned"];
       return (
@@ -82,6 +82,12 @@ const columnsDefinitions = [
     name: "Seriale",
   },
   {
+    key: "hostname",
+    fieldName: "hostname",
+    name: "Hostname",
+    minWidth: 240,
+  },
+  {
     key: "dateFromString",
     fieldName: "dateFromString",
     name: "Inizio",
@@ -100,8 +106,9 @@ const columnsDefinitions = [
   {
     key: "antivirus",
     fieldName: "antivirus",
-    name: "Antivirus",
-    minWidth: 60,
+    iconName: "Bug",
+    minWidth: 18,
+    maxWidth: 18,
     onRender: (item) => (
       <ListItem>
         <Tooltip
@@ -122,8 +129,9 @@ const columnsDefinitions = [
   {
     key: "encryption",
     fieldName: "encryption",
-    name: "Cifratura",
-    minWidth: 56,
+    iconName: "HardDriveLock",
+    minWidth: 18,
+    maxWidth: 18,
     onRender: (item) => (
       <ListItem>
         <Tooltip
