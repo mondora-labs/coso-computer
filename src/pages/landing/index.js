@@ -2,6 +2,7 @@ import { Link } from "@reach/router";
 import { useStoreActions, useStoreState } from "easy-peasy";
 import moment from "moment";
 import {
+  DefaultButton,
   DocumentCard,
   DocumentCardDetails,
   DocumentCardStatus,
@@ -23,6 +24,7 @@ import { isItemPersonal } from "../../utils/misc";
 
 const FORMAT = "DD/MM/YYYY";
 const ICONS = {
+  computer: "ThisPC",
   notebook: "ThisPC",
   smartphone: "CellPhone",
   tablet: "Tablet",
@@ -189,7 +191,7 @@ const Landing = () => {
           )}
         </Stack>
 
-        <Stack horizontal>
+        <Stack horizontal tokens={{ childrenGap: 8 }}>
           <Stack.Item align="center">
             <Link to="/app/item">
               <PrimaryButton
@@ -197,6 +199,18 @@ const Landing = () => {
                 iconProps={{ iconName: "Add" }}
               />
             </Link>
+          </Stack.Item>
+          <Stack.Item align="center">
+            <a
+              href="https://mondora-store.mmn.it/"
+              target="_blank"
+              rel="noreferrer"
+            >
+              <DefaultButton
+                text="Richiedi device"
+                iconProps={{ iconName: "Money" }}
+              />
+            </a>
           </Stack.Item>
         </Stack>
       </Stack>

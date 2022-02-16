@@ -10,6 +10,7 @@ const FormikTextfield = ({
   errors,
   touched,
   handleChange,
+  placeHolder,
   ...rest
 }) => {
   const value = values[name];
@@ -19,7 +20,7 @@ const FormikTextfield = ({
       <TextField
         name={name}
         label={label}
-        placeholder="Inserisci testo"
+        placeholder={placeHolder || "Inserisci testo"}
         errorMessage={touched[name] && errors[name] && " "}
         value={value}
         onChange={(event, text) =>

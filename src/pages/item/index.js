@@ -83,11 +83,26 @@ const VALIDATION_SCHEMA = Yup.object().shape({
       Yup.ref("dateFrom"),
       "La data di upcycle deve essere successiva a quella di ricezione"
     ),
+  rentId: Yup.string().required(
+    "Il numero d'ordine é richiesto, controlla sullo store"
+  ),
+  taxableAmount: Yup.number()
+    .typeError("Importo non corretto, [0-9]")
+    .required("L'importo é richiesto, controlla sullo store"),
 });
 
-const ASSET_TYPES = ["Notebook", "Smartphone", "Tablet", "Accessori"].map(
-  (item) => ({ key: item.toLocaleLowerCase(), text: item })
-);
+const ASSET_TYPES = [
+  "Computer",
+  "Tablet",
+  "Mouse",
+  "Tastiera",
+  "Monitor",
+  "Headset",
+  "Accessori",
+].map((item) => ({
+  key: item.toLocaleLowerCase(),
+  text: item,
+}));
 
 const ASSET_MODELS = [
   'MacBook Pro 16"',
@@ -241,15 +256,12 @@ const Item = ({ itemId }) => {
                 label="Modello dispositivo"
                 {...props}
               />
-              <SuggestionBar>
-                <b>{"su Mac: "}</b>
-                {" 'informazioni su questo Mac'"}
-                <br />
-                <b>{"su Windows: "}</b>
-                {' cmd.exe > "wmic computersystem get model"'}
-                <br />
-                <i>{" es: MacBook Pro (15-inch, 2017)"}</i>
-              </SuggestionBar>
+              <FormikTextfield
+                name="deviceNote"
+                label="Note modello"
+                {...props}
+              />
+
               <FormikTextfield
                 name="serial"
                 label="Numero di serie"
@@ -281,24 +293,23 @@ const Item = ({ itemId }) => {
               <br />
               <FormikDatepicker
                 name="dateFrom"
-                label="Data ricezione"
+                label="Data acquisto"
                 {...props}
               />
-              <FormikDatepicker name="dateTo" label="Data upcycle" {...props} />
               <SuggestionBar>
-                {"Consideriamo la vita utile di "}
-                <b>{"3 anni"}</b>
-                {" dalla data di ricezione"}
+                {
+                  "Dalla data di acquisto, il periodo di vita di un computer é di "
+                }
+                <b>{"3.2 anni"}</b>
+                {"."}
               </SuggestionBar>
+              <FormikTextfield name="rentId" label="Numero ordine" {...props} />
               <FormikTextfield
-                name="rentId"
-                label="Codice contratto noleggio"
+                name="taxableAmount"
+                label="Importo IVA esclusa"
+                placeHolder="Inserisci importo"
                 {...props}
               />
-              <SuggestionBar>
-                <b>{"Non necessario,"}</b>
-                {" lascia vuoto se non lo conosci"}
-              </SuggestionBar>
               <FormikTextfield name="note" label="Note" multiline {...props} />
               <Stack tokens={{ childrenGap: 16, padding: "16px 0" }}>
                 <FormikCheckbox

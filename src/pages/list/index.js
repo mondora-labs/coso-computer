@@ -25,8 +25,10 @@ import NormalDialog from "../../components/dialog";
 import { isItemPersonal } from "../../utils/misc";
 
 const DATE_FORMAT = "DD/MM/YYYY";
+const UPCYCLE_FACTOR = 365 * 3.2;
 
 const ICONS = {
+  computer: "ThisPC",
   notebook: "ThisPC",
   smartphone: "CellPhone",
   tablet: "Tablet",
@@ -90,11 +92,11 @@ const columnsDefinitions = [
   {
     key: "dateFromString",
     fieldName: "dateFromString",
-    name: "Inizio",
+    name: "Data acquisto",
   },
   {
-    key: "dateToString",
-    fieldName: "dateToString",
+    key: "computedDateString",
+    fieldName: "computedDateString",
     name: "Termine",
   },
   {
@@ -239,6 +241,10 @@ const List = () => {
   const filteredItems = items
     .map((item) => ({
       ...item,
+      computedDateString: moment
+        .utc(item.dateFrom)
+        .add(UPCYCLE_FACTOR, "days")
+        .format(DATE_FORMAT),
       dateToString: moment.utc(item.dateTo).format(DATE_FORMAT),
       dateFromString: moment.utc(item.dateFrom).format(DATE_FORMAT),
     }))
@@ -253,6 +259,8 @@ const List = () => {
         .map((val) => `${val}`.toLocaleLowerCase())
         .some((val) => val.includes(search.toLocaleLowerCase()))
     );
+
+  console.log(filteredItems);
 
   const handleExport = () => {
     const options = {
