@@ -95,8 +95,8 @@ const columnsDefinitions = [
     name: "Data acquisto",
   },
   {
-    key: "computedDateString",
-    fieldName: "computedDateString",
+    key: "computedDateToString",
+    fieldName: "computedDateToString",
     name: "Termine",
   },
   {
@@ -241,7 +241,7 @@ const List = () => {
   const filteredItems = items
     .map((item) => ({
       ...item,
-      computedDateString: moment
+      computedDateToString: moment
         .utc(item.dateFrom)
         .add(UPCYCLE_FACTOR, "days")
         .format(DATE_FORMAT),

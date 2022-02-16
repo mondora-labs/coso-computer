@@ -66,14 +66,16 @@ export const upsertMac = async (mac) => {
       ownership: mac.ownership || "",
       device: mac.device || "",
       model: mac.model || "",
+      deviceNote: mac.deviceNote || "",
       serial: mac.serial || "",
       dateFrom: mac.dateFrom || "",
       dateTo: mac.dateTo || "",
       hostname: mac.hostname || "",
       rentId: mac.rentId || "",
-      note: mac.note || "Nessuna nota.",
+      note: mac.note || "",
       antivirus: mac.antivirus || false,
       encryption: mac.encryption || false,
+      taxableAmount: mac.taxableAmount || "",
     };
 
     const diff = getDiff(oldMac, newMac);

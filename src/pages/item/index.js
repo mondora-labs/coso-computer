@@ -42,6 +42,7 @@ const ITEM_INITIAL_VALUES = {
   ownership: "",
   device: "",
   model: "",
+  deviceNote: "",
   serial: "",
   dateFrom: "",
   dateTo: "",
@@ -50,6 +51,7 @@ const ITEM_INITIAL_VALUES = {
   note: "",
   antivirus: false,
   encryption: false,
+  taxableAmount: "",
 };
 
 const VALIDATION_SCHEMA = Yup.object().shape({
@@ -76,18 +78,13 @@ const VALIDATION_SCHEMA = Yup.object().shape({
     .min(2, "Numero di caratteri insufficiente")
     .max(50, "Numero di caratteri eccessivo")
     .required("Codice seriale richiesto"),
-  dateFrom: Yup.number().required("Seleziona data ricezione"),
-  dateTo: Yup.number()
-    .required("Seleziona data upcycle")
-    .moreThan(
-      Yup.ref("dateFrom"),
-      "La data di upcycle deve essere successiva a quella di ricezione"
-    ),
+  dateFrom: Yup.number().required("Seleziona una data di acquisto"),
+
   rentId: Yup.string().required(
     "Il numero d'ordine é richiesto, controlla sullo store"
   ),
   taxableAmount: Yup.number()
-    .typeError("Importo non corretto, [0-9]")
+    .typeError("Importo non valido, [0-9] (es per € 2.650,50 => 2650.50)")
     .required("L'importo é richiesto, controlla sullo store"),
 });
 
@@ -308,6 +305,8 @@ const Item = ({ itemId }) => {
                 name="taxableAmount"
                 label="Importo IVA esclusa"
                 placeHolder="Inserisci importo"
+                type="number"
+                step="any"
                 {...props}
               />
               <FormikTextfield name="note" label="Note" multiline {...props} />
