@@ -28,17 +28,21 @@ const DATE_FORMAT = "DD/MM/YYYY";
 const UPCYCLE_FACTOR = 365 * 3.2;
 
 const ICONS = {
-  computer: "ThisPC",
   notebook: "ThisPC",
-  smartphone: "CellPhone",
+  computer: "ThisPC",
   tablet: "Tablet",
-  accessori: "Headset",
+  mouse: "KeyboardClassic",
+  tastiera: "KeyboardClassic",
+  monitor: "TVMonitor",
+  headset: "Headset",
+  accessori: "Puzzle",
+  smartphone: "CellPhone",
 };
 
 const OWNERSHIP_DECORATIONS = {
   assigned: {
     label: "Il dispositivo è personale",
-    icon: (device) => ICONS[device],
+    icon: (device) => ICONS[device] || "Warning",
   },
   muletto: {
     label: "Il dispositivo è un muletto",
