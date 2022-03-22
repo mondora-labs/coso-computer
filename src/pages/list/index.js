@@ -264,8 +264,6 @@ const List = () => {
         .some((val) => val.includes(search.toLocaleLowerCase()))
     );
 
-  console.log(filteredItems);
-
   const handleExport = () => {
     const options = {
       header: true,

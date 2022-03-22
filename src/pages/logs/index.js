@@ -1,9 +1,9 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
 import moment from "moment";
 import { useStoreActions, useStoreState } from "easy-peasy";
 
-import { DetailsList, SelectionMode } from "office-ui-fabric-react";
+import { DetailsList, SelectionMode, TextField } from "office-ui-fabric-react";
 
 import Container from "../../components/container";
 
@@ -94,7 +94,9 @@ const columns = [
 
 const Logs = () => {
   const { listLogs } = useStoreActions((store) => store.logs);
-  const { items, fetched } = useStoreState((store) => store.logs);
+  const { items = [], fetched } = useStoreState((store) => store.logs);
+
+  const [search, setSearch] = useState("");
 
   useEffect(() => {
     if (!fetched) {
@@ -102,14 +104,46 @@ const Logs = () => {
     }
   }, [fetched, listLogs]);
 
+  const filteredItems = items.filter(
+    ({ diff: { additions = [], deletes = [], edits = [] } = {} }) => {
+      const filterSerialField = ({ value }) =>
+        `${value}`.toLowerCase().includes(search.toLowerCase());
+
+      const mergedEdits = edits.reduce(
+        (accumulator, { field, value }) => [
+          ...accumulator,
+          { field, value: value.new },
+          { field, value: value.old },
+        ],
+        []
+      );
+
+      const addedSerial = additions.find(filterSerialField);
+      const deletedSerial = deletes.find(filterSerialField);
+      const editedSerial = mergedEdits.find(filterSerialField);
+
+      return addedSerial || deletedSerial || editedSerial;
+    }
+  );
+
+  const sortedItems = filteredItems.sort(
+    (a, b) => new Date(b.timestamp) - new Date(a.timestamp)
+  );
+
   return (
     <Container>
+      <TextField
+        value={search}
+        onChange={(event, text) => setSearch(text)}
+        label="Cerca:"
+        placeholder="Cerca per whatever..."
+        iconProps={{ iconName: "Search" }}
+      />
+
       <DetailsList
         selectionMode={SelectionMode.none}
         columns={columns}
-        items={items.sort(
-          (a, b) => new Date(b.timestamp) - new Date(a.timestamp)
-        )}
+        items={sortedItems}
       />
     </Container>
   );
