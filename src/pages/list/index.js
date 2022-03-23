@@ -242,6 +242,8 @@ const List = () => {
     },
   ];
 
+  const columnsFields = columns.map((column) => column.key);
+
   const filteredItems = items
     .map((item) => ({
       ...item,
@@ -252,6 +254,12 @@ const List = () => {
       dateToString: moment.utc(item.dateTo).format(DATE_FORMAT),
       dateFromString: moment.utc(item.dateFrom).format(DATE_FORMAT),
     }))
+    .map((item) => {
+      return columnsFields.reduce((itemState, fieldName) => {
+        itemState[fieldName] = item[fieldName];
+        return itemState;
+      }, {});
+    })
     .sort((a, b) =>
       (sort.direction ? a[sort.key] < b[sort.key] : a[sort.key] > b[sort.key])
         ? 1
