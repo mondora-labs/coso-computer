@@ -7,20 +7,14 @@ import { DetailsList, SelectionMode, TextField } from "office-ui-fabric-react";
 
 import Container from "../../components/container";
 
-function json2array(json) {
-  var result = [];
-  var keys = Object.keys(json);
-  keys.forEach((key) => result.push({ field: key, value: json[key] }));
-  return result;
-}
-
 const getDeletions = (log) => {
-  const deletions = (log.removed && json2array(log.record)) || [];
+  if (!log.removed) {
+    return [];
+  }
 
-  return deletions.map((edit) => {
-    const value = getRenderValue(edit.field, edit.value);
-    return `Rimosso ${edit.field} : "${value}"`;
-  });
+  return [
+    `Eliminato device "serial" ${log.record.serial} di ${log.record.owner}`,
+  ];
 };
 
 const getAdditions = (log) => {
@@ -105,8 +99,11 @@ const Logs = () => {
   }, [fetched, listLogs]);
 
   const filteredItems = items.filter(
-    ({ diff: { additions = [], deletes = [], edits = [] } = {} }) => {
-      const filterSerialField = ({ value }) =>
+    ({
+      diff: { additions = [], deletes = [], edits = [] } = {},
+      record = {},
+    }) => {
+      const filterText = ({ value }) =>
         `${value}`.toLowerCase().includes(search.toLowerCase());
 
       const mergedEdits = edits.reduce(
@@ -118,11 +115,17 @@ const Logs = () => {
         []
       );
 
-      const addedSerial = additions.find(filterSerialField);
-      const deletedSerial = deletes.find(filterSerialField);
-      const editedSerial = mergedEdits.find(filterSerialField);
+      const removalEdits = Object.keys(record).map((key) => ({
+        field: key,
+        value: record[key],
+      }));
 
-      return addedSerial || deletedSerial || editedSerial;
+      const addedSearch = additions.find(filterText);
+      const deletedSearch = deletes.find(filterText);
+      const editedSearch = mergedEdits.find(filterText);
+      const removedSearch = removalEdits.find(filterText);
+
+      return addedSearch || deletedSearch || editedSearch || removedSearch;
     }
   );
 

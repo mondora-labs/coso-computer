@@ -100,6 +100,10 @@ export const upsertMac = async (mac) => {
 
 export const deleteMac = async (mac) => {
   try {
+    Object.keys(mac).forEach(
+      (key) => mac[key] === undefined && delete mac[key]
+    );
+
     const log = {
       who: firebase.auth().currentUser.email,
       timestamp: moment.utc().format(),

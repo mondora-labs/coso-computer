@@ -224,7 +224,6 @@ const List = () => {
           </Tooltip>
           {(isItemPersonal(user, item) || isUnsafeEditEnabled) && (
             <Tooltip content="Modifica" cursor={"pointer"}>
-              {console.log(item)}
               <Link to={`/app/item/${item.id}`}>
                 <IconButton iconProps={{ iconName: "EditNote" }} />
               </Link>
