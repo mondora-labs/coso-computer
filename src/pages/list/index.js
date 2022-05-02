@@ -224,6 +224,7 @@ const List = () => {
           </Tooltip>
           {(isItemPersonal(user, item) || isUnsafeEditEnabled) && (
             <Tooltip content="Modifica" cursor={"pointer"}>
+              {console.log(item)}
               <Link to={`/app/item/${item.id}`}>
                 <IconButton iconProps={{ iconName: "EditNote" }} />
               </Link>
@@ -255,10 +256,13 @@ const List = () => {
       dateFromString: moment.utc(item.dateFrom).format(DATE_FORMAT),
     }))
     .map((item) => {
-      return columnsFields.reduce((itemState, fieldName) => {
-        itemState[fieldName] = item[fieldName];
-        return itemState;
-      }, {});
+      return columnsFields.reduce(
+        (itemState, fieldName) => {
+          itemState[fieldName] = item[fieldName];
+          return itemState;
+        },
+        { id: item.id }
+      );
     })
     .sort((a, b) =>
       (sort.direction ? a[sort.key] < b[sort.key] : a[sort.key] > b[sort.key])
