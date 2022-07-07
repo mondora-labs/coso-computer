@@ -10,7 +10,7 @@
     "easy-peasy": "^3.3.1",
     "firebase": "^7.16.0",
     "formik": "^2.1.4",
-    "moment": "^2.27.0",
+    "moment": "^2.29.4",
     "office-ui-fabric-react": "^7.122.0",
     "pdf-lib": "^1.9.0",
     "react": "^16.13.1",
