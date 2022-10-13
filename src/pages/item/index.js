@@ -228,7 +228,7 @@ const Item = ({ itemId }) => {
                 options={[
                   {
                     key: "assigned",
-                    text: "Personale",
+                    text: "Lavorativo",
                     icon: "FabricUserFolder",
                   },
                   {
