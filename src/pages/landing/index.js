@@ -125,13 +125,13 @@ const Landing = () => {
                       </Stack.Item>
                       <Stack>
                         <Stack.Item>
-                          <Text variant="xLarge">{item.hostname} </Text>
-                        </Stack.Item>
-                        <Stack.Item>
-                          <Text>{item.model} </Text>
+                          <Text variant="xLarge">{item.model} </Text>
                         </Stack.Item>
                         <Stack.Item>
                           <Text>{item.serial} </Text>
+                        </Stack.Item>
+                        <Stack.Item>
+                          <Text>{item.device} </Text>
                         </Stack.Item>
                       </Stack>
                     </Stack>
