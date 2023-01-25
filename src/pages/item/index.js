@@ -27,7 +27,7 @@ import FormikDatepicker from "../../components/formik/datepicker";
 import FormikPicker from "../../components/formik/formik-picker";
 import FormikChoiceGroup from "../../components/formik/choicegroup";
 
-import { GOOGLE_FOLDER } from "../../config";
+import { GOOGLE_FOLDER, ASSET_MODELS, ASSET_TYPES } from "../../config";
 
 const SuggestionBar = styled(MessageBar).attrs({
   messageBarType: MessageBarType.warning,
@@ -87,37 +87,6 @@ const VALIDATION_SCHEMA = Yup.object().shape({
     .typeError("Importo non valido, [0-9] (es per € 2.650,50 => 2650.50)")
     .required("L'importo é richiesto, controlla sullo store"),
 });
-
-const ASSET_TYPES = [
-  "Computer",
-  "Tablet",
-  "Mouse",
-  "Tastiera",
-  "Monitor",
-  "Headset",
-  "Accessori",
-].map((item) => ({
-  key: item.toLocaleLowerCase(),
-  text: item,
-}));
-
-const ASSET_MODELS = [
-  'MacBook Pro 16"',
-  'MacBook Pro 15"',
-  'MacBook Pro 14"',
-  'MacBook Pro 13"',
-  'MacBook Air 13"',
-  "Dell XPS 15 9500",
-  "Surface Pro 8",
-  "Surface Pro 7",
-  "Surface Book 3",
-  "ThinkPad X1",
-  "iPad Pro",
-  "iPad Air",
-  "iPad mini",
-  "iPad",
-  "Altro (Note)",
-].map((item) => ({ key: item, text: item }));
 
 const Item = ({ itemId }) => {
   const { email, name, permissions } = useStoreState((state) => state.user);

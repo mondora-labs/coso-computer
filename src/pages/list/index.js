@@ -16,28 +16,15 @@ import {
   TextField,
   Button,
   Text,
+  Dropdown,
 } from "office-ui-fabric-react";
 
 import Container from "../../components/container";
 import Tooltip from "../../components/tooltip";
 import NormalDialog from "../../components/dialog";
-
 import { isItemPersonal } from "../../utils/misc";
 
-const DATE_FORMAT = "DD/MM/YYYY";
-const UPCYCLE_FACTOR = 365 * 3.2;
-
-const ICONS = {
-  notebook: "ThisPC",
-  computer: "ThisPC",
-  tablet: "Tablet",
-  mouse: "KeyboardClassic",
-  tastiera: "KeyboardClassic",
-  monitor: "TVMonitor",
-  headset: "Headset",
-  accessori: "Puzzle",
-  smartphone: "CellPhone",
-};
+import { ASSET_TYPES, ICONS, UPCYCLE_FACTOR, DATE_FORMAT } from "../../config";
 
 const OWNERSHIP_DECORATIONS = {
   assigned: {
@@ -50,6 +37,12 @@ const OWNERSHIP_DECORATIONS = {
     color: "orange",
   },
 };
+
+const dropdownOptions = [
+  { key: "tutti", text: "Tutti" },
+  ...ASSET_TYPES,
+  { key: "altro", text: "Altro..." },
+];
 
 const columnsDefinitions = [
   {
@@ -76,6 +69,11 @@ const columnsDefinitions = [
         </ListItem>
       );
     },
+  },
+  {
+    key: "device",
+    fieldName: "device",
+    disabled: true,
   },
   {
     key: "owner",
@@ -163,6 +161,7 @@ const ListItem = ({ children, verticalAlign = "center" }) => (
 
 const List = () => {
   const [search, setSearch] = useState("");
+  const [assetType, setAssetType] = useState(ASSET_TYPES[0]);
   const [sort, setSort] = useState("");
   const [remove, setRemove] = useState({
     show: false,
@@ -182,23 +181,25 @@ const List = () => {
     }
   }, [fetched, listMacs]);
 
-  const columns = columnsDefinitions.map((columnDefinition) => ({
-    isSorted: columnDefinition.key === sort.key,
-    isSortedDescending: sort.direction,
-    onRender: (item, index, column) => (
-      <ListItem>
-        <Text variant="small">{item[column.fieldName]}</Text>
-      </ListItem>
-    ),
-    isResizable: true,
-    onColumnClick: (ev, column) => {
-      setSort({
-        key: column.key,
-        direction: sort.key === column.key ? !sort.direction : false,
-      });
-    },
-    ...columnDefinition,
-  }));
+  const columns = columnsDefinitions
+    .filter((column) => !column.disabled && column)
+    .map((columnDefinition) => ({
+      isSorted: columnDefinition.key === sort.key,
+      isSortedDescending: sort.direction,
+      onRender: (item, index, column) => (
+        <ListItem>
+          <Text variant="small">{item[column.fieldName]}</Text>
+        </ListItem>
+      ),
+      isResizable: true,
+      onColumnClick: (ev, column) => {
+        setSort({
+          key: column.key,
+          direction: sort.key === column.key ? !sort.direction : false,
+        });
+      },
+      ...columnDefinition,
+    }));
 
   const isUnsafeDeleteEnabled =
     user.permissions.superUser && user.permissions.unsafeDelete;
@@ -242,7 +243,7 @@ const List = () => {
     },
   ];
 
-  const columnsFields = columns.map((column) => column.key);
+  const columnsFields = columnsDefinitions.map((column) => column.key);
 
   const filteredItems = items
     .map((item) => ({
@@ -273,6 +274,13 @@ const List = () => {
       Object.values(item)
         .map((val) => `${val}`.toLocaleLowerCase())
         .some((val) => val.includes(search.toLocaleLowerCase()))
+    )
+    .filter(
+      (item) =>
+        assetType.key === "tutti" ||
+        (assetType.key === "altro" &&
+          !ASSET_TYPES.some((type) => item.device === type.key)) ||
+        item.device === assetType.key
     );
 
   const handleExport = () => {
@@ -315,7 +323,14 @@ const List = () => {
           removeMac(remove.mac);
         }}
       />
-
+      <Dropdown
+        options={dropdownOptions}
+        name="device"
+        label="Tipologia dispositivo"
+        defaultSelectedKey={assetType.key}
+        value={assetType}
+        onChange={(event, text) => setAssetType(text)}
+      />
       <TextField
         value={search}
         onChange={(event, text) => setSearch(text)}
