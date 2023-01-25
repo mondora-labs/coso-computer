@@ -40,7 +40,6 @@ export const ASSET_MODELS = [
 export const UPCYCLE_FACTOR = 365 * 3.2;
 
 export const ICONS = {
-  notebook: "ThisPC",
   computer: "ThisPC",
   tablet: "Tablet",
   mouse: "KeyboardClassic",
