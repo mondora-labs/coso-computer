@@ -3752,11 +3752,6 @@ coa@^2.0.2:
     chalk "^2.4.1"
     q "^1.1.2"
 
-codice-fiscale-js@^2.3.9:
-  version "2.3.9"
-  resolved "https://registry.yarnpkg.com/codice-fiscale-js/-/codice-fiscale-js-2.3.9.tgz#05930c3a8d2893b37efa833eb2a96c220025911e"
-  integrity sha512-yrJBn11+t+sYT1fuseBptLkvQ8WkjZdtEOHl7mW4KfLwHCiksqWAhOCzbzpJojy2rex58RwMenAZwwXvMOfQkQ==
-
 collect-v8-coverage@^1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/collect-v8-coverage/-/collect-v8-coverage-1.0.1.tgz#cc2c8e94fc18bbdffe64d6534570c8a673b27f59"

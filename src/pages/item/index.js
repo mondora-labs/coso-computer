@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 
 import styled from "styled-components";
 import { useStoreActions, useStoreState } from "easy-peasy";
-import CodiceFiscale from "codice-fiscale-js";
 
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
@@ -62,12 +61,6 @@ const VALIDATION_SCHEMA = Yup.object().shape({
   ownerEmail: Yup.string()
     .email("Email non valida")
     .required("Email richiesta"),
-  fiscalCode: Yup.string()
-    .length(16, "Numero di caratteri incorretto")
-    .test("cf test", "Codice fiscale non valido", (cf) =>
-      CodiceFiscale.check(cf)
-    )
-    .required("Codice Fiscale richiesto"),
   ownership: Yup.string().required("Ownership dispositivo richiesta"),
   device: Yup.string().required("Tipologia dispositivo richiesta"),
   model: Yup.string()
@@ -79,10 +72,6 @@ const VALIDATION_SCHEMA = Yup.object().shape({
     .max(50, "Numero di caratteri eccessivo")
     .required("Codice seriale richiesto"),
   dateFrom: Yup.number().required("Seleziona una data di acquisto"),
-
-  rentId: Yup.string().required(
-    "Il numero d'ordine é richiesto, controlla sullo store"
-  ),
   taxableAmount: Yup.number()
     .typeError("Importo non valido, [0-9] (es per € 2.650,50 => 2650.50)")
     .required("L'importo é richiesto, controlla sullo store"),
