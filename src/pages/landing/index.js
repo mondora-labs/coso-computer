@@ -189,28 +189,12 @@ const Landing = () => {
           )}
         </Stack>
 
-        <Stack horizontal tokens={{ childrenGap: 8 }}>
-          <Stack.Item align="center">
-            <Link to="/app/item">
-              <PrimaryButton
-                text="Aggiungi nuovo"
-                iconProps={{ iconName: "Add" }}
-              />
-            </Link>
-          </Stack.Item>
-          <Stack.Item align="center">
-            <a
-              href="https://mondora-store.mmn.it/"
-              target="_blank"
-              rel="noreferrer"
-            >
-              <DefaultButton
-                text="Richiedi device"
-                iconProps={{ iconName: "Money" }}
-              />
-            </a>
-          </Stack.Item>
-        </Stack>
+        <Link to="/app/item">
+          <PrimaryButton
+            text="Aggiungi nuovo"
+            iconProps={{ iconName: "Add" }}
+          />
+        </Link>
       </Stack>
     </Container>
   );
