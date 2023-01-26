@@ -38,6 +38,7 @@ export const ASSET_MODELS = [
 ].map((item) => ({ key: item, text: item }));
 
 export const UPCYCLE_FACTOR = 365 * 3.2;
+export const BUDGET = 3000;
 
 export const ICONS = {
   computer: "ThisPC",

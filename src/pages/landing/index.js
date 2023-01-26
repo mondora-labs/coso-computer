@@ -16,13 +16,13 @@ import {
   Text,
   Separator,
 } from "office-ui-fabric-react";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
 import Container from "../../components/container";
 import NormalDialog from "../../components/dialog";
 
 import { ResidualBudget, BudgetDate } from "../../utils/budget";
-import { isItemPersonal } from "../../utils/misc";
+import { UserItems } from "../../utils/misc";
 
 import { ICONS, UPCYCLE_FACTOR, DATE_FORMAT } from "../../config";
 
@@ -35,19 +35,9 @@ const Landing = () => {
     show: false,
   });
 
-  const { listMacs, removeMac } = useStoreActions((store) => store.macs);
-  const { items, fetched } = useStoreState((store) => store.macs);
+  const { removeMac } = useStoreActions((store) => store.macs);
   const user = useStoreState((state) => state.user);
-
-  useEffect(() => {
-    if (!fetched) {
-      listMacs();
-    }
-  }, [fetched, listMacs]);
-
-  const userItems = items
-    .filter((item) => isItemPersonal(user, item))
-    .sort((a, b) => (a.dateFrom < b.dateFrom ? 1 : -1));
+  const userItems = UserItems(user.name, user.email);
 
   const profile = {
     imageUrl: user.photo,
