@@ -14,12 +14,14 @@ import {
   PrimaryButton,
   Stack,
   Text,
+  Separator,
 } from "office-ui-fabric-react";
 import React, { useEffect, useState } from "react";
 
 import Container from "../../components/container";
 import NormalDialog from "../../components/dialog";
 
+import { ResidualBudget, BudgetDate } from "../../utils/budget";
 import { isItemPersonal } from "../../utils/misc";
 
 import { ICONS, UPCYCLE_FACTOR, DATE_FORMAT } from "../../config";
@@ -74,6 +76,15 @@ const Landing = () => {
 
       <Stack tokens={{ childrenGap: 16 }}>
         <Persona {...profile} size={PersonaSize.size120} />
+
+        <Text variant="xLargePlus">
+          {"Budget: " + ResidualBudget(user.name, user.email) + " €"}
+        </Text>
+        <Text variant="medium">
+          {"Calcolato a partire dal  " + BudgetDate(user.name, user.email)}
+        </Text>
+
+        <Separator />
 
         <Text variant="xLargePlus">{"I miei dispositivi:"}</Text>
 

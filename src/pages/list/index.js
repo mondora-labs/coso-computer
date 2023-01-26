@@ -22,6 +22,7 @@ import {
 import Container from "../../components/container";
 import Tooltip from "../../components/tooltip";
 import NormalDialog from "../../components/dialog";
+import {ResidualBudget} from "../../utils/budget";
 import { isItemPersonal } from "../../utils/misc";
 
 import { ASSET_TYPES, ICONS, UPCYCLE_FACTOR, DATE_FORMAT } from "../../config";
@@ -76,6 +77,11 @@ const columnsDefinitions = [
     disabled: true,
   },
   {
+    key: "ownerEmail",
+    fieldName: "ownerEmail",
+    disabled: true,
+  },
+  {
     key: "owner",
     fieldName: "owner",
     name: "Possessore",
@@ -89,7 +95,7 @@ const columnsDefinitions = [
     key: "hostname",
     fieldName: "hostname",
     name: "Hostname",
-    minWidth: 240,
+    minWidth: 200,
   },
   {
     key: "dateFromString",
@@ -106,6 +112,13 @@ const columnsDefinitions = [
     fieldName: "model",
     name: "Modello",
     minWidth: 176,
+  },
+  {
+    key: "budget",
+    fieldName: "budget",
+    name: "Budget residuo",
+    minWidth: 100,
+    onRender: (item) => ResidualBudget(item.owner, item.ownerEmail ) + " €",
   },
   {
     key: "antivirus",
