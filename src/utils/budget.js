@@ -1,7 +1,7 @@
 import moment from "moment";
 
 import { UserItems } from "./misc";
-import { BUDGET, DATE_FORMAT } from "../config";
+import { BUDGET } from "../config";
 
 const LatestComputer = (userItems) =>
   userItems.reduce((prev, curr) =>
@@ -9,7 +9,7 @@ const LatestComputer = (userItems) =>
     curr.ownership !== "muletto" &&
     (prev.device !== "computer" ||
       prev.ownership === "muletto" ||
-      curr.dateFrom > prev.dateFrom)
+      curr.dateFrom >= prev.dateFrom)
       ? curr
       : prev
   );
@@ -25,7 +25,6 @@ export const ResidualBudget = (name, email) => {
           : tot,
       0
     );
-    console.log(spent);
     return BUDGET - spent;
   } else {
     return BUDGET;
@@ -38,9 +37,9 @@ export const BudgetDate = (name, email) => {
     const latestComputer = LatestComputer(userItems);
     return latestComputer.device === "computer" &&
       latestComputer.ownership !== "muletto"
-      ? moment.utc(latestComputer.dateFrom).format(DATE_FORMAT)
-      : "primo acquisto computer";
+      ? moment.utc(latestComputer.dateFrom)
+      : 0;
   } else {
-    return "primo acquisto computer";
+    return 0;
   }
 };

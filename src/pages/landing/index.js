@@ -2,7 +2,8 @@ import { Link } from "@reach/router";
 import { useStoreActions, useStoreState } from "easy-peasy";
 import moment from "moment";
 import {
-  DefaultButton,
+  MessageBar,
+  MessageBarType,
   DocumentCard,
   DocumentCardDetails,
   DocumentCardStatus,
@@ -24,7 +25,7 @@ import NormalDialog from "../../components/dialog";
 import { ResidualBudget, BudgetDate } from "../../utils/budget";
 import { UserItems } from "../../utils/misc";
 
-import { ICONS, UPCYCLE_FACTOR, DATE_FORMAT } from "../../config";
+import { ICONS, UPCYCLE_FACTOR, DATE_FORMAT, BUDGET } from "../../config";
 
 const Landing = () => {
   const [note, setNote] = useState({
@@ -34,10 +35,16 @@ const Landing = () => {
   const [remove, setRemove] = useState({
     show: false,
   });
+  const [budgetDialog, setBudgetDialog] = useState({
+    show: false,
+  });
 
   const { removeMac } = useStoreActions((store) => store.macs);
   const user = useStoreState((state) => state.user);
   const userItems = UserItems(user.name, user.email);
+
+  const budgetDate = BudgetDate(user.name, user.email);
+  const budgetEndDate = moment.utc(budgetDate).add(UPCYCLE_FACTOR, "days");
 
   const profile = {
     imageUrl: user.photo,
@@ -54,6 +61,18 @@ const Landing = () => {
         onDismiss={() => setNote({ ...note, show: false })}
       />
       <NormalDialog
+        title="Budget"
+        subText={
+          "Il budget per ciascuna persona corrisponde a " +
+          BUDGET +
+          " € iva esclusa, viene calcolato a partire dal primo computer acquistato e può essere rinnovato dopo " +
+          UPCYCLE_FACTOR / 365 +
+          " anni. Nel calcolo del budget residuo vengono considerati tutti i dispositivi aggiunti in seguito al computer ad eccezione dei muletti."
+        }
+        hidden={!budgetDialog.show}
+        onDismiss={() => setBudgetDialog({ show: false })}
+      />
+      <NormalDialog
         title="Mi vuoi cancellare oh?"
         subText="E se poi te ne penti?"
         hidden={!remove.show}
@@ -68,11 +87,32 @@ const Landing = () => {
         <Persona {...profile} size={PersonaSize.size120} />
 
         <Text variant="xLargePlus">
-          {"Budget: " + ResidualBudget(user.name, user.email) + " €"}
+          {"Budget: " + ResidualBudget(user.name, user.email) + " €  "}
+          <IconButton
+            iconProps={{ iconName: "Info" }}
+            onClick={() => setBudgetDialog({ show: true })}
+          />
         </Text>
         <Text variant="medium">
-          {"Calcolato a partire dal  " + BudgetDate(user.name, user.email)}
+          {"Calcolato a partire dal  " +
+            (budgetDate
+              ? budgetDate.format(DATE_FORMAT)
+              : "primo computer aggiunto")}
         </Text>
+        {budgetEndDate.isBefore(new Date()) && (
+          <MessageBar
+            messageBarType={MessageBarType.warning}
+            isMultiline={true}
+          >
+            <b>
+              {"Sono passati più di " +
+                UPCYCLE_FACTOR / 365 +
+                " anni dall'ultimo rinnovo del budget"}
+            </b>
+            <br />
+            {"Il tuo budget verrà rinnovato appena inserisci un nuovo computer"}
+          </MessageBar>
+        )}
 
         <Separator />
 
