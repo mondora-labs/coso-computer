@@ -22,7 +22,7 @@ import {
 import Container from "../../components/container";
 import Tooltip from "../../components/tooltip";
 import NormalDialog from "../../components/dialog";
-import {ResidualBudget} from "../../utils/budget";
+import { ResidualBudget } from "../../utils/budget";
 import { isItemPersonal } from "../../utils/misc";
 
 import { ASSET_TYPES, ICONS, UPCYCLE_FACTOR, DATE_FORMAT } from "../../config";
@@ -118,7 +118,7 @@ const columnsDefinitions = [
     fieldName: "budget",
     name: "Budget residuo",
     minWidth: 100,
-    onRender: (item) => ResidualBudget(item.owner, item.ownerEmail ) + " €",
+    onRender: (item) => ResidualBudget(item.owner, item.ownerEmail) + " €",
   },
   {
     key: "antivirus",
@@ -174,7 +174,7 @@ const ListItem = ({ children, verticalAlign = "center" }) => (
 
 const List = () => {
   const [search, setSearch] = useState("");
-  const [assetType, setAssetType] = useState(ASSET_TYPES[0]);
+  const [assetType, setAssetType] = useState({ key: "tutti", text: "Tutti" });
   const [sort, setSort] = useState("");
   const [remove, setRemove] = useState({
     show: false,
