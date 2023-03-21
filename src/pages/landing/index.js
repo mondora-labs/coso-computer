@@ -22,7 +22,19 @@ import NormalDialog from "../../components/dialog";
 
 import { isItemPersonal } from "../../utils/misc";
 
-import { ICONS, UPCYCLE_FACTOR, DATE_FORMAT } from "../../config";
+const FORMAT = "DD/MM/YYYY";
+const UPCYCLE_FACTOR = 365 * 3.2;
+const ICONS = {
+  notebook: "ThisPC",
+  computer: "ThisPC",
+  tablet: "Tablet",
+  mouse: "KeyboardClassic",
+  tastiera: "KeyboardClassic",
+  monitor: "TVMonitor",
+  headset: "Headset",
+  accessori: "Puzzle",
+  smartphone: "CellPhone",
+};
 
 const Landing = () => {
   const [note, setNote] = useState({
@@ -85,9 +97,9 @@ const Landing = () => {
                 computedDateTo: moment
                   .utc(item.dateFrom)
                   .add(UPCYCLE_FACTOR, "days")
-                  .format(DATE_FORMAT),
-                dateFrom: moment.utc(item.dateFrom).format(DATE_FORMAT),
-                dateTo: moment.utc(item.dateTo).format(DATE_FORMAT),
+                  .format(FORMAT),
+                dateFrom: moment.utc(item.dateFrom).format(FORMAT),
+                dateTo: moment.utc(item.dateTo).format(FORMAT),
               }))
               .map((item) => (
                 <Stack.Item styles={{ root: { width: 320 } }} key={item.id}>
@@ -101,7 +113,7 @@ const Landing = () => {
                           size={PersonaSize.size56}
                           presence={
                             moment
-                              .utc(item.dateTo, DATE_FORMAT)
+                              .utc(item.dateTo, FORMAT)
                               .isAfter(moment.utc())
                               ? PersonaPresence.online
                               : PersonaPresence.busy
